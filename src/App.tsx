@@ -18,8 +18,7 @@ declare var process : {
   }
 }
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID); // Mumbai (Polygon Testnet) Chain ID
-const YOUR_GATEDNFT_ADDRESS = process.env.REACT_APP_YOUR_GATEDNFT_ADDRESS;
-const YOUR_TIER_ADDRESS = parseInt(process.env.REACT_APP_YOUR_TIER_ADDRESS); // See here for more info: https://docs.openzeppelin.com/contracts/3.x/erc20#a-note-on-decimals
+const YOUR_GATEDNFT_ADDRESS = process.env.REACT_APP_YOUR_GATEDNFT_ADDRESS; // you will need to deploy a GATEDNFT contract and copy the address to here
 
 /**
  * Get Signer
