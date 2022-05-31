@@ -24,6 +24,9 @@ declare var process : {
     REACT_APP_REDEEMABLE_WALLET_CAP: string
     REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE: string
     REACT_APP_SALE_TIMEOUT_IN_BLOCKS: string
+    REACT_APP_REDEEMABLE_INITIAL_SUPPLY: string
+    REACT_APP_REDEEMABLE_NAME: string
+    REACT_APP_REDEEMABLE_SYMBOL: string
   }
 }
 
@@ -37,9 +40,12 @@ function App() {
   const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
   const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
   const [redeemableDecimals, setRedeemableDecimals ] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
+  const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
   const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
   const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
   const [saleTimeoutInBlocks, setSaleTimeoutInBlocks] = useState(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
+  const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
+  const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
 
   // run once on render and check url parameters
@@ -95,16 +101,16 @@ function App() {
       reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
       saleTimeout: saleTimeoutInBlocks,
       cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
-      minimumRaise: ethers.utils.parseUnits("10", reserveDecimals), // minimum to complete a Raise // TODO CHECK IF FINISHES AUTOMATICALLY WHEN HIT
+      minimumRaise: ethers.utils.parseUnits(redeemableInitialSupply, reserveDecimals), // minimum to complete a Raise // TODO CHECK IF FINISHES AUTOMATICALLY WHEN HIT
       dustSize: ethers.utils.parseUnits("0", reserveDecimals), // todo check this: for bonding curve price curves (that generate a few left in the contract at the end)
     };
     const redeemableConfig = {
       // todo can erc721 be used instead?
       erc20Config: { // config for the redeemable token (rTKN) which participants will get in exchange for reserve tokens
-        name: "Shoes", // the name of the rTKN
-        symbol: "shoeNFT", // the symbol for your rTKN
+        name: redeemableName, // the name of the rTKN
+        symbol: redeemableSymbol, // the symbol for your rTKN
         distributor: "0x0000000000000000000000000000000000000000", // distributor address
-        initialSupply: ethers.utils.parseUnits("100", redeemableDecimals), // initial rTKN supply
+        initialSupply: ethers.utils.parseUnits(redeemableInitialSupply, redeemableDecimals), // initial rTKN supply
       },
       // todo why can't I decompile? https://mumbai.polygonscan.com/address/0xC064055DFf6De32f44bB7cCB0ca59Cbd8434B2de#code
       tier: "0xC064055DFf6De32f44bB7cCB0ca59Cbd8434B2de", // tier contract address (used for gating)
@@ -140,6 +146,8 @@ function App() {
     const startStatusReceipt = await startStatusTransaction.wait();
     console.log('Info: Sale Started Receipt:', startStatusReceipt);
     console.log('------------------------------'); // separator
+
+    // todo provide a link to the sale
 
     setDeploying(false);
   }
