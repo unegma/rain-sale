@@ -61,7 +61,7 @@ function App() {
 
   // basic connection to web3 wallet
   useEffect(() => {
-    makeWeb3Connection();
+    makeWeb3Connection(); // todo test what happens if not signed in
   },[]);
 
   const amountOfShoes = 2;
