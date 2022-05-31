@@ -10,7 +10,17 @@ import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import {Divider, Icon} from "@mui/material";
 import Shoes from "./components/Shoes";
 import { connect } from "./connect.js"; // a very basic web3 connection implementation
-import { opcodeData } from "./opcodeData.js"; // opcode data for RainVM
+import { opcodeData } from "./opcodeData.js";
+import Typography from "@mui/material/Typography"; // opcode data for RainVM
+
+
+import Box from '@mui/material/Box';
+import FilledInput from '@mui/material/FilledInput';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 // declare var process : {
 //   env: {
@@ -32,6 +42,13 @@ function App() {
 
   const [signer, setSigner] = useState();
   const [address, setAddress] = useState("");
+
+
+  const [name, setName] = React.useState('Composed TextField');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
 
   async function makeWeb3Connection() {
     try {
@@ -133,7 +150,7 @@ function App() {
 
   if (!saleView) {
 
-}
+  }
 
 
   /**
@@ -168,6 +185,47 @@ function App() {
       { !saleView && (
         <>
 
+          <Box
+            component="form"
+            sx={{
+              '& > :not(style)': { m: 1 },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Typography color="black">
+              Configure a Shoe Sale
+            </Typography>
+            <FormControl variant="standard">
+              <InputLabel htmlFor="component-helper">Name</InputLabel>
+              <Input
+                id="component-helper"
+                value={name}
+                onChange={handleChange}
+                aria-describedby="component-helper-text"
+              />
+              <FormHelperText id="component-helper-text">
+                Some important helper text
+              </FormHelperText>
+            </FormControl>
+
+            {/*<FormControl disabled variant="standard">*/}
+            {/*  <InputLabel htmlFor="component-disabled">Name</InputLabel>*/}
+            {/*  <Input id="component-disabled" value={name} onChange={handleChange} />*/}
+            {/*  <FormHelperText>Disabled</FormHelperText>*/}
+            {/*</FormControl>*/}
+
+            {/*<FormControl error variant="standard">*/}
+            {/*  <InputLabel htmlFor="component-error">Name</InputLabel>*/}
+            {/*  <Input*/}
+            {/*    id="component-error"*/}
+            {/*    value={name}*/}
+            {/*    onChange={handleChange}*/}
+            {/*    aria-describedby="component-error-text"*/}
+            {/*  />*/}
+            {/*  <FormHelperText id="component-error-text">Error</FormHelperText>*/}
+            {/*</FormControl>*/}
+          </Box>
         </>
       )}
 
