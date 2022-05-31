@@ -12,36 +12,12 @@ import Shoes from "./components/Shoes";
 import { connect } from "./connect.js"; // a very basic web3 connection implementation
 import { opcodeData } from "./opcodeData.js"; // opcode data for RainVM
 
-
 // declare var process : {
 //   env: {
 //     REACT_APP_CHAIN_ID: string
 //   }
 // }
 
-/**
- * Get Signer
- */
-// async function getSigner (){
-//   const {ethereum}: any = window;
-//
-//   if (!ethereum) {
-//     console.log("No Web3 Wallet installed");
-//   }
-//
-//   const provider = new ethers.providers.Web3Provider(ethereum, {
-//     name: 'Mumbai',
-//     chainId: CHAIN_ID,
-//   });
-//
-//   // Prompt user for account connections
-//   await provider.send("eth_requestAccounts", []);
-//   const signer = provider.getSigner();
-//   const address = await signer.getAddress();
-//   console.log("Info: Your Account Address:", address);
-//   console.log('------------------------------'); // separator
-//   return signer;
-// }
 
 /**
  * App
@@ -214,30 +190,6 @@ function App() {
             {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
             {/*<Environment preset="city"/>*/}
 
-            {/*<group position={[0, -0.5, 0]}>*/}
-            {/*  <Frames*/}
-            {/*    images={images}*/}
-            {/*    setModalOpen={setModalOpen}*/}
-            {/*    setSelectedImage={setSelectedImage}*/}
-            {/*  />*/}
-
-            {/*  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>*/}
-            {/*    <planeGeometry args={[50, 50]}/>*/}
-            {/*    <MeshReflectorMaterial*/}
-            {/*      blur={[300, 100]}*/}
-            {/*      resolution={2048}*/}
-            {/*      mixBlur={1}*/}
-            {/*      mixStrength={40}*/}
-            {/*      roughness={1}*/}
-            {/*      depthScale={1.2}*/}
-            {/*      minDepthThreshold={0.4}*/}
-            {/*      maxDepthThreshold={1.4}*/}
-            {/*      color="#101010"*/}
-            {/*      metalness={0.5}*/}
-            {/*      mirror={1}*/}
-            {/*    />*/}
-            {/*  </mesh>*/}
-            {/*</group>*/}
           </Canvas>
         </div>
       )}
