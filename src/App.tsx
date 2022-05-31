@@ -9,13 +9,15 @@ import * as rainSDK from "rain-sdk";
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import {Divider, Icon} from "@mui/material";
 import Shoes from "./components/Shoes";
+import { connect } from "./connect.js"; // a very basic web3 connection implementation
+import { opcodeData } from "./opcodeData.js"; // opcode data for RainVM
 
-declare var process : {
-  env: {
-    REACT_APP_CHAIN_ID: string
-  }
-}
-const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID); // Mumbai (Polygon Testnet) Chain ID
+
+// declare var process : {
+//   env: {
+//     REACT_APP_CHAIN_ID: string
+//   }
+// }
 
 /**
  * Get Signer
@@ -52,6 +54,19 @@ function App({images}: any) {
   // const [selectedImage, setSelectedImage] = useState("")
   // const [entryAllowed, setEntryAllowed] = useState(false);
   // const [userBalance, setUserBalance] = useState(0);
+
+  const [signer, setSigner] = useState();
+  const [address, setAddress] = useState("");
+
+  async function makeWeb3Connection() {
+    try {
+      const {signer, address} = await connect(); // get the signer and account address using a very basic connection implementation
+      setSigner(signer);
+      setAddress(address);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   /**
    * Get UserBalance
@@ -133,7 +148,18 @@ function App({images}: any) {
     }
   },[]);
 
+  useEffect(() => {
+    makeWeb3Connection();
+  },[]);
+
   const amountOfShoes = 2;
+
+
+
+  if (!saleView) {
+
+}
+
 
   /**
    * View
@@ -163,48 +189,60 @@ function App({images}: any) {
       {/*    </div>*/}
       {/*  </div>*/}
       {/*</div>*/}
-      <div className="canvasContainer">
-        {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
 
-        <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
-          <ambientLight intensity={0.5} />
-          <directionalLight intensity={0.3} position={[5, 25, 20]} />
-          <Suspense fallback={null}>
-            <Shoes amount={amountOfShoes} />
-            <Environment preset="city" />
-          </Suspense>
-          <OrbitControls autoRotate autoRotateSpeed={1} />
+      { !saleView && (
+        <>
 
-          {/*<color attach="background" args={['#191920']}/>*/}
-          {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
-          {/*<Environment preset="city"/>*/}
+        </>
+      )}
 
-          {/*<group position={[0, -0.5, 0]}>*/}
-          {/*  <Frames*/}
-          {/*    images={images}*/}
-          {/*    setModalOpen={setModalOpen}*/}
-          {/*    setSelectedImage={setSelectedImage}*/}
-          {/*  />*/}
 
-          {/*  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>*/}
-          {/*    <planeGeometry args={[50, 50]}/>*/}
-          {/*    <MeshReflectorMaterial*/}
-          {/*      blur={[300, 100]}*/}
-          {/*      resolution={2048}*/}
-          {/*      mixBlur={1}*/}
-          {/*      mixStrength={40}*/}
-          {/*      roughness={1}*/}
-          {/*      depthScale={1.2}*/}
-          {/*      minDepthThreshold={0.4}*/}
-          {/*      maxDepthThreshold={1.4}*/}
-          {/*      color="#101010"*/}
-          {/*      metalness={0.5}*/}
-          {/*      mirror={1}*/}
-          {/*    />*/}
-          {/*  </mesh>*/}
-          {/*</group>*/}
-        </Canvas>
-      </div>
+      { saleView && (
+
+        <div className="canvasContainer">
+          {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
+
+          <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
+            <ambientLight intensity={0.5} />
+            <directionalLight intensity={0.3} position={[5, 25, 20]} />
+            <Suspense fallback={null}>
+              <Shoes amount={amountOfShoes} />
+              <Environment preset="city" />
+            </Suspense>
+            <OrbitControls autoRotate autoRotateSpeed={1} />
+
+            {/*<color attach="background" args={['#191920']}/>*/}
+            {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
+            {/*<Environment preset="city"/>*/}
+
+            {/*<group position={[0, -0.5, 0]}>*/}
+            {/*  <Frames*/}
+            {/*    images={images}*/}
+            {/*    setModalOpen={setModalOpen}*/}
+            {/*    setSelectedImage={setSelectedImage}*/}
+            {/*  />*/}
+
+            {/*  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>*/}
+            {/*    <planeGeometry args={[50, 50]}/>*/}
+            {/*    <MeshReflectorMaterial*/}
+            {/*      blur={[300, 100]}*/}
+            {/*      resolution={2048}*/}
+            {/*      mixBlur={1}*/}
+            {/*      mixStrength={40}*/}
+            {/*      roughness={1}*/}
+            {/*      depthScale={1.2}*/}
+            {/*      minDepthThreshold={0.4}*/}
+            {/*      maxDepthThreshold={1.4}*/}
+            {/*      color="#101010"*/}
+            {/*      metalness={0.5}*/}
+            {/*      mirror={1}*/}
+            {/*    />*/}
+            {/*  </mesh>*/}
+            {/*</group>*/}
+          </Canvas>
+        </div>
+      )}
+
     </div>
   );
 }
