@@ -46,10 +46,9 @@ import { opcodeData } from "./opcodeData.js"; // opcode data for RainVM
 /**
  * App
  *
- * @param images
  * @constructor
  */
-function App({images}: any) {
+function App() {
   // const [modalOpen, setModalOpen] = useState(false)
   // const [selectedImage, setSelectedImage] = useState("")
   // const [entryAllowed, setEntryAllowed] = useState(false);
@@ -143,7 +142,7 @@ function App({images}: any) {
     let saleAddress = queryString.get('s');
 
     if (typeof saleAddress !== 'undefined' && saleAddress) {
-      console.log(`saleAddress is ${saleAddress}`)
+      console.log(`saleAddress is ${saleAddress}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
       setSaleView(true);
     }
   },[]);
