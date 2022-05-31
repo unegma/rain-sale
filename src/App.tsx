@@ -9,7 +9,6 @@ import * as rainSDK from "rain-sdk";
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import {Divider, Icon} from "@mui/material";
 import Shoes from "./components/Shoes";
-import { useControls } from 'leva';
 
 declare var process : {
   env: {
@@ -134,7 +133,7 @@ function App({images}: any) {
     }
   },[]);
 
-  const { range } = useControls({ range: { value: 100, min: 0, max: 1000, step: 10 } })
+  const amountOfShoes = 2;
 
   /**
    * View
@@ -171,7 +170,7 @@ function App({images}: any) {
           <ambientLight intensity={0.5} />
           <directionalLight intensity={0.3} position={[5, 25, 20]} />
           <Suspense fallback={null}>
-            <Shoes amount={range} />
+            <Shoes amount={amountOfShoes} />
             <Environment preset="city" />
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} />
