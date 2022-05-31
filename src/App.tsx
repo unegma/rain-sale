@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber'
-import {MeshReflectorMaterial, Environment} from '@react-three/drei';
+import { OrbitControls, Environment, useGLTF } from '@react-three/drei'
 import NavBar from './components/NavBar';
-import Modal from './components/Modal';
+// import Modal from './components/Modal';
 import Button from "@mui/material/Button";
 import {ethers} from "ethers";
 import * as rainSDK from "rain-sdk";
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import {Divider, Icon} from "@mui/material";
+import Shoes from "./components/Shoes";
+import { useControls } from 'leva';
 
 declare var process : {
   env: {
@@ -47,10 +49,10 @@ const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID); // Mumbai (Polygon Te
  * @constructor
  */
 function App({images}: any) {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState("")
-  const [entryAllowed, setEntryAllowed] = useState(false);
-  const [userBalance, setUserBalance] = useState(0);
+  // const [modalOpen, setModalOpen] = useState(false)
+  // const [selectedImage, setSelectedImage] = useState("")
+  // const [entryAllowed, setEntryAllowed] = useState(false);
+  // const [userBalance, setUserBalance] = useState(0);
 
   /**
    * Get UserBalance
@@ -132,6 +134,8 @@ function App({images}: any) {
     }
   },[]);
 
+  const { range } = useControls({ range: { value: 100, min: 0, max: 1000, step: 10 } })
+
   /**
    * View
    */
@@ -161,9 +165,17 @@ function App({images}: any) {
       {/*  </div>*/}
       {/*</div>*/}
       <div className="canvasContainer">
-        <Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />
+        {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
 
-        <Canvas gl={{alpha: false}} dpr={[1, 1.5]} camera={{fov: 70, position: [0, 2, 15]}}>
+        <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
+          <ambientLight intensity={0.5} />
+          <directionalLight intensity={0.3} position={[5, 25, 20]} />
+          <Suspense fallback={null}>
+            <Shoes amount={range} />
+            <Environment preset="city" />
+          </Suspense>
+          <OrbitControls autoRotate autoRotateSpeed={1} />
+
           {/*<color attach="background" args={['#191920']}/>*/}
           {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
           {/*<Environment preset="city"/>*/}
