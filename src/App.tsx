@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber'
 import {MeshReflectorMaterial, Environment} from '@react-three/drei';
-import Frames from './components/Frames';
 import NavBar from './components/NavBar';
 import Modal from './components/Modal';
 import Button from "@mui/material/Button";
