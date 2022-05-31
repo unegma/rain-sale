@@ -120,6 +120,19 @@ function App({images}: any) {
   //   getUserBalance()
   // }, [userBalance])
 
+  const [saleView, setSaleView] = React.useState(false);
+
+  // run once on render
+  useEffect(() => {
+    let queryString = new URLSearchParams(window.location.search);
+    let saleAddress = queryString.get('s');
+
+    if (typeof saleAddress !== 'undefined' && saleAddress) {
+      console.log(`saleAddress is ${saleAddress}`)
+      setSaleView(true);
+    }
+  },[]);
+
   /**
    * View
    */
