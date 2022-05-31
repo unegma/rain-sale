@@ -22,11 +22,15 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-// declare var process : {
-//   env: {
-//     REACT_APP_CHAIN_ID: string
-//   }
-// }
+declare var process : {
+  env: {
+    REACT_APP_RESERVE_TOKEN_ADDRESS: string
+    REACT_APP_RESERVE_ERC20_DECIMALS: string
+    REACT_APP_REDEEMABLE_ERC20_DECIMALS: string
+    REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE: string
+    REACT_APP_SALE_TIMEOUT_IN_BLOCKS: string
+  }
+}
 
 
 /**
@@ -42,13 +46,18 @@ function App() {
 
   const [signer, setSigner] = useState();
   const [address, setAddress] = useState("");
+  const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
+  const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
+  const [redeemableDecimals, setRedeemableDecimals ] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
+  const [redeemableWalletCap, setRedeemableWalletCap] = useState(ethers.constants.MaxUint256);
+  const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] =
+    useState(ethers.utils.parseUnits(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE, parseInt(reserveDecimals)));
+  const [saleTimeoutInBlocks, setSaleTimeoutInBlocks] = useState(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
 
-
-  const [name, setName] = React.useState('Composed TextField');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const handleChangeReserveTokenAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReserveTokenAddress(event.target.value);
   };
+
 
   async function makeWeb3Connection() {
     try {
@@ -186,6 +195,7 @@ function App() {
         <>
 
           <Box
+            className="admin-form"
             component="form"
             sx={{
               '& > :not(style)': { m: 1 },
@@ -193,21 +203,24 @@ function App() {
             noValidate
             autoComplete="off"
           >
-            <Typography color="black">
-              Configure a Shoe Sale
+            <Typography variant="h3" component="h2" color="black">
+              Configure a Shoe NFT Sale
             </Typography>
+
             <FormControl variant="standard">
-              <InputLabel htmlFor="component-helper">Name</InputLabel>
+              <InputLabel htmlFor="component-helper">The Token that Users will use to buy Shoe NFTs</InputLabel>
               <Input
                 id="component-helper"
-                value={name}
-                onChange={handleChange}
+                value={reserveTokenAddress}
+                onChange={handleChangeReserveTokenAddress}
                 aria-describedby="component-helper-text"
               />
               <FormHelperText id="component-helper-text">
-                Some important helper text
+                Default: a version of USDC (18 Decimals)
               </FormHelperText>
             </FormControl>
+
+            <Button variant="outlined">Deploy Sale</Button>
 
             {/*<FormControl disabled variant="standard">*/}
             {/*  <InputLabel htmlFor="component-disabled">Name</InputLabel>*/}
