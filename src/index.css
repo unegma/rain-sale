@@ -59,6 +59,7 @@ canvas {
 
 .navBar {
   z-index: 2;
+  color: black;
 }
 
 .modalText {
