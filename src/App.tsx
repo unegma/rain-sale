@@ -167,6 +167,9 @@ function App() {
             <Typography variant="h3" component="h2" color="black">
               Configure a Shoe NFT Sale
             </Typography>
+            <Typography variant="h4" component="h3" color="black">
+              (Admin Dashboard)
+            </Typography>
 
             <FormControl variant="standard">
               <InputLabel htmlFor="component-helper">The Token that Users will use to buy Shoe NFTs</InputLabel>
