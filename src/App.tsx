@@ -78,14 +78,14 @@ function App({images}: any) {
    * @param userBalance
    * @param setEntryAllowed
    */
-  async function tryEntry(userBalance: number, setEntryAllowed: any) {
-    if (userBalance < 1) {
-      console.log('here')
-      alert('You need to buy a ticket to enter');
-    } else {
-      setEntryAllowed(true);
-    }
-  }
+  // async function tryEntry(userBalance: number, setEntryAllowed: any) {
+  //   if (userBalance < 1) {
+  //     console.log('here')
+  //     alert('You need to buy a ticket to enter');
+  //   } else {
+  //     setEntryAllowed(true);
+  //   }
+  // }
 
   /**
    * Purchase Ticket
@@ -139,6 +139,9 @@ function App({images}: any) {
   return (
     <div className="rootContainer">
       <NavBar />
+
+
+
       {/*<div hidden={entryAllowed} className="gatedSection">*/}
       {/*  <div className="gatedSection__left"></div>*/}
       {/*  <div className="gatedSection__right">*/}
