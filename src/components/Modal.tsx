@@ -16,8 +16,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, reserveTokenAddress}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, reserveTokenAddress: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string})
 {
 
   return (
@@ -31,7 +31,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           <img className="modalImage" src={displayedImage} alt="#" /><br/>
           <Typography className="modalText">Demo, see console for more data.</Typography>
           <br/>
-          <Typography className="modalText">To see the shoe in your wallet, add {reserveTokenAddress}</Typography>
+          <Typography className="modalText">To see the shoe in your wallet, add {redeemableTokenAddress}</Typography>
           <br/>
           <Typography color="red" className="modalText">Please note, this will fail if you already have more than the WALLET_CAP</Typography>
 

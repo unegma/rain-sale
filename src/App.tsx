@@ -63,6 +63,9 @@ function App() {
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
 
+  // a bit isolated because not taken from .env and only used in the Sale
+  const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
+
   // these must be the same as the above in .env
   function resetToDefault() {
     setReserveTokenAddress(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
@@ -153,6 +156,7 @@ function App() {
       console.log(reserve);
 
       setReserveTokenAddress(reserve.address);
+      setRedeemableTokenAddress(redeemable.address);
       setRedeemableName(await redeemable.name());
       setRedeemableSymbol(await redeemable.symbol())
       setRedeemableDecimals((await redeemable.decimals()).toString());
@@ -514,7 +518,7 @@ function App() {
               setModalOpen={setModalOpen}
               initiateBuy={initiateBuy}
               buttonLock={buttonLock}
-              reserveTokenAddress={reserveTokenAddress}
+              redeemableTokenAddress={redeemableTokenAddress}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
