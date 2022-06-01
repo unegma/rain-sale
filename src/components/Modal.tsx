@@ -39,7 +39,8 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <div className="buttons-box">
             <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe!</Button><br/>
+            {/*TODO DON'T HARD CODE THE PRICE*/}
+            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe (1USDCC)!</Button><br/>
           </div>
 
         </Box>
