@@ -212,7 +212,7 @@ function App() {
               <>
 
                 <Typography variant="h4" component="h3" color="black">
-                  Sale Parameters (Page 1/2)
+                  Sale Parameters (Page 1/3)
                 </Typography>
 
                 <FormControl variant="standard">
@@ -265,7 +265,7 @@ function App() {
             { adminConfigPage === 1 && (
               <>
                 <Typography variant="h4" component="h3" color="black">
-                  NFT Parameters (Page 2/2)
+                  NFT Parameters (Page 2/3)
                 </Typography>
 
                 <FormControl variant="standard">
@@ -310,12 +310,23 @@ function App() {
 
                 <div className="buttons-box">
                   <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
-                  <Button className="fifty-percent-button" disabled={deploying} variant="contained" onClick={() => {deploySale()}}>Deploy Sale</Button>
+                  <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
                 </div>
               </>
             )}
 
+            { adminConfigPage === 2 && (
+              <>
+                <Typography variant="h4" component="h3" color="black">
+                  Deployment Costs (Page 3/3)
+                </Typography>
 
+                <div className="buttons-box">
+                  <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
+                  <Button className="fifty-percent-button" disabled={deploying} variant="contained" onClick={() => {deploySale()}}>Deploy</Button>
+                </div>
+              </>
+            )}
 
             {/*<FormControl disabled variant="standard">*/}
             {/*  <InputLabel className="input-box-label" htmlFor="component-disabled">Name</InputLabel>*/}
