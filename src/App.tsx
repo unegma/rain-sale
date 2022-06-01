@@ -40,17 +40,19 @@ function App() {
 
   /** State Config **/
 
-  const [deploying, setDeploying] = useState(false);
-  const [adminConfigPage, setAdminConfigPage] = useState(0);
+  // high level
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
   const [address, setAddress] = useState("");
+  const [saleAddress, setSaleAddress] = React.useState("");
 
+  // page controls
+  const [deploying, setDeploying] = useState(false);
+  const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
   const [modalOpen, setModalOpen] = React.useState(false);
   const [showShoes, setShowShoes] = React.useState(false);
-  const [saleAddress, setSaleAddress] = React.useState("");
-  const [stateSaleContract, setStateSaleContract] = React.useState(undefined);
 
+  // all these from .env will be replaced by calls to blockchain within the getSaleData function when saleView is set to true
   const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
   const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
   const [redeemableDecimals, setRedeemableDecimals] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
@@ -61,11 +63,8 @@ function App() {
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
 
+  // these must be the same as the above in .env
   function resetToDefault() {
-    setDeploying(false);
-    setAdminConfigPage(0);
-    // setSigner()
-    // setAddress();
     setReserveTokenAddress(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
     setReserveDecimals(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
     setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
@@ -75,7 +74,6 @@ function App() {
     setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
     setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
     setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
-    setSaleView(false); // show sale or admin view (if there is a sale address in the url)
   }
 
   /** UseEffects **/
@@ -104,7 +102,7 @@ function App() {
       console.log('HERE');
       getSaleData();
     }
-  }, [saleAddress, signer]); // todo might not need to monitor this depending on if the other useEffect runs quicker?
+  }, [saleAddress, signer]); // only get sale data when signer and saleAddress have been loaded
 
   /** Handle Form Inputs **/
 
@@ -141,15 +139,30 @@ function App() {
 
   /**
    * Get Sale Data from blockchain instead of .env
+   * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
+   * todo might want to abstract this function and the whole Sale into a different component
    */
   async function getSaleData() {
     try {
       // @ts-ignore
-      const saleContract = new rainSDK.Sale(saleAddress, signer); // todo--question does this await somehow?
+      const saleContract = new rainSDK.Sale(saleAddress, signer);
       console.log(saleContract);
-
       const redeemable = await saleContract.getRedeemable(signer);
       console.log(redeemable);
+      const reserve = await saleContract.getReserve(signer);
+      console.log(reserve);
+
+      setReserveTokenAddress(reserve.address);
+      console.log(reserve.address);
+
+      // setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
+      // setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
+      // setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
+      // setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
+      // setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
+      // setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
+      // setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
+
 
       const amountOfShoesBN = await redeemable.totalSupply();
       const amountOfShoesDecimals = await redeemable.decimals();
@@ -161,10 +174,50 @@ function App() {
       setRedeemableSymbol(await redeemable.symbol())
 
       // @ts-ignore
-      setStateSaleContract(saleContract);
       setShowShoes(true);
     } catch(err) {
       console.log('Error getting sale data', err);
+    }
+  }
+
+  /**
+   * Called within the modal for making a buy
+   */
+  async function initiateBuy() {
+    // todo might want to tell user to look at console
+    try {
+      const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", redeemableDecimals); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
+
+      // connect to the reserve token and approve the spend limit for the buy, to be able to perform the "buy" transaction.
+      console.log(`Info: Connecting to Reserve token for approval of spend:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
+      // @ts-ignore
+      const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
+      // @ts-ignore
+      const saleContract = new rainSDK.Sale(saleAddress, signer);
+      const approveTransaction = await reserveContract.approve(saleContract.address, DESIRED_UNITS_OF_REDEEMABLE);
+      const approveReceipt = await approveTransaction.wait();
+      console.log(`Info: Approve Receipt:`, approveReceipt);
+      console.log('------------------------------'); // separator
+
+      let priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+      console.log(`Info: Price of tokens in the Sale: ${priceOfRedeemableInUnitsOfReserve.toNumber()/(10**parseInt(redeemableDecimals))} ${await reserveContract.symbol()} (${reserveContract.address})`); // 10 to the power of REDEEMABLE_ERC20_DECIMALS
+
+      const buyConfig = {
+        feeRecipient: address,
+        fee: ethers.utils.parseUnits("0", reserveDecimals), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
+        minimumUnits: DESIRED_UNITS_OF_REDEEMABLE, // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
+        desiredUnits: DESIRED_UNITS_OF_REDEEMABLE,
+        maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
+      }
+
+      console.log(`Info: Buying ${DESIRED_UNITS_OF_REDEEMABLE} ${redeemableSymbol} from Sale with parameters:`, buyConfig); // todo check this
+      const buyStatusTransaction = await saleContract.buy(buyConfig);
+      const buyStatusReceipt = await buyStatusTransaction.wait();
+      console.log(`Info: Buy Receipt:`, buyStatusReceipt);
+      console.log('------------------------------'); // separator
+
+    } catch(err) {
+      console.log(`Info: Something went wrong:`, err);
     }
   }
 
@@ -451,7 +504,11 @@ function App() {
         <>
           <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} />
           <div className="canvasContainer">
-            <Modal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+            <Modal
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              initiateBuy={initiateBuy}
+            />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
               <ambientLight intensity={0.5} />
