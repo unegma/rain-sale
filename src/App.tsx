@@ -15,6 +15,9 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 declare var process : {
   env: {
@@ -185,6 +188,35 @@ function App() {
     setDeploying(false);
   }
 
+  /** Various **/
+
+  const data = {
+    labels: ['Deploy Sale (~0.040 MATIC)', 'Start Sale (~0.00125 MATIC)'],
+    datasets: [
+      {
+        label: 'Ratio of Gas+Fee',
+        data: [0.040, 0.00125],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   /** View **/
 
   return (
@@ -212,7 +244,7 @@ function App() {
               <>
 
                 <Typography variant="h4" component="h3" color="black">
-                  Sale Parameters (Page 1/3)
+                  (Page 1/3) Sale Parameters
                 </Typography>
 
                 <FormControl variant="standard">
@@ -265,7 +297,7 @@ function App() {
             { adminConfigPage === 1 && (
               <>
                 <Typography variant="h4" component="h3" color="black">
-                  NFT Parameters (Page 2/3)
+                  (Page 2/3) NFT Parameters
                 </Typography>
 
                 <FormControl variant="standard">
@@ -318,8 +350,13 @@ function App() {
             { adminConfigPage === 2 && (
               <>
                 <Typography variant="h4" component="h3" color="black">
-                  Deployment Costs (Page 3/3)
+                  (Page 3/3) Deployment Cost Ratios
                 </Typography>
+                <Typography color="black">
+                  Ratios and costs based on tests taken around the following time: 2022-05-30T15:32:44Z
+                </Typography>
+
+                <Pie className="costs-pie" data={data} />
 
                 <div className="buttons-box">
                   <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>

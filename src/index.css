@@ -42,6 +42,10 @@ code {
   font-size: calc(10px + 2vmin);
 }
 
+.rootContainer {
+  max-width: 40vw;
+}
+
 body {
   color: white;
   user-select: none;
@@ -89,4 +93,10 @@ canvas {
 .input-box-label {
   font-weight: bold !important;
   color: black !important;
+}
+
+.costs-pie {
+  width:20vw !important;
+  height:20vw !important;
+  align-self: center;
 }
