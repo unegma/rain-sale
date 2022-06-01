@@ -16,8 +16,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, reserveTokenAddress}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, reserveTokenAddress: string})
 {
 
   return (
@@ -30,6 +30,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock}
         <Box component="div" sx={style}>
           <img className="modalImage" src={displayedImage} alt="#" /><br/>
           <Typography className="modalText">Demo, see console for more data.</Typography>
+          <Typography className="modalText">To see the shoe in your wallet, add {reserveTokenAddress}</Typography>
           <Typography color="red" className="modalText">Please note, this will fail if you already have more than the WALLET_CAP</Typography>
 
           <br/>

@@ -514,6 +514,7 @@ function App() {
               setModalOpen={setModalOpen}
               initiateBuy={initiateBuy}
               buttonLock={buttonLock}
+              reserveTokenAddress={reserveTokenAddress}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
