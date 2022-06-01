@@ -16,8 +16,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string})
 {
 
   return (
@@ -39,8 +39,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <div className="buttons-box">
             <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
-            {/*TODO DON'T HARD CODE THE PRICE*/}
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe (1USDCC)!</Button><br/>
+            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy A Shoe ({staticReservePriceOfRedeemable}{reserveSymbol})</Button><br/>
           </div>
 
         </Box>

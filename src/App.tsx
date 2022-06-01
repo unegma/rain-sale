@@ -19,6 +19,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
+
 declare var process : {
   env: {
     REACT_APP_RESERVE_TOKEN_ADDRESS: string
@@ -58,13 +60,15 @@ function App() {
   const [redeemableDecimals, setRedeemableDecimals] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
   const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
   const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
-  const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
+  const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
   const [saleTimeoutInBlocks, setSaleTimeoutInBlocks] = useState(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
 
-  // a bit isolated because not taken from .env and only used in the Sale
+  // a bit isolated because not taken from .env and only used in the Sale (and got from getSaleData())
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
+  const [reserveName, setReserveName] = React.useState("");
+  const [reserveSymbol, setReserveSymbol] = React.useState("");
 
   // these must be the same as the above in .env
   function resetToDefault() {
@@ -156,6 +160,8 @@ function App() {
       console.log(reserve);
 
       setReserveTokenAddress(reserve.address);
+      setReserveName(await reserve.name());
+      setReserveSymbol(await reserve.symbol());
       setRedeemableTokenAddress(redeemable.address);
       setRedeemableName(await redeemable.name());
       setRedeemableSymbol(await redeemable.symbol())
@@ -172,6 +178,12 @@ function App() {
       console.log(`Shoes in Sale: ${amountOfShoes}`); // todo check if this changes when they are bought
       setRedeemableInitialSupply(amountOfShoes.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
 
+      // todo this will cause a giant number if signer has more than the walletcap
+      const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+      let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+      setStaticReservePriceOfRedeemable(readablePrice);
+      console.log(`Price for you: ${readablePrice}`);
+
       // @ts-ignore
       setShowShoes(true);
     } catch(err) {
@@ -181,44 +193,37 @@ function App() {
 
   /**
    * Called within the modal for making a buy
+   * THIS MUST NOT BE SHOWN BEFORE getSaleData() HAS FINISHED OR THE DATA WILL BE FROM .ENV
    */
   async function initiateBuy() {
     setButtonLock(true);
 
     try {
-      // remember redeemableDecimals will change when getSaleData() is called
-      const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", parseInt(redeemableDecimals)); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
-
-      // connect to the reserve token and approve the spend limit for the buy, to be able to perform the "buy" transaction.
       // @ts-ignore
       const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
       // @ts-ignore
       const saleContract = new rainSDK.Sale(saleAddress, signer);
 
       // approval
-      console.log(`Info: Connecting to Reserve token for approval of spend:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
+      console.log(`Info: Connecting to Reserve token for approval of spend of ${staticReservePriceOfRedeemable}${reserveSymbol}:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
 
-      const approveTransaction = await reserveContract.approve(saleContract.address, DESIRED_UNITS_OF_REDEEMABLE);
+      // todo maybe create a toBigNumber() function instead of putting ethers everywhere
+      const approveTransaction = await reserveContract.approve(saleContract.address, ethers.utils.parseUnits(staticReservePriceOfRedeemable.toString(), parseInt(reserveDecimals)));
       const approveReceipt = await approveTransaction.wait();
       console.log(`Info: Approve Receipt:`, approveReceipt);
       console.log('------------------------------'); // separator
 
-      const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-      console.log(priceOfRedeemableInUnitsOfReserve);
-      let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-
-      console.log(`Info: Price of tokens in the Sale: ${readablePrice} ${await reserveContract.symbol()} (${reserveContract.address})`); // 10 to the power of REDEEMABLE_ERC20_DECIMALS
+      console.log(`Info: Price of tokens in the Sale: ${staticReservePriceOfRedeemable}${await reserveContract.symbol()} (${reserveContract.address})`);
 
       const buyConfig = {
         feeRecipient: address,
         fee: ethers.utils.parseUnits("0", parseInt(reserveDecimals)), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
-        minimumUnits: DESIRED_UNITS_OF_REDEEMABLE, // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
-        desiredUnits: DESIRED_UNITS_OF_REDEEMABLE,
+        minimumUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)), // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
+        desiredUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)),
         maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
       }
 
-      let readableUnits = (parseInt(DESIRED_UNITS_OF_REDEEMABLE.toString())/(10**parseInt(redeemableDecimals))).toString();
-      console.log(`Info: Buying ${readableUnits} ${redeemableSymbol} from Sale with parameters:`, buyConfig);
+      console.log(`Info: Buying ${DESIRED_UNITS_OF_REDEEMABLE}${redeemableSymbol} from Sale with parameters:`, buyConfig);
       const buyStatusTransaction = await saleContract.buy(buyConfig);
       const buyStatusReceipt = await buyStatusTransaction.wait();
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);
@@ -519,6 +524,8 @@ function App() {
               initiateBuy={initiateBuy}
               buttonLock={buttonLock}
               redeemableTokenAddress={redeemableTokenAddress}
+              staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
+              reserveSymbol={reserveSymbol}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
