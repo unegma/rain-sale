@@ -34,7 +34,11 @@ declare var process : {
  * App
  */
 function App() {
+
+  /** State Config **/
+
   const [deploying, setDeploying] = useState(false);
+  const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
   const [address, setAddress] = useState("");
   const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
@@ -47,6 +51,25 @@ function App() {
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
+
+  function resetToDefault() {
+    setDeploying(false);
+    setAdminConfigPage(0);
+    // setSigner()
+    // setAddress();
+    setReserveTokenAddress(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
+    setReserveDecimals(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
+    setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
+    setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
+    setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
+    setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
+    setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
+    setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
+    setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
+    setSaleView(false); // show sale or admin view (if there is a sale address in the url)
+  }
+
+  /** UseEffects **/
 
   // run once on render and check url parameters
   useEffect(() => {
@@ -64,10 +87,7 @@ function App() {
     makeWeb3Connection(); // todo test what happens if not signed in
   },[]);
 
-  const amountOfShoes = 2;
-
-  if (!saleView) {
-  }
+  /** Handle Form Inputs **/
 
   const handleChangeReserveTokenAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReserveTokenAddress(event.target.value);
@@ -75,6 +95,20 @@ function App() {
   const handleChangeStaticReservePriceOfRedeemable = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStaticReservePriceOfRedeemable(event.target.value);
   };
+  const handleChangeSaleTimeout = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSaleTimeoutInBlocks(event.target.value);
+  };
+  const handleChangeRedeemableName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRedeemableName(event.target.value);
+  };
+  const handleChangeRedeemableSymbol = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRedeemableSymbol(event.target.value);
+  };
+  const handleChangeRedeemableInitialSupply = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRedeemableInitialSupply(event.target.value);
+  };
+
+  /** Functions **/
 
   async function makeWeb3Connection() {
     try {
@@ -85,7 +119,6 @@ function App() {
       console.log(err);
     }
   }
-
 
   async function deploySale() {
     setDeploying(true);
@@ -147,15 +180,13 @@ function App() {
     console.log('Info: Sale Started Receipt:', startStatusReceipt);
     console.log('------------------------------'); // separator
 
-    // todo provide a link to the sale
+    // todo provide a link to the sale (or redirect)
 
     setDeploying(false);
   }
 
+  /** View **/
 
-  /**
-   * View
-   */
   return (
     <div className="rootContainer">
       <NavBar />
@@ -172,49 +203,128 @@ function App() {
             noValidate
             autoComplete="off"
           >
+
             <Typography variant="h3" component="h2" color="black">
               Configure a Shoe NFT Sale
             </Typography>
-            <Typography variant="h4" component="h3" color="black">
-              (Admin Dashboard)
-            </Typography>
 
-            <FormControl variant="standard">
-              <InputLabel htmlFor="component-helper">The Token that Users will use to buy Shoe NFTs</InputLabel>
-              <Input
-                id="component-helper"
-                value={reserveTokenAddress}
-                onChange={handleChangeReserveTokenAddress}
-                aria-describedby="component-helper-text"
-              />
-              <FormHelperText id="component-helper-text">
-                Default: a version of USDC (18 Decimals)
-              </FormHelperText>
-            </FormControl>
+            { adminConfigPage === 0 && (
+              <>
 
-            <FormControl variant="standard">
-              <InputLabel htmlFor="component-helper">The Price of a Shoe NFT</InputLabel>
-              <Input
-                id="component-helper"
-                value={staticReservePriceOfRedeemable}
-                onChange={handleChangeStaticReservePriceOfRedeemable}
-                aria-describedby="component-helper-text"
-              />
-              <FormHelperText id="component-helper-text">
-                Default: 1 of the above Tokens
-              </FormHelperText>
-            </FormControl>
+                <Typography variant="h4" component="h3" color="black">
+                  Sale Parameters (Page 1/2)
+                </Typography>
 
-            <Button disabled={deploying} variant="outlined" onClick={() => {deploySale()}}>Deploy Sale</Button>
+                <FormControl variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The Token that Users will use to buy Shoe NFTs</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={reserveTokenAddress}
+                    onChange={handleChangeReserveTokenAddress}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    Default: a version of USDC (18 Decimals)
+                  </FormHelperText>
+                </FormControl>
+
+                <FormControl variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The Price of a Shoe NFT</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={staticReservePriceOfRedeemable}
+                    onChange={handleChangeStaticReservePriceOfRedeemable}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    Default: 1 of the above Tokens
+                  </FormHelperText>
+                </FormControl>
+
+                {/*todo add some validation for max*/}
+                <FormControl variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Timeout</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={saleTimeoutInBlocks}
+                    onChange={handleChangeSaleTimeout}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    On Matic Mumbai, 100 blocks is about 10 mins
+                  </FormHelperText>
+                </FormControl>
+
+                <div className="buttons-box">
+                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
+                  <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
+                </div>
+              </>
+            )}
+
+            { adminConfigPage === 1 && (
+              <>
+                <Typography variant="h4" component="h3" color="black">
+                  NFT Parameters (Page 2/2)
+                </Typography>
+
+                <FormControl variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Shoe Collection Name</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={redeemableName}
+                    onChange={handleChangeRedeemableName}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    Name for your Shoe Collection
+                  </FormHelperText>
+                </FormControl>
+
+
+                <FormControl disabled variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Shoe NFT Symbol</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={redeemableSymbol}
+                    onChange={handleChangeRedeemableSymbol}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    Symbol for Shoe NFT Token
+                  </FormHelperText>
+                </FormControl>
+
+                <FormControl variant="standard">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Shoes for Sale</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={redeemableInitialSupply}
+                    onChange={handleChangeRedeemableInitialSupply}
+                    aria-describedby="component-helper-text"
+                  />
+                  <FormHelperText id="component-helper-text">
+                    Users can currently only buy 1, but this can be altered in config
+                  </FormHelperText>
+                </FormControl>
+
+                <div className="buttons-box">
+                  <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
+                  <Button className="fifty-percent-button" disabled={deploying} variant="contained" onClick={() => {deploySale()}}>Deploy Sale</Button>
+                </div>
+              </>
+            )}
+
+
 
             {/*<FormControl disabled variant="standard">*/}
-            {/*  <InputLabel htmlFor="component-disabled">Name</InputLabel>*/}
+            {/*  <InputLabel className="input-box-label" htmlFor="component-disabled">Name</InputLabel>*/}
             {/*  <Input id="component-disabled" value={name} onChange={handleChange} />*/}
             {/*  <FormHelperText>Disabled</FormHelperText>*/}
             {/*</FormControl>*/}
 
             {/*<FormControl error variant="standard">*/}
-            {/*  <InputLabel htmlFor="component-error">Name</InputLabel>*/}
+            {/*  <InputLabel className="input-box-label" htmlFor="component-error">Name</InputLabel>*/}
             {/*  <Input*/}
             {/*    id="component-error"*/}
             {/*    value={name}*/}
@@ -237,7 +347,7 @@ function App() {
             <ambientLight intensity={0.5} />
             <directionalLight intensity={0.3} position={[5, 25, 20]} />
             <Suspense fallback={null}>
-              <Shoes amount={amountOfShoes} />
+              <Shoes amount={redeemableInitialSupply} />
               <Environment preset="city" />
             </Suspense>
             <OrbitControls autoRotate autoRotateSpeed={1} />

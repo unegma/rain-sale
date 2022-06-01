@@ -71,3 +71,22 @@ canvas {
   flex-direction: column;
   max-width: 75vw;
 }
+
+.buttons-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.fifty-percent-button {
+  flex: 1;
+}
+
+#component-helper-text {
+  /*color: green;*/
+}
+
+.input-box-label {
+  font-weight: bold !important;
+  color: black !important;
+}
