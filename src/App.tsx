@@ -186,18 +186,24 @@ function App() {
       const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", parseInt(redeemableDecimals)); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
 
       // connect to the reserve token and approve the spend limit for the buy, to be able to perform the "buy" transaction.
-      console.log(`Info: Connecting to Reserve token for approval of spend:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
       // @ts-ignore
       const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
       // @ts-ignore
       const saleContract = new rainSDK.Sale(saleAddress, signer);
+
+      // approval
+      console.log(`Info: Connecting to Reserve token for approval of spend:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
+
       const approveTransaction = await reserveContract.approve(saleContract.address, DESIRED_UNITS_OF_REDEEMABLE);
       const approveReceipt = await approveTransaction.wait();
       console.log(`Info: Approve Receipt:`, approveReceipt);
       console.log('------------------------------'); // separator
 
-      let priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-      console.log(`Info: Price of tokens in the Sale: ${priceOfRedeemableInUnitsOfReserve.toNumber()/(10**parseInt(redeemableDecimals))} ${await reserveContract.symbol()} (${reserveContract.address})`); // 10 to the power of REDEEMABLE_ERC20_DECIMALS
+      const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+      console.log(priceOfRedeemableInUnitsOfReserve);
+      let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+
+      console.log(`Info: Price of tokens in the Sale: ${readablePrice} ${await reserveContract.symbol()} (${reserveContract.address})`); // 10 to the power of REDEEMABLE_ERC20_DECIMALS
 
       const buyConfig = {
         feeRecipient: address,
@@ -207,7 +213,8 @@ function App() {
         maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
       }
 
-      console.log(`Info: Buying ${DESIRED_UNITS_OF_REDEEMABLE} ${redeemableSymbol} from Sale with parameters:`, buyConfig); // todo check this
+      let readableUnits = (parseInt(DESIRED_UNITS_OF_REDEEMABLE.toString())/(10**parseInt(redeemableDecimals))).toString();
+      console.log(`Info: Buying ${readableUnits} ${redeemableSymbol} from Sale with parameters:`, buyConfig);
       const buyStatusTransaction = await saleContract.buy(buyConfig);
       const buyStatusReceipt = await buyStatusTransaction.wait();
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);

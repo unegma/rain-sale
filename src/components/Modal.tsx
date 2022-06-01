@@ -30,6 +30,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock}
         <Box component="div" sx={style}>
           <img className="modalImage" src={displayedImage} alt="#" /><br/>
           <Typography className="modalText">Demo, see console for more data.</Typography>
+          <Typography color="red" className="modalText">Please note, this will fail if you already have more than the WALLET_CAP</Typography>
 
           <br/>
 
