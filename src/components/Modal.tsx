@@ -3,14 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
-
-declare var process : {
-  env: {
-    REACT_APP_REDEEMABLE_ERC20_DECIMALS: string
-  }
-}
-const REDEEMABLE_ERC20_DECIMALS = parseInt(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS); // See here for more info: https://docs.openzeppelin.com/contracts/3.x/erc20#a-note-on-decimals
-
+const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoes.jpg'
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -35,11 +28,13 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock}
         aria-describedby="modal-modal-description"
       >
         <Box component="div" sx={style}>
-          {/*<img className="modalImage" src={displayedImage} alt="#" /><br/>*/}
+          <img className="modalImage" src={displayedImage} alt="#" /><br/>
           <Typography className="modalText">Demo, see console for more data.</Typography>
 
+          <br/>
+
           <div className="buttons-box">
-            <Button className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
+            <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
             <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe!</Button><br/>
           </div>
 

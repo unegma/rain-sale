@@ -183,7 +183,7 @@ function App() {
 
     try {
       // remember redeemableDecimals will change when getSaleData() is called
-      const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", redeemableDecimals); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
+      const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", parseInt(redeemableDecimals)); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
 
       // connect to the reserve token and approve the spend limit for the buy, to be able to perform the "buy" transaction.
       console.log(`Info: Connecting to Reserve token for approval of spend:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
@@ -201,7 +201,7 @@ function App() {
 
       const buyConfig = {
         feeRecipient: address,
-        fee: ethers.utils.parseUnits("0", reserveDecimals), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
+        fee: ethers.utils.parseUnits("0", parseInt(reserveDecimals)), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
         minimumUnits: DESIRED_UNITS_OF_REDEEMABLE, // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
         desiredUnits: DESIRED_UNITS_OF_REDEEMABLE,
         maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
