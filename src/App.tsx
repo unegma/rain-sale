@@ -154,38 +154,46 @@ function App() {
       distributionEndForwardingAddress: "0x0000000000000000000000000000000000000000" // the rTKNs that are not sold get forwarded here (0x00.. will burn them)
     }
 
-    // todo get ratios of costs
-    // todo what happens if one fails (inform users)
-    console.warn("Info: It is important to let your users know how many transactions to expect and what they are. " +
-      "This example consists of 5 Transactions:\n\n" +
-      "* Create Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.002108 MATIC)\n" + // todo check how much gas costs can fluctuate (gas cost at 2022-05-30T15:27:32Z: 0.001992 MATIC) (gas cost at 2022-05-30T15:32:44Z: 0.044359 MATIC)
-      "* Start Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000061 MATIC) \n" +
-      // todo what is this contract address? and is it approved to spend this again in future or only up to this amount?
-      "* Give Permission to 0x642d4e6d828436ee95658c3462b46dafc1d0a61a to access USDCC (For Users) (fee+gas at circa 2022-05-30T15:32:44Z: 0.00009 MATIC) \n" +
-      "* Buying from Sale (For Users) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000531 MATIC) \n" +
-      "* End Sale (For Admins) (fee+gas at circa 2022-05-30T15:32:44Z: 0.000158 MATIC) \n"
-    );
-    console.log('------------------------------'); // separator
+    // // todo get ratios of costs
+    // // todo what happens if one fails (inform users)
+    // console.warn("Info: It is important to let your users know how many transactions to expect and what they are. " +
+    //   "This example consists of 5 Transactions:\n\n" +
+    //   "* Create Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.002108 MATIC)\n" + // todo check how much gas costs can fluctuate (gas cost at 2022-05-30T15:27:32Z: 0.001992 MATIC) (gas cost at 2022-05-30T15:32:44Z: 0.044359 MATIC)
+    //   "* Start Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000061 MATIC) \n" +
+    //   // todo what is this contract address? and is it approved to spend this again in future or only up to this amount?
+    //   "* Give Permission to 0x642d4e6d828436ee95658c3462b46dafc1d0a61a to access USDCC (For Users) (fee+gas at circa 2022-05-30T15:32:44Z: 0.00009 MATIC) \n" +
+    //   "* Buying from Sale (For Users) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000531 MATIC) \n" +
+    //   "* End Sale (For Admins) (fee+gas at circa 2022-05-30T15:32:44Z: 0.000158 MATIC) \n"
+    // );
+    // console.log('------------------------------'); // separator
 
-    console.log("Info: Creating Sale with the following state:", saleConfig, redeemableConfig);
-    // @ts-ignore
-    const saleContract = await rainSDK.Sale.deploy(signer, saleConfig, redeemableConfig);
-    console.log('Result: Sale Contract:', saleContract); // the Sale contract and corresponding address
-    const redeemableContract = await saleContract.getRedeemable();
-    console.log('Result: Redeemable Contract:', redeemableContract); // the Sale contract and corresponding address
-    console.log('------------------------------'); // separator
+    try {
 
-    // ### Interact with the newly deployed ecosystem
+      console.log("Info: Creating Sale with the following state:", saleConfig, redeemableConfig);
+      // @ts-ignore
+      const saleContract = await rainSDK.Sale.deploy(signer, saleConfig, redeemableConfig);
+      console.log('Result: Sale Contract:', saleContract); // the Sale contract and corresponding address
+      const redeemableContract = await saleContract.getRedeemable();
+      console.log('Result: Redeemable Contract:', redeemableContract); // the Sale contract and corresponding address
+      console.log('------------------------------'); // separator
 
-    console.log('Info: Starting The Sale.');
-    const startStatusTransaction = await saleContract.start();
-    const startStatusReceipt = await startStatusTransaction.wait();
-    console.log('Info: Sale Started Receipt:', startStatusReceipt);
-    console.log('------------------------------'); // separator
+      // ### Interact with the newly deployed ecosystem
 
-    // todo provide a link to the sale (or redirect)
+      console.log('Info: Starting The Sale.');
+      const startStatusTransaction = await saleContract.start();
+      const startStatusReceipt = await startStatusTransaction.wait();
+      console.log('Info: Sale Started Receipt:', startStatusReceipt);
+      console.log('------------------------------'); // separator
 
-    setDeploying(false);
+      // todo provide a link to the sale (or redirect)
+      // setDeploying(false);
+      // setSaleView(true);
+      console.log(`Redirecting to Sale: ${saleContract.address}`);
+      window.location.replace(`${window.location.origin}?s=${saleContract.address}`);
+    } catch (err) {
+      console.log(err);
+      alert('Failed Deployment, please start again.');
+    }
   }
 
   /** Various **/
@@ -275,7 +283,7 @@ function App() {
 
                 {/*todo add some validation for max*/}
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Timeout</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Timeout (blocks)</InputLabel>
                   <Input
                     id="component-helper"
                     value={saleTimeoutInBlocks}
@@ -357,6 +365,14 @@ function App() {
                 </Typography>
 
                 <Pie className="costs-pie" data={data} />
+
+                <Typography color="black">
+                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Step 2 (start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
+                </Typography>
+
+                <Typography color="red">
+                  Please make sure you are connected to Mumbai Matic testnet.
+                </Typography>
 
                 <div className="buttons-box">
                   <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
