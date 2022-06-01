@@ -301,7 +301,7 @@ function App() {
   /** Various **/
 
   const data = {
-    labels: ['Deploy Sale (~0.040 MATIC)', 'Start Sale (~0.00125 MATIC)'],
+    labels: ['Tx1: Deploy Sale (~0.040 MATIC)', 'Tx2: Start Sale (~0.00125 MATIC)'],
     datasets: [
       {
         label: 'Ratio of Gas+Fee',
