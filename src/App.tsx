@@ -44,16 +44,21 @@ function App() {
   const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
   const [address, setAddress] = useState("");
+
+  const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
+  const [showShoes, setShowShoes] = React.useState(false);
+  const [saleAddress, setSaleAddress] = React.useState("");
+  const [stateSaleContract, setStateSaleContract] = React.useState(undefined);
+
   const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
   const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
-  const [redeemableDecimals, setRedeemableDecimals ] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
+  const [redeemableDecimals, setRedeemableDecimals] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
   const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
   const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
   const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
   const [saleTimeoutInBlocks, setSaleTimeoutInBlocks] = useState(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
-  const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
 
   function resetToDefault() {
     setDeploying(false);
@@ -77,11 +82,12 @@ function App() {
   // run once on render and check url parameters
   useEffect(() => {
     let queryString = new URLSearchParams(window.location.search);
-    let saleAddress = queryString.get('s');
+    let sParam = queryString.get('s');
 
-    if (typeof saleAddress !== 'undefined' && saleAddress) {
-      console.log(`saleAddress is ${saleAddress}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
+    if (typeof sParam !== 'undefined' && sParam) {
+      console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
       setSaleView(true);
+      setSaleAddress(sParam);
     }
   },[]);
 
@@ -89,6 +95,15 @@ function App() {
   useEffect(() => {
     makeWeb3Connection(); // todo test what happens if not signed in
   },[]);
+
+  // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
+  useEffect(() => {
+    if (saleAddress && signer) {
+      // todo get saleContract and then get amount of shoes, and then load shoes
+      console.log('HERE');
+      getSaleData();
+    }
+  }, [saleAddress, signer]); // todo might not need to monitor this depending on if the other useEffect runs quicker?
 
   /** Handle Form Inputs **/
 
@@ -123,6 +138,38 @@ function App() {
     }
   }
 
+  /**
+   * Get Sale Data from blockchain instead of .env
+   */
+  async function getSaleData() {
+    try {
+      // @ts-ignore
+      const saleContract = new rainSDK.Sale(saleAddress, signer); // todo--question does this await somehow?
+      console.log(saleContract);
+
+      const redeemable = await saleContract.getRedeemable(signer);
+      console.log(redeemable);
+
+      const amountOfShoesBN = await redeemable.totalSupply();
+      const amountOfShoesDecimals = await redeemable.decimals();
+      const amountOfShoes = parseInt(amountOfShoesBN.toString()) / 10 ** amountOfShoesDecimals;
+      console.log(`Shoes in Sale: ${amountOfShoes}`); // todo check if this changes when they are bought
+
+      setRedeemableInitialSupply(amountOfShoes.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
+      setRedeemableName(await redeemable.name());
+      setRedeemableSymbol(await redeemable.symbol())
+
+      // @ts-ignore
+      setStateSaleContract(saleContract);
+      setShowShoes(true);
+    } catch(err) {
+      console.log('Error getting sale data', err);
+    }
+  }
+
+  /**
+   * Deploy a Sale and Start it (2txs)
+   */
   async function deploySale() {
     setDeploying(true);
 
@@ -168,7 +215,6 @@ function App() {
     // console.log('------------------------------'); // separator
 
     try {
-
       console.log("Info: Creating Sale with the following state:", saleConfig, redeemableConfig);
       // @ts-ignore
       const saleContract = await rainSDK.Sale.deploy(signer, saleConfig, redeemableConfig);
@@ -185,14 +231,11 @@ function App() {
       console.log('Info: Sale Started Receipt:', startStatusReceipt);
       console.log('------------------------------'); // separator
 
-      // todo provide a link to the sale (or redirect)
-      // setDeploying(false);
-      // setSaleView(true);
       console.log(`Redirecting to Sale: ${saleContract.address}`);
       window.location.replace(`${window.location.origin}?s=${saleContract.address}`);
     } catch (err) {
       console.log(err);
-      alert('Failed Deployment, please start again.');
+      alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.');
     }
   }
 
@@ -229,10 +272,11 @@ function App() {
 
   return (
     <div className="rootContainer">
-      <NavBar />
 
+      {/*if nothing is set, show admin panel*/}
       { !saleView && (
         <>
+          <NavBar />
 
           <Box
             className="admin-form"
@@ -401,27 +445,29 @@ function App() {
         </>
       )}
 
+      {/* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set */}
+      { saleView && showShoes && (
+        <>
+          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} />
+          <div className="canvasContainer">
+            {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
 
-      { saleView && (
+            <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
+              <ambientLight intensity={0.5} />
+              <directionalLight intensity={0.3} position={[5, 25, 20]} />
+              <Suspense fallback={null}>
+                <Shoes amount={redeemableInitialSupply} />
+                <Environment preset="city" />
+              </Suspense>
+              <OrbitControls autoRotate autoRotateSpeed={1} />
 
-        <div className="canvasContainer">
-          {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
+              {/*<color attach="background" args={['#191920']}/>*/}
+              {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
+              {/*<Environment preset="city"/>*/}
 
-          <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
-            <ambientLight intensity={0.5} />
-            <directionalLight intensity={0.3} position={[5, 25, 20]} />
-            <Suspense fallback={null}>
-              <Shoes amount={redeemableInitialSupply} />
-              <Environment preset="city" />
-            </Suspense>
-            <OrbitControls autoRotate autoRotateSpeed={1} />
-
-            {/*<color attach="background" args={['#191920']}/>*/}
-            {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
-            {/*<Environment preset="city"/>*/}
-
-          </Canvas>
-        </div>
+            </Canvas>
+          </div>
+        </>
       )}
 
     </div>
