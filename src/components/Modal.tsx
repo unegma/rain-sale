@@ -29,17 +29,26 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
       >
         <Box component="div" sx={style}>
           <img className="modalImage" src={displayedImage} alt="#" /><br/>
+
+          {/*todo create graph of transaction costs*/}
+
           <Typography className="modalText">Demo, see console for more data.</Typography>
           <br/>
           <Typography className="modalText">To see the shoe in your wallet, add {redeemableTokenAddress}</Typography>
-          <br/>
-          <Typography color="red" className="modalText">Please note, this will fail if you already have more than the WALLET_CAP</Typography>
 
           <br/>
 
           <div className="buttons-box">
             <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy A Shoe ({staticReservePriceOfRedeemable}{reserveSymbol})</Button><br/>
+
+            {/* todo could check directly against the large number in ethers instead of this arbitrarily large number */}
+            { parseInt(staticReservePriceOfRedeemable)*10**18 < 9999999999999  && (
+              <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy A Shoe ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
+            )}
+            { parseInt(staticReservePriceOfRedeemable)*10**18 > 9999999999999  && (
+              <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>
+            )}
+
           </div>
 
         </Box>

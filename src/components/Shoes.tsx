@@ -21,7 +21,6 @@ export default function Shoes({amount, modalOpen, setModalOpen}: {amount: any, m
       const dracoLoader = new DRACOLoader();
       dracoLoader.setDecoderConfig({type: 'js'});
       dracoLoader.setDecoderPath(DECODER_PATH);
-      console.log(dracoLoader)
       loader.setDRACOLoader(dracoLoader);
     }
   });

@@ -46,6 +46,7 @@ function App() {
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
   const [address, setAddress] = useState("");
   const [saleAddress, setSaleAddress] = React.useState("");
+  const [saleComplete, setSaleComplete] = React.useState(false);
 
   // page controls
   const [buttonLock, setButtonLock] = useState(false);
@@ -105,11 +106,9 @@ function App() {
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
   useEffect(() => {
     if (saleAddress && signer) {
-      // todo get saleContract and then get amount of shoes, and then load shoes
-      console.log('HERE');
-      getSaleData();
+      getSaleData(); // get saleContract and then get amount of shoes, and then load shoes
     }
-  }, [saleAddress, signer]); // only get sale data when signer and saleAddress have been loaded
+  }, [saleAddress, signer, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
 
   /** Handle Form Inputs **/
 
@@ -228,6 +227,8 @@ function App() {
       const buyStatusReceipt = await buyStatusTransaction.wait();
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);
       console.log('------------------------------'); // separator
+
+      setSaleComplete(true);
       setButtonLock(false);
     } catch(err) {
       setButtonLock(false);
@@ -456,7 +457,7 @@ function App() {
                     aria-describedby="component-helper-text"
                   />
                   <FormHelperText id="component-helper-text">
-                    Users can currently only buy 1, but this can be altered in config
+                    In this example, Users can only buy 1
                   </FormHelperText>
                 </FormControl>
 
@@ -485,6 +486,8 @@ function App() {
                 <Typography color="red">
                   Please make sure you are connected to Mumbai Matic testnet.
                 </Typography>
+
+                {/*todo explain to users that they will need to redeem the actual shoe for rTKN which */}
 
                 <div className="buttons-box">
                   <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
