@@ -14,7 +14,7 @@ const randomData = Array.from({ length: 1000 }, (r = 10) => ({ random: Math.rand
  * From this example:
  * https://codesandbox.io/s/floating-instanced-shoes-h8o2d?file=/src/App.js:1195-1246
  */
-export default function Shoes({amount}: {amount: any}) {
+export default function Shoes({amount, modalOpen, setModalOpen}: {amount: any, modalOpen: boolean, setModalOpen: any}) {
   const useDraco = true;
   const { nodes, materials }: any = useLoader(GLTFLoader, shoeURL, (loader: any) => {
     if (useDraco) {
@@ -28,7 +28,7 @@ export default function Shoes({amount}: {amount: any}) {
   return (
     <Instances range={amount} material={materials.phong1SG} geometry={nodes.Shoe.geometry}>
       {randomData.map((props, i) => (
-        <Shoe key={i} {...props} />
+        <Shoe modalOpen={modalOpen} setModalOpen={setModalOpen} key={i} {...props} />
       ))}
     </Instances>
   )

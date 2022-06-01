@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
 import {ethers} from "ethers";
 import * as rainSDK from "rain-sdk";
-import {useEffect, useState} from "react";
 
 declare var process : {
   env: {
@@ -75,26 +74,23 @@ async function initiateBuy() {
   }
 }
 
-export default function Modal({open, setModalOpen, selectedImage}: any) {
-  console.log(selectedImage)
-  const [displayedImage, setDisplayedImage] = useState("");
-
-  useEffect(() => {
-    setDisplayedImage(selectedImage);
-  }, [selectedImage])
-
+export default function Modal({modalOpen, setModalOpen}: {modalOpen: boolean, setModalOpen: any}) {
   return (
     <div>
       <ModalMaterial
-        open={open}
+        open={modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box component="div" sx={style}>
-          <img className="modalImage" src={displayedImage} alt="#" /><br/>
+          {/*<img className="modalImage" src={displayedImage} alt="#" /><br/>*/}
           <Typography className="modalText">Demo, see console for data. Please also be aware (for now), you aren't currently buying individual NFTs, but rTKN.</Typography>
-          <Button onClick={initiateBuy}>Buy NFT</Button><br/>
-          <Button onClick={() => {setModalOpen(false)}}>Close</Button>
+
+          <div className="buttons-box">
+            <Button className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
+            <Button className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe!</Button><br/>
+          </div>
+
         </Box>
       </ModalMaterial>
     </div>

@@ -4,7 +4,7 @@ import {Instance} from "@react-three/drei";
 import * as THREE from "three";
 const color = new THREE.Color();
 
-export default function Shoe({ random, ...props }: {random: number}) {
+export default function Shoe({random, modalOpen, setModalOpen, ...props }: {random: number, modalOpen: boolean, setModalOpen: any}) {
   const ref = useRef<any>()
   const [hovered, setHover] = useState(false)
   useFrame((state) => {
@@ -16,7 +16,7 @@ export default function Shoe({ random, ...props }: {random: number}) {
   })
   return (
     <group {...props}>
-      <Instance ref={ref} onPointerOver={(e) => (e.stopPropagation(), setHover(true))} onPointerOut={(e) => setHover(false)} />
+      <Instance ref={ref} onClick={() =>{setModalOpen(true)}} onPointerOver={(e) => (e.stopPropagation(), setHover(true))} onPointerOut={(e) => setHover(false)} />
     </group>
   )
 }

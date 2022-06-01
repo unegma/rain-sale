@@ -1,8 +1,8 @@
 import React, {Suspense, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber'
-import { OrbitControls, Environment, useGLTF } from '@react-three/drei'
+import { OrbitControls, Environment } from '@react-three/drei'
 import NavBar from './components/NavBar';
-// import Modal from './components/Modal';
+import Modal from './components/Modal';
 import Button from "@mui/material/Button";
 import {ethers, Signer} from "ethers";
 import * as rainSDK from "rain-sdk";
@@ -46,6 +46,7 @@ function App() {
   const [address, setAddress] = useState("");
 
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
+  const [modalOpen, setModalOpen] = React.useState(false);
   const [showShoes, setShowShoes] = React.useState(false);
   const [saleAddress, setSaleAddress] = React.useState("");
   const [stateSaleContract, setStateSaleContract] = React.useState(undefined);
@@ -450,13 +451,13 @@ function App() {
         <>
           <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} />
           <div className="canvasContainer">
-            {/*<Modal open={modalOpen} setModalOpen={setModalOpen} selectedImage={selectedImage} />*/}
+            <Modal modalOpen={modalOpen} setModalOpen={setModalOpen} />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
               <ambientLight intensity={0.5} />
               <directionalLight intensity={0.3} position={[5, 25, 20]} />
               <Suspense fallback={null}>
-                <Shoes amount={redeemableInitialSupply} />
+                <Shoes modalOpen={modalOpen} setModalOpen={setModalOpen} amount={redeemableInitialSupply} />
                 <Environment preset="city" />
               </Suspense>
               <OrbitControls autoRotate autoRotateSpeed={1} />
