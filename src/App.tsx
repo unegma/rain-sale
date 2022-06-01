@@ -507,7 +507,7 @@ function App() {
       {/* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set */}
       { saleView && showShoes && (
         <>
-          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} />
+          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Shoe to Buy`} />
           <div className="canvasContainer">
             <Modal
               modalOpen={modalOpen}

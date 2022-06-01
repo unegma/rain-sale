@@ -70,8 +70,13 @@ canvas {
   color: black;
 }
 
+.right {
+  text-align: right;
+}
+
 .modalText {
   color: black;
+  user-select: text;
 }
 
 .admin-form {
