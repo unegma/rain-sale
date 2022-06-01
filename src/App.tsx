@@ -46,7 +46,7 @@ function App() {
   const [saleAddress, setSaleAddress] = React.useState("");
 
   // page controls
-  const [deploying, setDeploying] = useState(false);
+  const [buttonLock, setButtonLock] = useState(false);
   const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -153,25 +153,20 @@ function App() {
       console.log(reserve);
 
       setReserveTokenAddress(reserve.address);
-      console.log(reserve.address);
+      setRedeemableName(await redeemable.name());
+      setRedeemableSymbol(await redeemable.symbol())
+      setRedeemableDecimals((await redeemable.decimals()).toString());
 
-      // setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
-      // setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
+      // unnecessary, but here for reference // TODO ADD A SALE TIMEOUT INDICATOR AND A PRICE GETTER
       // setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
-      // setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
+      // setStaticReservePriceOfRedeemable(saleContract.calculatePrice(process.env.REACT_APP_REDEEMABLE_WALLET_CAP)); // should be desired units
       // setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
-      // setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
-      // setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
-
 
       const amountOfShoesBN = await redeemable.totalSupply();
       const amountOfShoesDecimals = await redeemable.decimals();
       const amountOfShoes = parseInt(amountOfShoesBN.toString()) / 10 ** amountOfShoesDecimals;
       console.log(`Shoes in Sale: ${amountOfShoes}`); // todo check if this changes when they are bought
-
       setRedeemableInitialSupply(amountOfShoes.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
-      setRedeemableName(await redeemable.name());
-      setRedeemableSymbol(await redeemable.symbol())
 
       // @ts-ignore
       setShowShoes(true);
@@ -184,8 +179,10 @@ function App() {
    * Called within the modal for making a buy
    */
   async function initiateBuy() {
-    // todo might want to tell user to look at console
+    setButtonLock(true);
+
     try {
+      // remember redeemableDecimals will change when getSaleData() is called
       const DESIRED_UNITS_OF_REDEEMABLE = ethers.utils.parseUnits("1", redeemableDecimals); // TODO DOES DECIMALS NEED CONVERTING TO INT? // could do this dynamically, but letting users buy one at a time here, with a limit of 1
 
       // connect to the reserve token and approve the spend limit for the buy, to be able to perform the "buy" transaction.
@@ -215,8 +212,9 @@ function App() {
       const buyStatusReceipt = await buyStatusTransaction.wait();
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);
       console.log('------------------------------'); // separator
-
+      setButtonLock(false);
     } catch(err) {
+      setButtonLock(false);
       console.log(`Info: Something went wrong:`, err);
     }
   }
@@ -225,7 +223,7 @@ function App() {
    * Deploy a Sale and Start it (2txs)
    */
   async function deploySale() {
-    setDeploying(true);
+    setButtonLock(true);
 
     const saleConfig = {
       canStartStateConfig: opcodeData.canStartStateConfig, // config for the start of the Sale (see opcodes section below)
@@ -447,7 +445,7 @@ function App() {
                 </FormControl>
 
                 <div className="buttons-box">
-                  <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
+                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
                   <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
                 </div>
               </>
@@ -473,8 +471,8 @@ function App() {
                 </Typography>
 
                 <div className="buttons-box">
-                  <Button className="fifty-percent-button" disabled={deploying} variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
-                  <Button className="fifty-percent-button" disabled={deploying} variant="contained" onClick={() => {deploySale()}}>Deploy</Button>
+                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
+                  <Button className="fifty-percent-button" disabled={buttonLock} variant="contained" onClick={() => {deploySale()}}>Deploy</Button>
                 </div>
               </>
             )}
@@ -508,6 +506,7 @@ function App() {
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
               initiateBuy={initiateBuy}
+              buttonLock={buttonLock}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>

@@ -23,7 +23,9 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy}: {modalOpen: boolean, setModalOpen: any, initiateBuy: any}) {
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean})
+{
 
   return (
     <div>
@@ -34,11 +36,11 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy}: {modalOpen
       >
         <Box component="div" sx={style}>
           {/*<img className="modalImage" src={displayedImage} alt="#" /><br/>*/}
-          {/*<Typography className="modalText">Demo, see console for data.</Typography>*/}
+          <Typography className="modalText">Demo, see console for more data.</Typography>
 
           <div className="buttons-box">
             <Button className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
-            <Button className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe!</Button><br/>
+            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Shoe!</Button><br/>
           </div>
 
         </Box>
