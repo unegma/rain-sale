@@ -25,6 +25,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
+import {CircularProgress} from "@mui/material";
 const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-voucher.jpg'
 ChartJS.register(
   CategoryScale,
@@ -66,6 +67,7 @@ function App() {
 
   // page controls
   const [buttonLock, setButtonLock] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -257,6 +259,7 @@ function App() {
    */
   async function deploySale() {
     setButtonLock(true);
+    setLoading(true);
 
     const saleConfig = {
       canStartStateConfig: opcodeData.canStartStateConfig, // config for the start of the Sale (see opcodes section below)
@@ -320,6 +323,7 @@ function App() {
       window.location.replace(`${window.location.origin}?s=${saleContract.address}`);
     } catch (err) {
       console.log(err);
+      setLoading(false);
       alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.');
     }
   }
@@ -384,6 +388,10 @@ function App() {
 
   return (
     <div className="rootContainer">
+
+      { loading && (
+        <div className="deploying"><CircularProgress /></div>
+      )}
 
       {/*if nothing is set, show admin panel*/}
       { !saleView && (
