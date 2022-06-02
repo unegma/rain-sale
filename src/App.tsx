@@ -537,7 +537,7 @@ function App() {
 
 
                 <Typography color="black">
-                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Tx2 (start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
+                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Tx2 (Start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
                 </Typography>
 
                 {/*todo explain to users that they will need to redeem the actual shoe for rTKN which */}
