@@ -463,7 +463,7 @@ function App() {
 
                 {/*todo add some validation for max*/}
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Duration (Matic Mumbai: 100 blocks is 10mins)</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Duration (Matic Mumbai: 600 blocks is 60mins)</InputLabel>
                   <Input
                     id="component-helper"
                     value={saleTimeoutInBlocks}
