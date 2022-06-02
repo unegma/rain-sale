@@ -13,12 +13,27 @@ import Typography from "@mui/material/Typography"; // opcode data for RainVM
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-voucher.jpg'
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -310,31 +325,58 @@ function App() {
   }
 
   /** Various **/
+  //
+  // const data = {
+  //   labels: ['Tx1: Deploy Sale (~0.040 MATIC)', 'Tx2: Start Sale (~0.00125 MATIC)'],
+  //   datasets: [
+  //     {
+  //       label: 'Ratio of Gas+Fee',
+  //       data: [0.040, 0.00125],
+  //       backgroundColor: [
+  //         'rgba(255, 99, 132, 0.2)',
+  //         'rgba(54, 162, 235, 0.2)',
+  //         'rgba(255, 206, 86, 0.2)',
+  //         'rgba(75, 192, 192, 0.2)',
+  //         'rgba(153, 102, 255, 0.2)',
+  //         'rgba(255, 159, 64, 0.2)',
+  //       ],
+  //       borderColor: [
+  //         'rgba(255, 99, 132, 1)',
+  //         'rgba(54, 162, 235, 1)',
+  //         'rgba(255, 206, 86, 1)',
+  //         'rgba(75, 192, 192, 1)',
+  //         'rgba(153, 102, 255, 1)',
+  //         'rgba(255, 159, 64, 1)',
+  //       ],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
+
+
+  const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+          position: 'top' as const,
+        },
+        title: {
+          display: true,
+          text: 'Upcoming Transaction Costs (Estimated MATIC)',
+        },
+      },
+    };
+
 
   const data = {
-    labels: ['Tx1: Deploy Sale (~0.040 MATIC)', 'Tx2: Start Sale (~0.00125 MATIC)'],
+    labels: ['Tx1', 'Tx2'],
     datasets: [
       {
-        label: 'Ratio of Gas+Fee',
+        label: '',
         data: [0.040, 0.00125],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      }
     ],
   };
 
@@ -362,7 +404,7 @@ function App() {
               Configure Voucher Sale
             </Typography>
             <Typography color="black" align="center">
-              A Proof of Concept for showing a Rain Protocol Sale
+              A Proof of Concept for demoing a Rain Protocol Sale
             </Typography>
 
             <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
@@ -453,7 +495,8 @@ function App() {
 
             { adminConfigPage === 2 && (
               <>
-                <Pie className="costs-pie" data={data} />
+                {/*<Pie className="costs-pie" data={data} />*/}
+                <Bar options={options} data={data} />;
 
                 <Typography variant="h5" component="h3" color="black">
                   (Page 3/3)
@@ -469,9 +512,8 @@ function App() {
                 </Typography>
 
 
-
                 <Typography color="black">
-                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Step 2 (start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
+                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Tx2 (start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
                 </Typography>
 
                 {/*todo explain to users that they will need to redeem the actual shoe for rTKN which */}
