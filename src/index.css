@@ -84,6 +84,11 @@ canvas {
   user-select: text;
 }
 
+.modalTextGreen {
+  color: green;
+  user-select: text;
+}
+
 .admin-form {
   display: flex;
   flex-direction: column;
