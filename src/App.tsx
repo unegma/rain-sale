@@ -214,6 +214,7 @@ function App() {
    */
   async function initiateBuy() {
     setButtonLock(true);
+    setLoading(true);
 
     try {
       // @ts-ignore
@@ -248,7 +249,9 @@ function App() {
 
       setSaleComplete(true);
       setButtonLock(false);
+      setLoading(false);
     } catch(err) {
+      setLoading(false);
       setButtonLock(false);
       console.log(`Info: Something went wrong:`, err);
     }
@@ -374,11 +377,11 @@ function App() {
 
 
   const data = {
-    labels: ['Tx1', 'Tx2'],
+    labels: ['Tx1: Deploy Sale', 'Tx2: Start Sale'],
     datasets: [
       {
         label: '',
-        data: [0.040, 0.00125],
+        data: [0.040, 0.00125], // todo base it on dynamic matic costs
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       }
     ],
@@ -449,7 +452,6 @@ function App() {
                     id="component-helper"
                     value={saleTimeoutInBlocks}
                     onChange={handleChangeSaleTimeout}
-                    aria-describedby="component-helper-text"
                   />
                 </FormControl>
 
@@ -490,7 +492,7 @@ function App() {
                   <Input
                     id="component-helper"
                     value={redeemableInitialSupply}
-                    aria-describedby="component-helper-text"
+                    onChange={handleChangeRedeemableInitialSupply}
                   />
                 </FormControl>
 
@@ -509,7 +511,6 @@ function App() {
                 <Typography variant="h5" component="h3" color="black">
                   (Page 3/3)
                 </Typography>
-
 
                 <Typography color="red">
                   Please make sure you are connected to Mumbai Matic testnet.
@@ -566,6 +567,7 @@ function App() {
               redeemableTokenAddress={redeemableTokenAddress}
               staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               reserveSymbol={reserveSymbol}
+              redeemableSymbol={redeemableSymbol}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>

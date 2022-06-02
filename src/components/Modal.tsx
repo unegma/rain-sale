@@ -16,8 +16,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string})
 {
 
   return (
@@ -32,10 +32,11 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           {/*todo create graph of transaction costs*/}
 
-          <Typography className="modalText">Demo, see console for more data.</Typography>
           <br/>
-          <Typography className="modalText">To see the shoe in your wallet, add {redeemableTokenAddress}</Typography>
 
+          <Typography className="modalText">After buying, an {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
+          <Typography className="modalText">To see the {redeemableSymbol} in your wallet, add: {redeemableTokenAddress}</Typography><br/>
+          <Typography className="modalText">See console for more data.</Typography>
           <br/>
 
           <div className="buttons-box">
