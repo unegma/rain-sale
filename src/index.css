@@ -79,6 +79,11 @@ canvas {
   user-select: text;
 }
 
+.modalTextRed {
+  color: red;
+  user-select: text;
+}
+
 .admin-form {
   display: flex;
   flex-direction: column;

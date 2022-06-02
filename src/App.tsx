@@ -64,6 +64,7 @@ function App() {
   const [address, setAddress] = useState("");
   const [saleAddress, setSaleAddress] = React.useState("");
   const [saleComplete, setSaleComplete] = React.useState(false);
+  const [consoleData, setConsoleData] = React.useState("");
 
   // page controls
   const [buttonLock, setButtonLock] = useState(false);
@@ -321,12 +322,15 @@ function App() {
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);
       console.log('------------------------------'); // separator
 
+      setConsoleData(`Complete! You can view the ${redeemableSymbol} in your wallet by adding: ${redeemableTokenAddress}`);
+
       setSaleComplete(true);
       setButtonLock(false);
       setLoading(false);
     } catch(err) {
       setLoading(false);
       setButtonLock(false);
+      setConsoleData(`Sale Failed (Check console for more data).`);
       console.log(`Info: Something went wrong:`, err);
     }
   }
@@ -566,7 +570,7 @@ function App() {
       {/* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set */}
       { saleView && showShoes && (
         <>
-          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Shoe`} />
+          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Shoe!`} />
           <div className="canvasContainer">
             <Modal
               modalOpen={modalOpen}
@@ -577,6 +581,7 @@ function App() {
               staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               reserveSymbol={reserveSymbol}
               redeemableSymbol={redeemableSymbol}
+              consoleData={consoleData}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
