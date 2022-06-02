@@ -17,6 +17,7 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-voucher.jpg'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
@@ -357,55 +358,49 @@ function App() {
             autoComplete="off"
           >
 
-            <Typography variant="h3" component="h2" color="black">
-              Configure a Shoe NFT Sale
+            <Typography variant="h4" component="h2" color="black" align="center">
+              Configure Voucher Sale
             </Typography>
+            <Typography color="black" align="center">
+              A Proof of Concept for showing a Rain Protocol Sale
+            </Typography>
+
+            <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
 
             { adminConfigPage === 0 && (
               <>
 
-                <Typography variant="h4" component="h3" color="black">
-                  (Page 1/3) Sale Parameters
+                <Typography variant="h5" component="h3" color="black">
+                  (Page 1/3)
                 </Typography>
 
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The Token that Users will use to buy Shoe NFTs</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The Token (e.g. USDC) for buying Vouchers</InputLabel>
                   <Input
                     id="component-helper"
                     value={reserveTokenAddress}
                     onChange={handleChangeReserveTokenAddress}
-                    aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    Default: a version of USDC (18 Decimals)
-                  </FormHelperText>
                 </FormControl>
 
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The Price of a Shoe NFT</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in USDC) of a Voucher</InputLabel>
                   <Input
                     id="component-helper"
                     value={staticReservePriceOfRedeemable}
                     onChange={handleChangeStaticReservePriceOfRedeemable}
-                    aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    Default: 1 of the above Tokens
-                  </FormHelperText>
                 </FormControl>
 
                 {/*todo add some validation for max*/}
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Timeout (blocks)</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Duration (Matic Mumbai: 100 blocks is 10mins)</InputLabel>
                   <Input
                     id="component-helper"
                     value={saleTimeoutInBlocks}
                     onChange={handleChangeSaleTimeout}
                     aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    On Matic Mumbai, 100 blocks is about 10 mins
-                  </FormHelperText>
                 </FormControl>
 
                 <div className="buttons-box">
@@ -417,8 +412,8 @@ function App() {
 
             { adminConfigPage === 1 && (
               <>
-                <Typography variant="h4" component="h3" color="black">
-                  (Page 2/3) NFT Parameters
+                <Typography variant="h5" component="h3" color="black">
+                  (Page 2/3)
                 </Typography>
 
                 <FormControl variant="standard">
@@ -427,38 +422,26 @@ function App() {
                     id="component-helper"
                     value={redeemableName}
                     onChange={handleChangeRedeemableName}
-                    aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    Name for your Shoe Collection
-                  </FormHelperText>
                 </FormControl>
 
 
                 <FormControl disabled variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Shoe NFT Symbol</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Voucher Symbol</InputLabel>
                   <Input
                     id="component-helper"
                     value={redeemableSymbol}
                     onChange={handleChangeRedeemableSymbol}
-                    aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    Symbol for Shoe NFT Token
-                  </FormHelperText>
                 </FormControl>
 
                 <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Shoes for Sale</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Amount for Sale (1 per User)</InputLabel>
                   <Input
                     id="component-helper"
                     value={redeemableInitialSupply}
-                    onChange={handleChangeRedeemableInitialSupply}
                     aria-describedby="component-helper-text"
                   />
-                  <FormHelperText id="component-helper-text">
-                    In this example, Users can only buy 1
-                  </FormHelperText>
                 </FormControl>
 
                 <div className="buttons-box">
@@ -470,21 +453,25 @@ function App() {
 
             { adminConfigPage === 2 && (
               <>
-                <Typography variant="h4" component="h3" color="black">
-                  (Page 3/3) Deployment Cost Ratios
+                <Pie className="costs-pie" data={data} />
+
+                <Typography variant="h5" component="h3" color="black">
+                  (Page 3/3)
                 </Typography>
+
+
+                <Typography color="red">
+                  Please make sure you are connected to Mumbai Matic testnet.
+                </Typography>
+
                 <Typography color="black">
                   Ratios and costs based on tests taken around the following time: 2022-05-30T15:32:44Z
                 </Typography>
 
-                <Pie className="costs-pie" data={data} />
+
 
                 <Typography color="black">
                   Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Step 2 (start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
-                </Typography>
-
-                <Typography color="red">
-                  Please make sure you are connected to Mumbai Matic testnet.
                 </Typography>
 
                 {/*todo explain to users that they will need to redeem the actual shoe for rTKN which */}

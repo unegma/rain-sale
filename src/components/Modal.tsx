@@ -41,11 +41,10 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           <div className="buttons-box">
             <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
 
-            {/* todo could check directly against the large number in ethers instead of this arbitrarily large number */}
-            { parseInt(staticReservePriceOfRedeemable)*10**18 < 9999999999999  && (
+            { !staticReservePriceOfRedeemable.includes('e') && (
               <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy A Shoe ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
             )}
-            { parseInt(staticReservePriceOfRedeemable)*10**18 > 9999999999999  && (
+            { staticReservePriceOfRedeemable.includes('e')  && (
               <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>
             )}
 
