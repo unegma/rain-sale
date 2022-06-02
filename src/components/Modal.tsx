@@ -34,7 +34,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">After buying, an {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
+          <Typography className="modalText">An {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
           <Typography className="modalText">To see the {redeemableSymbol} in your wallet, add: {redeemableTokenAddress}</Typography><br/>
           <Typography className="modalText">See console for more data.</Typography>
           <br/>
