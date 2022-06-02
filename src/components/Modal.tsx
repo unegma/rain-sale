@@ -17,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, consoleData}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, consoleData: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, consoleData, consoleColor}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, consoleData: string, consoleColor: string})
 {
 
 
@@ -71,11 +71,23 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           {/*todo create graph of transaction costs*/}
 
           <br/>
-          <Bar options={options} data={data} />;
 
+          { !staticReservePriceOfRedeemable.includes('e') && (
+            <Bar options={options} data={data} />
+          )}
+
+          <br/>
 
           <Typography className="modalText">An {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
-          <Typography className="modalTextRed">{consoleData}</Typography>
+
+          { consoleColor === 'red' && (
+            <Typography className="modalTextRed">{consoleData}</Typography>
+          )}
+
+          { consoleColor === 'green' && (
+            <Typography className="modalTextGreen">{consoleData}</Typography>
+          )}
+
           <br/>
 
           <div className="buttons-box">

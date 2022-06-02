@@ -65,6 +65,7 @@ function App() {
   const [saleAddress, setSaleAddress] = React.useState("");
   const [saleComplete, setSaleComplete] = React.useState(false);
   const [consoleData, setConsoleData] = React.useState("");
+  const [consoleColor, setConsoleColor] = React.useState('red');
 
   // page controls
   const [buttonLock, setButtonLock] = useState(false);
@@ -323,7 +324,7 @@ function App() {
       console.log('------------------------------'); // separator
 
       setConsoleData(`Complete! You can view the ${redeemableSymbol} in your wallet by adding: ${redeemableTokenAddress}`);
-
+      setConsoleColor(`green`); // todo add to struct
       setSaleComplete(true);
       setButtonLock(false);
       setLoading(false);
@@ -331,6 +332,7 @@ function App() {
       setLoading(false);
       setButtonLock(false);
       setConsoleData(`Sale Failed (Check console for more data).`);
+      setConsoleColor(`red`); // todo add to struct
       console.log(`Info: Something went wrong:`, err);
     }
   }
@@ -582,6 +584,7 @@ function App() {
               reserveSymbol={reserveSymbol}
               redeemableSymbol={redeemableSymbol}
               consoleData={consoleData}
+              consoleColor={consoleColor}
             />
 
             <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
