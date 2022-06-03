@@ -52,6 +52,8 @@ declare var process : {
   }
 }
 
+// todo might need to check sale timeout is working (ie that cant buy if passes)
+
 /**
  * App
  */
