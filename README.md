@@ -1,9 +1,9 @@
 # About
 
-This small project was designed to show Rain Protocol functionality using the SDK with Tier Gating a Sale.
+This small project was designed to show Rain Protocol Sale functionality using the SDK.
 
-It uses [this example from React Fiber](https://codesandbox.io/s/image-gallery-lx2h8?file=/src/index.js:0-33).
 
+---
 
 # Getting Started with Create React App
 
