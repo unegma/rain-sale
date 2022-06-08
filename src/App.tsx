@@ -1,40 +1,11 @@
-import React, {Suspense, useEffect, useState} from 'react';
-import {Canvas} from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
-import NavBar from './components/NavBar';
-import Modal from './components/Modal';
-import Button from "@mui/material/Button";
+import React, {useEffect, useState} from 'react';
 import {ethers, Signer} from "ethers";
 import * as rainSDK from "rain-sdk";
-import Shoes from "./components/Shoes";
 import { connect } from "./connect.js"; // a very basic web3 connection implementation
 import { opcodeData } from "./opcodeData.js";
-import Typography from "@mui/material/Typography"; // opcode data for RainVM
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 import {CircularProgress} from "@mui/material";
-const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-voucher.jpg'
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import AdminPanelView from "./components/AdminPanelView";
+import SaleView from "./components/SaleView";
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -340,70 +311,6 @@ function App() {
   }
 
   /** Various **/
-  //
-  // const data = {
-  //   labels: ['Tx1: Deploy Sale (~0.040 MATIC)', 'Tx2: Start Sale (~0.00125 MATIC)'],
-  //   datasets: [
-  //     {
-  //       label: 'Ratio of Gas+Fee',
-  //       data: [0.040, 0.00125],
-  //       backgroundColor: [
-  //         'rgba(255, 99, 132, 0.2)',
-  //         'rgba(54, 162, 235, 0.2)',
-  //         'rgba(255, 206, 86, 0.2)',
-  //         'rgba(75, 192, 192, 0.2)',
-  //         'rgba(153, 102, 255, 0.2)',
-  //         'rgba(255, 159, 64, 0.2)',
-  //       ],
-  //       borderColor: [
-  //         'rgba(255, 99, 132, 1)',
-  //         'rgba(54, 162, 235, 1)',
-  //         'rgba(255, 206, 86, 1)',
-  //         'rgba(75, 192, 192, 1)',
-  //         'rgba(153, 102, 255, 1)',
-  //         'rgba(255, 159, 64, 1)',
-  //       ],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-
-
-  const options = {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false,
-          position: 'top' as const,
-        },
-        title: {
-          display: true,
-          text: 'Upcoming Transaction Costs (Estimated MATIC)',
-        },
-      },
-    };
-
-
-  const data = {
-    labels: ['Tx1: Deploy Sale', 'Tx2: Start Sale'],
-    datasets: [
-      {
-        label: '',
-        data: [1],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-      },
-      {
-        label: '',
-        data: [0.040, 0.00125], // todo base it on dynamic matic costs
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: '',
-        data: [1],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-      }
-    ],
-  };
 
   /** View **/
 
@@ -416,195 +323,29 @@ function App() {
 
       {/*if nothing is set, show admin panel*/}
       { !saleView && (
-        <>
-          <NavBar />
-
-          <Box
-            className="admin-form"
-            component="form"
-            sx={{
-              '& > :not(style)': { m: 1 },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-
-            <Typography variant="h4" component="h2" color="black" align="center">
-              Configure Voucher Sale
-            </Typography>
-            <Typography color="black" align="center">
-              A Proof of Concept for demoing a Rain Protocol Sale
-            </Typography>
-
-            <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
-
-            { adminConfigPage === 0 && (
-              <>
-
-                <Typography variant="h5" component="h3" color="black">
-                  (Page 1/3)
-                </Typography>
-
-                <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The Token (e.g. USDC) for buying Vouchers</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={reserveTokenAddress}
-                    onChange={handleChangeReserveTokenAddress}
-                  />
-                </FormControl>
-
-                <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in USDC) of a Voucher</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={staticReservePriceOfRedeemable}
-                    onChange={handleChangeStaticReservePriceOfRedeemable}
-                  />
-                </FormControl>
-
-                {/*todo add some validation for max*/}
-                <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Sale Duration (Matic Mumbai: 600 blocks is 60mins)</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={saleTimeoutInBlocks}
-                    onChange={handleChangeSaleTimeout}
-                  />
-                </FormControl>
-
-                <div className="buttons-box">
-                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
-                  <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
-                </div>
-              </>
-            )}
-
-            { adminConfigPage === 1 && (
-              <>
-                <Typography variant="h5" component="h3" color="black">
-                  (Page 2/3)
-                </Typography>
-
-                <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Shoe Collection Name</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={redeemableName}
-                    onChange={handleChangeRedeemableName}
-                  />
-                </FormControl>
-
-
-                <FormControl disabled variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Voucher Symbol</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={redeemableSymbol}
-                    onChange={handleChangeRedeemableSymbol}
-                  />
-                </FormControl>
-
-                <FormControl variant="standard">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">Amount for Sale (1 per User)</InputLabel>
-                  <Input
-                    id="component-helper"
-                    value={redeemableInitialSupply}
-                    onChange={handleChangeRedeemableInitialSupply}
-                  />
-                </FormControl>
-
-                <div className="buttons-box">
-                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
-                  <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
-                </div>
-              </>
-            )}
-
-            { adminConfigPage === 2 && (
-              <>
-                <Bar options={options} data={data} />;
-
-                <Typography variant="h5" component="h3" color="black">
-                  (Page 3/3)
-                </Typography>
-
-                <Typography color="red">
-                  Please make sure you are connected to Mumbai Matic testnet.
-                </Typography>
-
-                <Typography color="black">
-                  Ratios and costs based on tests taken around the following time: 2022-05-30T15:32:44Z
-                </Typography>
-
-
-                <Typography color="black">
-                  Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Tx2 (Start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
-                </Typography>
-
-                {/*todo explain to users that they will need to redeem the actual shoe for rTKN which */}
-
-                <div className="buttons-box">
-                  <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
-                  <Button className="fifty-percent-button" disabled={buttonLock} variant="contained" onClick={() => {deploySale()}}>Deploy</Button>
-                </div>
-              </>
-            )}
-
-            {/*<FormControl disabled variant="standard">*/}
-            {/*  <InputLabel className="input-box-label" htmlFor="component-disabled">Name</InputLabel>*/}
-            {/*  <Input id="component-disabled" value={name} onChange={handleChange} />*/}
-            {/*  <FormHelperText>Disabled</FormHelperText>*/}
-            {/*</FormControl>*/}
-
-            {/*<FormControl error variant="standard">*/}
-            {/*  <InputLabel className="input-box-label" htmlFor="component-error">Name</InputLabel>*/}
-            {/*  <Input*/}
-            {/*    id="component-error"*/}
-            {/*    value={name}*/}
-            {/*    onChange={handleChange}*/}
-            {/*    aria-describedby="component-error-text"*/}
-            {/*  />*/}
-            {/*  <FormHelperText id="component-error-text">Error</FormHelperText>*/}
-            {/*</FormControl>*/}
-          </Box>
-        </>
+        <AdminPanelView
+          adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}
+          handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
+          staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
+          handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}
+          saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}
+          resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}
+          handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
+          handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
+          handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}
+          deploySale={deploySale}
+        />
       )}
 
       {/* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set */}
       { saleView && showShoes && (
-        <>
-          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Shoe!`} />
-          <div className="canvasContainer">
-            <Modal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              initiateBuy={initiateBuy}
-              buttonLock={buttonLock}
-              redeemableTokenAddress={redeemableTokenAddress}
-              staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
-              reserveSymbol={reserveSymbol}
-              redeemableSymbol={redeemableSymbol}
-              consoleData={consoleData}
-              consoleColor={consoleColor}
-            />
-
-            <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
-              <ambientLight intensity={0.5} />
-              <directionalLight intensity={0.3} position={[5, 25, 20]} />
-              <Suspense fallback={null}>
-                <Shoes modalOpen={modalOpen} setModalOpen={setModalOpen} amount={redeemableInitialSupply} />
-                <Environment preset="city" />
-              </Suspense>
-              <OrbitControls autoRotate autoRotateSpeed={1} />
-
-              {/*<color attach="background" args={['#191920']}/>*/}
-              {/*<fog attach="fog" args={['#191920', 0, 15]}/>*/}
-              {/*<Environment preset="city"/>*/}
-
-            </Canvas>
-          </div>
-        </>
+        <SaleView
+          redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}
+          setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
+          redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
+          reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
+          redeemableInitialSupply={redeemableInitialSupply}
+        />
       )}
 
     </div>
