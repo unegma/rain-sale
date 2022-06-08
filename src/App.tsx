@@ -201,6 +201,7 @@ function App() {
       reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
       saleTimeout: saleTimeoutInBlocks,
       cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
+      // USING THE REDEEMABLE_INITIAL_SUPPLY HERE BECAUSE WE HAVE CONFIGURED 1 REDEEMABLE TO COST 1 RESERVE
       minimumRaise: ethers.utils.parseUnits(redeemableInitialSupply, reserveDecimals), // minimum to complete a Raise // TODO CHECK IF FINISHES AUTOMATICALLY WHEN HIT
       dustSize: ethers.utils.parseUnits("0", reserveDecimals), // todo check this: for bonding curve price curves (that generate a few left in the contract at the end)
     };
@@ -217,19 +218,6 @@ function App() {
       minimumTier: 0, // minimum tier a user needs to take part
       distributionEndForwardingAddress: "0x0000000000000000000000000000000000000000" // the rTKNs that are not sold get forwarded here (0x00.. will burn them)
     }
-
-    // // todo get ratios of costs
-    // // todo what happens if one fails (inform users)
-    // console.warn("Info: It is important to let your users know how many transactions to expect and what they are. " +
-    //   "This example consists of 5 Transactions:\n\n" +
-    //   "* Create Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.002108 MATIC)\n" + // todo check how much gas costs can fluctuate (gas cost at 2022-05-30T15:27:32Z: 0.001992 MATIC) (gas cost at 2022-05-30T15:32:44Z: 0.044359 MATIC)
-    //   "* Start Sale (For Admins) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000061 MATIC) \n" +
-    //   // todo what is this contract address? and is it approved to spend this again in future or only up to this amount?
-    //   "* Give Permission to 0x642d4e6d828436ee95658c3462b46dafc1d0a61a to access USDCC (For Users) (fee+gas at circa 2022-05-30T15:32:44Z: 0.00009 MATIC) \n" +
-    //   "* Buying from Sale (For Users) (fee+gas cost at circa 2022-05-30T15:32:44Z: 0.000531 MATIC) \n" +
-    //   "* End Sale (For Admins) (fee+gas at circa 2022-05-30T15:32:44Z: 0.000158 MATIC) \n"
-    // );
-    // console.log('------------------------------'); // separator
 
     try {
       console.log("Info: Creating Sale with the following state:", saleConfig, redeemableConfig);
