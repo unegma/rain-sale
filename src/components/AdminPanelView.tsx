@@ -98,7 +98,10 @@ export default function AdminPanelView({
           Configure Voucher Sale
         </Typography>
         <Typography color="black" align="center">
-          A Proof of Concept for demoing a Rain Protocol Sale
+          A Short Demo for Rain Protocol Sales
+        </Typography>
+        <Typography color="black" align="center">
+          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' as fillers for USDC etc can be Deployed and Minted here</a>
         </Typography>
 
         <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
@@ -111,7 +114,7 @@ export default function AdminPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The Token (e.g. USDC) for buying Vouchers</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (e.g. USDC) for buying Vouchers</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
@@ -120,7 +123,7 @@ export default function AdminPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in USDC) of a Voucher</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Tokens) of a Voucher</InputLabel>
               <Input
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
