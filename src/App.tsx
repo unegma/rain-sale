@@ -241,6 +241,7 @@ function App() {
     } catch (err) {
       console.log(err);
       setLoading(false);
+      setButtonLock(false);
       alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.');
     }
   }
