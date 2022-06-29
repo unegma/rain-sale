@@ -25,6 +25,8 @@ declare var process : {
 
 // todo might need to check sale timeout is working (ie that cant buy if passes)
 
+// todo add a graphql call to get amount of shoes remaining in the sale
+
 /**
  * App
  */
