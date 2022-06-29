@@ -164,7 +164,7 @@ export default function AdminPanelView({
             </FormControl>
 
 
-            <FormControl disabled variant="standard">
+            <FormControl variant="standard">
               <InputLabel className="input-box-label" htmlFor="component-helper">Voucher Symbol</InputLabel>
               <Input
                 id="component-helper"
