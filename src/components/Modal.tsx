@@ -66,7 +66,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
         aria-describedby="modal-modal-description"
       >
         <Box component="div" sx={style}>
-          <img className="modalImage" src={displayedImage} alt="#" /><br/>
+          {/*<img className="modalImage" src={displayedImage} alt="#" /><br/>*/}
 
           {/*todo create graph of transaction costs*/}
 
