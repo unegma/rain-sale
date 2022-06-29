@@ -256,7 +256,8 @@ function App() {
 
     try {
       // @ts-ignore
-      const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
+      const reserveContract = new rainSDK.EmissionsERC20(reserveTokenAddress, signer);
+      // const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
       // @ts-ignore
       const saleContract = new rainSDK.Sale(saleAddress, signer);
 
