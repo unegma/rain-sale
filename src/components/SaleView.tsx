@@ -34,7 +34,7 @@ export default function SaleView({
           consoleColor={consoleColor}
         />
 
-        <Canvas camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
+        <Canvas className="the-canvas" camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>
           <ambientLight intensity={0.5} />
           <directionalLight intensity={0.3} position={[5, 25, 20]} />
           <Suspense fallback={null}>
