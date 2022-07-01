@@ -166,7 +166,7 @@ function App() {
       // setStaticReservePriceOfRedeemable(saleContract.calculatePrice(process.env.REACT_APP_REDEEMABLE_WALLET_CAP)); // should be desired units
       // setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
 
-      const amountOfShoesBN = await redeemable.totalSupply();
+      const amountOfShoesBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
       const amountOfShoesDecimals = await redeemable.decimals();
       const amountOfShoes = parseInt(amountOfShoesBN.toString()) / 10 ** amountOfShoesDecimals;
       console.log(`Shoes in Sale: ${amountOfShoes}`); // todo check if this changes when they are bought
