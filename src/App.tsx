@@ -87,6 +87,7 @@ function App() {
     let sParam = queryString.get('s');
 
     // todo change this to include saleView in url (so can pass in a sale and autofill the form)
+    // todo although, it will only be reserve tokens that are passed from the faucet example, so maybe don't need to do the above
     if (typeof sParam !== 'undefined' && sParam) {
       console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
       setSaleView(true);
