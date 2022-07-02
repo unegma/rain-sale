@@ -86,6 +86,7 @@ function App() {
     let queryString = new URLSearchParams(window.location.search);
     let sParam = queryString.get('s');
 
+    // todo change this to include saleView in url (so can pass in a sale and autofill the form)
     if (typeof sParam !== 'undefined' && sParam) {
       console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
       setSaleView(true);
