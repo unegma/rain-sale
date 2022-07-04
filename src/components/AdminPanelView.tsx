@@ -98,7 +98,7 @@ export default function AdminPanelView({
           Configure Voucher Sale
         </Typography>
         <Typography color="black" align="center">
-          A Short Demo for Rain Protocol Sales
+          A Short Demo for Rain Protocol Sales, to go along with the tutorials at <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
         </Typography>
         <Typography color="black" align="center">
           <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' as fillers for USDC etc can be Deployed and Minted here</a>
