@@ -85,6 +85,7 @@ function App() {
   useEffect(() => {
     let queryString = new URLSearchParams(window.location.search);
     let sParam = queryString.get('s');
+    let tParam = queryString.get('t');
 
     // todo change this to include saleView in url (so can pass in a sale and autofill the form)
     // todo although, it will only be reserve tokens that are passed from the faucet example, so maybe don't need to do the above
@@ -93,6 +94,12 @@ function App() {
       setSaleView(true);
       setSaleAddress(sParam);
     }
+
+    if (typeof tParam !== 'undefined' && tParam) {
+      console.log(`tokenAddress is ${tParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
+      setReserveTokenAddress(tParam); // todo check for xss // this is used for creating links with the Reserve token pre-filled
+    }
+
   },[]);
 
   // basic connection to web3 wallet
