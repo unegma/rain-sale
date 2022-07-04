@@ -17,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, consoleData, consoleColor}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, consoleData: string, consoleColor: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, consoleData, consoleColor, saleAddress}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, consoleData: string, consoleColor: string, saleAddress: string})
 {
 
 
@@ -78,7 +78,12 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">An {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
+          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
+
+          {/*todo pass the address in url when passing*/}
+          <Typography className="modalText">This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (passes Sale address)</a>
+            Use: {saleAddress} as the Sale Address, and then Buyers of {redeemableSymbol} can get extra rewards.
+          </Typography><br/>
 
           { consoleColor === 'red' && (
             <Typography className="modalTextRed">{consoleData}</Typography>

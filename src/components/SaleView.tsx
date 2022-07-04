@@ -8,12 +8,12 @@ import {Environment, OrbitControls} from "@react-three/drei";
 type saleViewProps = {
   redeemableName: any, redeemableSymbol: any, modalOpen: any, setModalOpen: any, initiateBuy: any, buttonLock: any,
   redeemableTokenAddress: any, staticReservePriceOfRedeemable: any, reserveSymbol: any, consoleData: any,
-  consoleColor: any, redeemableInitialSupply: any
+  consoleColor: any, redeemableInitialSupply: any, saleAddress: string
 }
 
 export default function SaleView({
     redeemableName, redeemableSymbol, modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress,
-    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, redeemableInitialSupply
+    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, redeemableInitialSupply, saleAddress
   }: saleViewProps )
 {
 
@@ -32,6 +32,7 @@ export default function SaleView({
           redeemableSymbol={redeemableSymbol}
           consoleData={consoleData}
           consoleColor={consoleColor}
+          saleAddress={saleAddress}
         />
 
         <Canvas className="the-canvas" camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>

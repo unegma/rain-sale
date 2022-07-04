@@ -345,7 +345,7 @@ function App() {
           setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
           redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
           reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
-          redeemableInitialSupply={redeemableInitialSupply}
+          redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress}
         />
       )}
 
