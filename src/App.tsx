@@ -212,18 +212,6 @@ function App() {
               sales (where: {id: "${saleAddress}"}) {
                 id
                 deployer
-                canEndStateConfig {
-                  sources
-                  constants
-                  stackLength
-                  argumentsLength
-                }
-                canStartStateConfig {
-                  sources
-                  constants
-                  stackLength
-                  argumentsLength
-                }
                 startEvent {
                     timestamp
                 }
