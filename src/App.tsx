@@ -249,7 +249,7 @@ function App() {
 
       console.log(`Result: data from subgraph with endpoint ${SUBGRAPH_ENDPOINT}:`);
       // @ts-ignore
-      setRTKNAvailable(subgraphData.unitsAvailable); // todo add
+      setRTKNAvailable(subgraphData.unitsAvailable/10**18); // todo add
 
     } catch(err) {
       console.log(err);
