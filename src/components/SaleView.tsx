@@ -33,6 +33,7 @@ export default function SaleView({
           consoleData={consoleData}
           consoleColor={consoleColor}
           saleAddress={saleAddress}
+          redeemableName={redeemableName}
         />
 
         <Canvas className="the-canvas" camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>

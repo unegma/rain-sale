@@ -17,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, consoleData, consoleColor, saleAddress}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, consoleData: string, consoleColor: string, saleAddress: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string})
 {
 
 
@@ -78,7 +78,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for an imaginary Shoe!</Typography><br/>
+          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for imaginary {redeemableName}!</Typography><br/>
 
           {/*todo pass the address in url when passing*/}
           <Typography className="modalText">
