@@ -305,7 +305,7 @@ function App() {
     }
 
     try {
-      console.log("Info: Creating Sale with the following state:", saleConfig, redeemableConfig);
+      console.log("Info: Creating Sale with the following parameters:", saleConfig, redeemableConfig);
       // @ts-ignore
       const saleContract = await rainSDK.Sale.deploy(signer, saleConfig, redeemableConfig);
       console.log('Result: Sale Contract:', saleContract); // the Sale contract and corresponding address
