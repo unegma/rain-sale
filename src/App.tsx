@@ -209,7 +209,7 @@ function App() {
         body: JSON.stringify({
           query: `
             query {
-              sales (where: {id: "${saleAddress}"}) {
+              sales (where: {id: "${saleAddress.toLowerCase()}"}) {
                 id
                 deployer
                 startEvent {
