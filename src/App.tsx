@@ -20,8 +20,11 @@ declare var process : {
     REACT_APP_REDEEMABLE_INITIAL_SUPPLY: string
     REACT_APP_REDEEMABLE_NAME: string
     REACT_APP_REDEEMABLE_SYMBOL: string
+    REACT_APP_CHAIN_ID: string
   }
 }
+
+const SUBGRAPH_ENDPOINT = rainSDK.AddressBook.getSubgraphEndpoint(parseInt(process.env.REACT_APP_CHAIN_ID));
 
 // todo might need to check sale timeout is working (ie that cant buy if passes)
 
@@ -65,6 +68,7 @@ function App() {
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
   const [reserveName, setReserveName] = React.useState("");
   const [reserveSymbol, setReserveSymbol] = React.useState("");
+  const [rTKNAvailable, setRTKNAvailable] = React.useState(0);
 
   // these must be the same as the above in .env
   function resetToDefault() {
@@ -111,6 +115,7 @@ function App() {
   useEffect(() => {
     if (saleAddress && signer) {
       getSaleData(); // get saleContract and then get amount of shoes, and then load shoes
+      getSubgraphSaleData();
     }
   }, [saleAddress, signer, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
 
@@ -191,6 +196,75 @@ function App() {
       setShowShoes(true);
     } catch(err) {
       console.log('Error getting sale data', err);
+    }
+  }
+
+  async function getSubgraphSaleData() {
+    try {
+      let subgraphData = await fetch(SUBGRAPH_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              sales (where: {id: "${saleAddress}"}) {
+                id
+                deployer
+                canEndStateConfig {
+                  sources
+                  constants
+                  stackLength
+                  argumentsLength
+                }
+                canStartStateConfig {
+                  sources
+                  constants
+                  stackLength
+                  argumentsLength
+                }
+                startEvent {
+                    timestamp
+                }
+                endEvent {
+                  timestamp
+                }
+                token {
+                  symbol
+                  name
+                  decimals
+                }
+                reserve {
+                  symbol
+                  name
+                  decimals
+                }
+                minimumRaise
+                unitsAvailable
+                totalRaised
+                percentRaised
+                saleStatus
+              }
+            }
+          `
+        })
+      });
+
+      // the response will then come back as promise, the data of which will need to be accessed as such:
+      subgraphData = await subgraphData.json();
+      console.log(subgraphData);
+
+      // @ts-ignore
+      subgraphData = subgraphData.data.sales[0]; // should only be one here anyway. // todo--question is there potential for 'too quick' to cause it not to exist yet in the subgraph?
+      if (subgraphData === undefined) throw new Error('NO_SUBGRAPH_DATA');
+
+      console.log(`Result: data from subgraph with endpoint ${SUBGRAPH_ENDPOINT}:`);
+      // @ts-ignore
+      setRTKNAvailable(subgraphData.unitsAvailable); // todo add
+
+    } catch(err) {
+      console.log(err);
     }
   }
 
@@ -345,7 +419,7 @@ function App() {
           setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
           redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
           reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
-          redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress}
+          redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
         />
       )}
 

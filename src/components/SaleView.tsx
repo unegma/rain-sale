@@ -8,12 +8,13 @@ import {Environment, OrbitControls} from "@react-three/drei";
 type saleViewProps = {
   redeemableName: any, redeemableSymbol: any, modalOpen: any, setModalOpen: any, initiateBuy: any, buttonLock: any,
   redeemableTokenAddress: any, staticReservePriceOfRedeemable: any, reserveSymbol: any, consoleData: any,
-  consoleColor: any, redeemableInitialSupply: any, saleAddress: string
+  consoleColor: any, redeemableInitialSupply: any, saleAddress: string, rTKNAvailable: number
 }
 
 export default function SaleView({
     redeemableName, redeemableSymbol, modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress,
-    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, redeemableInitialSupply, saleAddress
+    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, redeemableInitialSupply, saleAddress,
+    rTKNAvailable
   }: saleViewProps )
 {
 
@@ -40,7 +41,7 @@ export default function SaleView({
           <ambientLight intensity={0.5} />
           <directionalLight intensity={0.3} position={[5, 25, 20]} />
           <Suspense fallback={null}>
-            <Shoes modalOpen={modalOpen} setModalOpen={setModalOpen} amount={redeemableInitialSupply} />
+            <Shoes modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} />
             <Environment preset="city" />
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} />
