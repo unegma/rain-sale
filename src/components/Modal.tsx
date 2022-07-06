@@ -38,7 +38,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
 
   const data = {
-    labels: [`Tx1: Approve ${staticReservePriceOfRedeemable}${reserveSymbol}`, 'Tx2: Buy'],
+    labels: [`Tx1: Approve ${staticReservePriceOfRedeemable}${reserveSymbol} spend`, 'Tx2: Buy'],
     datasets: [
       {
         label: '',
