@@ -82,7 +82,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           {/*todo pass the address in url when passing*/}
           <Typography className="modalText">
-            This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address) for allowing {reserveSymbol} holders to claim other Tokens.</a>
+            This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address)</a> for allowing {reserveSymbol} holders to claim other Tokens.
           </Typography><br/>
 
           <Typography className="modalText">
