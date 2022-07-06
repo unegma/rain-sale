@@ -78,11 +78,15 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for a real life Shoe!</Typography><br/>
+          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for an imaginary Shoe!</Typography><br/>
 
           {/*todo pass the address in url when passing*/}
-          <Typography className="modalText">This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (passes Sale address)</a>
-            Use: {saleAddress} as the Sale Address, and then Buyers of {redeemableSymbol} can get extra rewards.
+          <Typography className="modalText">
+            This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address) for allowing {reserveSymbol} holders to claim other Tokens.</a>
+          </Typography><br/>
+
+          <Typography className="modalText">
+            To see these Vouchers in your Wallet, you may need to add the address ({redeemableTokenAddress}) for {redeemableSymbol}.
           </Typography><br/>
 
           { consoleColor === 'red' && (
@@ -99,7 +103,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
             <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
 
             { !staticReservePriceOfRedeemable.includes('e') && (
-              <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy A Shoe ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
+              <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Voucher ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
             )}
             { staticReservePriceOfRedeemable.includes('e')  && (
               <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>
