@@ -31,10 +31,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-prod": "react-scripts build --prod",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws --profile unegma s3 sync --delete ./build s3://rain-shoe-sale.unegma.work/",
-    "BUILD-AND-DEPLOY": "npm run build && npm run deploy"
+    "BUILD-AND-DEPLOY": "npm run build && npm run deploy",
+    "BUILD-AND-DEPLOY-PROD": "npm run build-prod && npm run deploy"
   },
   "eslintConfig": {
     "extends": [
