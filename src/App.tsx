@@ -460,11 +460,9 @@ function App() {
           path="/:id/settings"
           element={
             <SaleSettingsView
-              // consoleData={consoleData} consoleColor={consoleColor} initiateClaim={initiateClaim}
-              // reserveName={reserveName} reserveSymbol={reserveSymbol} modalOpen={modalOpen}
-              // reserveInitialSupply={reserveInitialSupply}
-              // setModalOpen={setModalOpen} buttonLock={buttonLock} tokenAddress={tokenAddress}
-              // setTokenAddress={setTokenAddress} faucetView={faucetView}
+              saleAddress={saleAddress}
+              reserveName={reserveName}
+              reserveSymbol={reserveSymbol}
             />
           }
         />
