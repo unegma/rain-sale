@@ -322,7 +322,7 @@ function App() {
       console.log(err);
       setLoading(false);
       setButtonLock(false);
-      alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.');
+      alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.'); // todo add link to settings panel here
     }
   }
 
