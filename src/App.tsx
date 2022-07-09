@@ -279,7 +279,7 @@ function App() {
       ), // config for the `calculatePrice` function (see opcodes section below).
       recipient: address, // who will receive the RESERVE token (e.g. USDCC) after the Sale completes
       reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
-      saleTimeout: saleTimeoutInBlocks,
+      saleTimeout: saleTimeoutInBlocks, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds
       cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
       // USING THE REDEEMABLE_INITIAL_SUPPLY HERE BECAUSE WE HAVE CONFIGURED 1 REDEEMABLE TO COST 1 RESERVE
       minimumRaise: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), reserveDecimals), // minimum to complete a Raise, setting to "1" here for example purposes
