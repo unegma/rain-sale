@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Route, Routes
+  Route, Routes, useParams
 } from "react-router-dom";
 import {ethers, Signer} from "ethers";
 import * as rainSDK from "rain-sdk";
@@ -88,6 +88,13 @@ function App() {
   }
 
   /** UseEffects **/
+  let {id}: any = useParams();
+
+  // todo does this need to be in app.tsx in the other examples?
+  // set token address by url instead of t= (check line 80 onwards works in app.tsx for getting the tokenData)
+  useEffect(() => {
+    setSaleAddress(id);
+  }, []);
 
   // run once on render and check url parameters
   useEffect(() => {

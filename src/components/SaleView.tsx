@@ -21,12 +21,6 @@ export default function SaleView({
     rTKNAvailable, setSaleAddress
   }: saleViewProps )
 {
-  let { id } = useParams();
-
-  // set token address by url instead of t= (check line 80 onwards works in app.tsx for getting the tokenData)
-  useEffect(() => {
-    setSaleAddress(id);
-  }, []);
 
   return (
     <>
