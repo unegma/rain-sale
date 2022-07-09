@@ -7,7 +7,7 @@ import * as rainSDK from "rain-sdk";
 import { connect } from "./connect.js"; // a very basic web3 connection implementation
 import { opcodeData } from "./opcodeData.js";
 import {CircularProgress} from "@mui/material";
-import AdminPanelView from "./components/AdminPanelView";
+import DeployPanelView from "./components/DeployPanelView";
 import SaleView from "./components/SaleView";
 import SaleSettingsView from "./components/SaleSettingsView";
 
@@ -425,7 +425,7 @@ function App() {
           key={'home'}
           path="/"
           element={
-            <AdminPanelView
+            <DeployPanelView
               adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}
               handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
               staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}

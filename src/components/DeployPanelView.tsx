@@ -37,7 +37,7 @@ type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
 }
 
 // todo rename from admin panel
-export default function AdminPanelView({
+export default function DeployPanelView({
     adminConfigPage, reserveTokenAddress, handleChangeReserveTokenAddress, staticReservePriceOfRedeemable,
     handleChangeStaticReservePriceOfRedeemable, saleTimeoutInBlocks, handleChangeSaleTimeout, resetToDefault,
     setAdminConfigPage, redeemableName, handleChangeRedeemableName, redeemableSymbol, handleChangeRedeemableSymbol,
