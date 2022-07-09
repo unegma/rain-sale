@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 type saleSettingsProps = {
-  saleAddress: string, reserveName: string, reserveSymbol: string
+  saleAddress: string, reserveName: string, reserveSymbol: string, endSale: any, startSale: any
 }
 
 export default function SaleSettingsView({
-  saleAddress, reserveName, reserveSymbol
+  saleAddress, reserveName, reserveSymbol, endSale, startSale
   }: saleSettingsProps)
 {
 
@@ -37,9 +37,9 @@ export default function SaleSettingsView({
           {saleAddress}
         </Typography>
 
-        <Button variant='contained'>Start Sale</Button>
-        <Button variant='contained'>End Sale</Button>
-        <Button variant='contained'>Timeout Sale</Button>
+        <Button variant='contained' onClick={() => {startSale()}}>Start Sale</Button>
+        <Button variant='contained' onClick={() => {endSale()}}>End Sale</Button>
+        {/*<Button variant='contained'>Timeout Sale</Button>*/}
 
       </Box>
     </>

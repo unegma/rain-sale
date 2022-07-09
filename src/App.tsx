@@ -327,6 +327,76 @@ function App() {
   }
 
   /**
+   * end Sale
+   */
+  async function endSale() {
+    setButtonLock(true);
+    setLoading(true);
+
+    try {
+      console.log(`Sale Address: ${saleAddress}`);
+      // @ts-ignore
+      const saleContract = new rainSDK.Sale(saleAddress, signer);
+
+      // approval
+      console.log(`Info: Ending Sale with Address: ${saleAddress}`);
+
+      const endSaleTransaction = await saleContract.end();
+      const endStatusReceipt = await endSaleTransaction.wait();
+      console.log(`Info: End Receipt:`, endStatusReceipt);
+      console.log('------------------------------'); // separator
+
+      setConsoleData(`Ended!`);
+      setConsoleColor(`green`); // todo add to struct
+      setSaleComplete(true);
+      setButtonLock(false);
+      setLoading(false);
+    } catch(err) {
+      setLoading(false);
+      setButtonLock(false);
+      setConsoleData(`End Failed (Check console for more data).`);
+      setConsoleColor(`red`); // todo add to struct
+      console.log(`Info: Something went wrong:`, err);
+    }
+  }
+
+
+  /**
+   * start Sale
+   */
+  async function startSale() {
+    setButtonLock(true);
+    setLoading(true);
+
+    try {
+      console.log(`Sale Address: ${saleAddress}`);
+      // @ts-ignore
+      const saleContract = new rainSDK.Sale(saleAddress, signer);
+
+      // approval
+      console.log(`Info: Starting Sale with Address: ${saleAddress}`);
+
+      const startSaleTransaction = await saleContract.start();
+      const startStatusReceipt = await startSaleTransaction.wait();
+      console.log(`Info: Start Receipt:`, startStatusReceipt);
+      console.log('------------------------------'); // separator
+
+      setConsoleData(`Ended!`);
+      setConsoleColor(`green`); // todo add to struct
+      setSaleComplete(true);
+      setButtonLock(false);
+      setLoading(false);
+    } catch(err) {
+      setLoading(false);
+      setButtonLock(false);
+      setConsoleData(`Start Failed (Check console for more data).`);
+      setConsoleColor(`red`); // todo add to struct
+      console.log(`Info: Something went wrong:`, err);
+    }
+  }
+
+
+  /**
    * Called within the modal for making a buy
    * THIS MUST NOT BE SHOWN BEFORE getSaleData() HAS FINISHED OR THE DATA WILL BE FROM .ENV
    */
@@ -463,6 +533,8 @@ function App() {
               saleAddress={saleAddress}
               reserveName={reserveName}
               reserveSymbol={reserveSymbol}
+              endSale={endSale}
+              startSale={startSale}
             />
           }
         />
