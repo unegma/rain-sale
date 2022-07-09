@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import {
+  Route, Routes
+} from "react-router-dom";
 import {ethers, Signer} from "ethers";
 import * as rainSDK from "rain-sdk";
 import { connect } from "./connect.js"; // a very basic web3 connection implementation
@@ -6,6 +9,7 @@ import { opcodeData } from "./opcodeData.js";
 import {CircularProgress} from "@mui/material";
 import AdminPanelView from "./components/AdminPanelView";
 import SaleView from "./components/SaleView";
+import SaleSettingsView from "./components/SaleSettingsView";
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -40,7 +44,7 @@ function App() {
   // high level
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
   const [address, setAddress] = useState("");
-  const [saleAddress, setSaleAddress] = React.useState("");
+  const [saleAddress, setSaleAddress] = React.useState(""); // this is now retrieved from the url
   const [saleComplete, setSaleComplete] = React.useState(false);
   const [consoleData, setConsoleData] = React.useState("");
   const [consoleColor, setConsoleColor] = React.useState('red');
@@ -51,7 +55,7 @@ function App() {
   const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [showShoes, setShowShoes] = React.useState(false);
+  // const [showShoes, setShowShoes] = React.useState(false);
 
   // all these from .env will be replaced by calls to blockchain within the getSaleData function when saleView is set to true
   const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
@@ -88,16 +92,16 @@ function App() {
   // run once on render and check url parameters
   useEffect(() => {
     let queryString = new URLSearchParams(window.location.search);
-    let sParam = queryString.get('s');
+    // let sParam = queryString.get('s');
     let tParam = queryString.get('t');
 
-    // todo change this to include saleView in url (so can pass in a sale and autofill the form)
-    // todo although, it will only be reserve tokens that are passed from the faucet example, so maybe don't need to do the above
-    if (typeof sParam !== 'undefined' && sParam) {
-      console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
-      setSaleView(true);
-      setSaleAddress(sParam);
-    }
+    // // todo change this to include saleView in url (so can pass in a sale and autofill the form)
+    // // todo although, it will only be reserve tokens that are passed from the faucet example, so maybe don't need to do the above
+    // if (typeof sParam !== 'undefined' && sParam) {
+    //   console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
+    //   setSaleView(true);
+    //   setSaleAddress(sParam);
+    // }
 
     if (typeof tParam !== 'undefined' && tParam) {
       console.log(`tokenAddress is ${tParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
@@ -112,7 +116,9 @@ function App() {
   },[]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
+  // todo check this section because it is different in all frontends
   useEffect(() => {
+    // todo check this still works with new url parameter
     if (saleAddress && signer) {
       getSaleData(); // get saleContract and then get amount of shoes, and then load shoes
       getSubgraphSaleData();
@@ -193,7 +199,8 @@ function App() {
       console.log(`Price for you: ${readablePrice}`);
 
       // @ts-ignore
-      setShowShoes(true);
+      // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
+      setSaleView(true);
     } catch(err) {
       console.log('Error getting sale data', err);
     }
@@ -310,7 +317,7 @@ function App() {
       console.log('------------------------------'); // separator
 
       console.log(`Redirecting to Sale: ${saleContract.address}`);
-      window.location.replace(`${window.location.origin}?s=${saleContract.address}`);
+      window.location.replace(`${window.location.origin}/${saleContract.address}`);
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -385,31 +392,92 @@ function App() {
       )}
 
       {/*if nothing is set, show admin panel*/}
-      { !saleView && (
-        <AdminPanelView
-          adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}
-          handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
-          staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
-          handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}
-          saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}
-          resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}
-          handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
-          handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
-          handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}
-          deploySale={deploySale}
-        />
-      )}
+      {/*{ !saleView && (*/}
+      {/*  <AdminPanelView*/}
+      {/*    adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}*/}
+      {/*    handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}*/}
+      {/*    staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}*/}
+      {/*    handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}*/}
+      {/*    saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}*/}
+      {/*    resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}*/}
+      {/*    handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}*/}
+      {/*    handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}*/}
+      {/*    handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}*/}
+      {/*    deploySale={deploySale}*/}
+      {/*  />*/}
+      {/*)}*/}
 
-      {/* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set */}
-      { saleView && showShoes && (
-        <SaleView
-          redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}
-          setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
-          redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
-          reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
-          redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
+      {/*/!* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set *!/*/}
+      {/*{ saleView && showShoes && (*/}
+      {/*  <SaleView*/}
+      {/*    redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}*/}
+      {/*    setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}*/}
+      {/*    redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}*/}
+      {/*    reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}*/}
+      {/*    redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}*/}
+      {/*  />*/}
+      {/*)}*/}
+
+      {/*todo change 'admin panel' to deploypanel*/}
+
+      <Routes>
+        <Route
+          key={'home'}
+          path="/"
+          element={
+            <AdminPanelView
+              adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}
+              handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
+              staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
+              handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}
+              saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}
+              resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}
+              handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
+              handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
+              handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}
+              deploySale={deploySale}
+            />
+          }
         />
-      )}
+
+        <Route
+          key={'sale'}
+          path="/:id"
+          element={
+            <SaleView
+              redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}
+              setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
+              redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
+              reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
+              redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
+              saleView={saleView} setSaleAddress={setSaleAddress}
+            />
+          }
+        />
+
+        <Route
+          key={'sale-settings'}
+          path="/:id/settings"
+          element={
+            <SaleSettingsView
+              // consoleData={consoleData} consoleColor={consoleColor} initiateClaim={initiateClaim}
+              // reserveName={reserveName} reserveSymbol={reserveSymbol} modalOpen={modalOpen}
+              // reserveInitialSupply={reserveInitialSupply}
+              // setModalOpen={setModalOpen} buttonLock={buttonLock} tokenAddress={tokenAddress}
+              // setTokenAddress={setTokenAddress} faucetView={faucetView}
+            />
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <main style={{ padding: "1rem" }}>
+              <p className='black'>There's nothing here!</p>
+            </main>
+          }
+        />
+      </Routes>
 
     </div>
   );
