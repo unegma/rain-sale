@@ -156,7 +156,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Shoe Collection Name</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Collection Name</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableName}
