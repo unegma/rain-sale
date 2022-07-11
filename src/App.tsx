@@ -9,7 +9,7 @@ import { opcodeData } from "./opcodeData.js";
 import {CircularProgress} from "@mui/material";
 import DeployPanelView from "./components/DeployPanelView";
 import SaleView from "./components/SaleView";
-import SaleSettingsView from "./components/SaleSettingsView";
+import SaleDashboardView from "./components/SaleDashboardView";
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -88,13 +88,6 @@ function App() {
   }
 
   /** UseEffects **/
-  let {id}: any = useParams();
-
-  // todo does this need to be in app.tsx in the other examples?
-  // set token address by url instead of t= (check line 80 onwards works in app.tsx for getting the tokenData)
-  useEffect(() => {
-    setSaleAddress(id);
-  }, []);
 
   // run once on render and check url parameters
   useEffect(() => {
@@ -533,15 +526,16 @@ function App() {
         />
 
         <Route
-          key={'sale-settings'}
-          path="/:id/settings"
+          key={'sale-dashboard'}
+          path="/:id/dashboard"
           element={
-            <SaleSettingsView
+            <SaleDashboardView
               saleAddress={saleAddress}
               reserveName={reserveName}
               reserveSymbol={reserveSymbol}
               endSale={endSale}
               startSale={startSale}
+              setSaleAddress={setSaleAddress}
             />
           }
         />

@@ -3,15 +3,22 @@ import Typography from "@mui/material/Typography";
 import NavBar from "./NavBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import {useParams} from "react-router-dom";
 
 type saleSettingsProps = {
-  saleAddress: string, reserveName: string, reserveSymbol: string, endSale: any, startSale: any
+  saleAddress: string, reserveName: string, reserveSymbol: string, endSale: any, startSale: any, setSaleAddress: any
 }
 
-export default function SaleSettingsView({
-  saleAddress, reserveName, reserveSymbol, endSale, startSale
+export default function SaleDashboardView({
+  saleAddress, reserveName, reserveSymbol, endSale, startSale, setSaleAddress,
   }: saleSettingsProps)
 {
+
+  let {id}: any = useParams();
+  // set token address by url instead of t= (check line 80 onwards works in app.tsx for getting the tokenData)
+  useEffect(() => {
+    setSaleAddress(id);
+  }, []);
 
   return (
     <>
