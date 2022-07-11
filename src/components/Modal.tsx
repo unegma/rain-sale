@@ -79,17 +79,17 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           <br/>
 
           <Typography className="modalText">
-            To see {redeemableSymbol} in your Wallet, you may need to add: ({redeemableTokenAddress}). These will be exchangeable for a (physical/digital) item in the (imaginary) {redeemableName} Collection!
+            To see <b>{redeemableSymbol}</b> in your Wallet, you may need to add: (<b>{redeemableTokenAddress}</b>). These will be exchangeable for a (physical/digital) item in the (imaginary) <b>{redeemableName} Collection</b>!
           </Typography><br/>
 
           {/*todo pass the address in url when passing*/}
           <Typography className="modalText">
-            This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address)</a> for allowing {redeemableSymbol} holders to claim other Tokens; Sale must have closed successfully,
+            This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address)</a> for allowing <b>{redeemableSymbol}</b> holders to claim other Tokens; <b className='red'>Sale must have closed successfully</b>,
             see <a href={`https://rain-voucher-sale.unegma.work/${saleAddress}/dashboard`} target="_blank">Sale Dashboard</a>.
           </Typography><br/>
 
           <Typography className="modalText">
-            You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">tokens for buying these vouchers here</a>.
+            You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank"> <b>{reserveSymbol}</b> tokens for buying these <b>{redeemableSymbol} Vouchers</b> here</a>.
           </Typography><br/>
 
           { consoleColor === 'red' && (
