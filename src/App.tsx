@@ -436,7 +436,7 @@ function App() {
       console.log(`Info: Buy Receipt:`, buyStatusReceipt);
       console.log('------------------------------'); // separator
 
-      setConsoleData(`Complete! You can view the ${redeemableSymbol} in your wallet by adding: ${redeemableTokenAddress}`);
+      setConsoleData(`Complete!`);
       setConsoleColor(`green`); // todo add to struct
       getSubgraphSaleData(); // update the amount of vouchers in the UI, todo check this works
       setSaleComplete(true);
