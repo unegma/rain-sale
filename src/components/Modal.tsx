@@ -78,7 +78,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for {redeemableName}!</Typography><br/>
+          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for an item in the {redeemableName} Collection!</Typography><br/>
 
           {/*todo pass the address in url when passing*/}
           <Typography className="modalText">
