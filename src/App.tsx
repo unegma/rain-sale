@@ -445,7 +445,7 @@ function App() {
     } catch(err) {
       setLoading(false);
       setButtonLock(false);
-      setConsoleData(`Sale Failed (Check console for more data).`);
+      setConsoleData(`Buy Failed (Check console for more data).`);
       setConsoleColor(`red`); // todo add to struct
       console.log(`Info: Something went wrong:`, err);
     }
