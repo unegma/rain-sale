@@ -2,6 +2,7 @@
 
 This small project was designed to show Rain Protocol Sale functionality using the SDK.
 
+Coin from here: https://www.renderhub.com/lonelyhermitharrison/simple-gold-coin
 
 ---
 
