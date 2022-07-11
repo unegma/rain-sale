@@ -79,7 +79,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           <br/>
 
           <Typography className="modalText">
-            To see {redeemableSymbol} in your Wallet, you may need to add the address ({redeemableTokenAddress}). These will be exchangeable for a (physical/digital) item in the (imaginary) {redeemableName} Collection!
+            To see {redeemableSymbol} in your Wallet, you may need to add: ({redeemableTokenAddress}). These will be exchangeable for a (physical/digital) item in the (imaginary) {redeemableName} Collection!
           </Typography><br/>
 
           {/*todo pass the address in url when passing*/}
