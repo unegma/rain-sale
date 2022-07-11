@@ -438,7 +438,7 @@ function App() {
 
       setConsoleData(`Complete!`);
       setConsoleColor(`green`); // todo add to struct
-      getSubgraphSaleData(); // update the amount of vouchers in the UI, todo check this works
+      // getSubgraphSaleData(); // no point in doin this because it takes the subgraph a while to index the data
       setSaleComplete(true);
       setButtonLock(false);
       setLoading(false);
