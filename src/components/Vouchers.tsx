@@ -1,6 +1,6 @@
 import {Canvas, useLoader} from "@react-three/fiber";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {Instances} from "@react-three/drei";
+import {Html, Instances} from "@react-three/drei";
 import Voucher from "./Voucher";
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader';
 
@@ -13,7 +13,7 @@ const randomData = Array.from({ length: 1000 }, (r = 10) => ({ random: Math.rand
 /**
  * From this example:
  */
-export default function Shoes({amount, modalOpen, setModalOpen}: {amount: any, modalOpen: boolean, setModalOpen: any}) {
+export default function Vouchers({amount, modalOpen, setModalOpen, redeemableSymbol}: {amount: any, modalOpen: boolean, setModalOpen: any, redeemableSymbol: string}) {
   const useDraco = false;
   const { nodes, materials }: any = useLoader(GLTFLoader, voucherURL, (loader: any) => {
     if (useDraco) {
@@ -27,7 +27,7 @@ export default function Shoes({amount, modalOpen, setModalOpen}: {amount: any, m
   return (
     <Instances range={amount} material={materials.lambert1} geometry={nodes.GoldCoin.geometry}>
       {randomData.map((props, i) => (
-        <Voucher modalOpen={modalOpen} setModalOpen={setModalOpen} key={i} {...props} />
+        <Voucher modalOpen={modalOpen} setModalOpen={setModalOpen} key={i} {...props} redeemableSymbol={redeemableSymbol}/>
       ))}
     </Instances>
   )

@@ -32,7 +32,7 @@ export default function SaleView({
     <>
       { saleView && (
         <>
-          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Shoe!`} />
+          <NavBar string={`${redeemableName} (${redeemableSymbol}) Sale!`} stringRight={`Click a Voucher!`} />
           <div className="canvasContainer">
             <Modal
               modalOpen={modalOpen}
@@ -53,7 +53,7 @@ export default function SaleView({
               <ambientLight intensity={0.5} />
               <directionalLight intensity={0.3} position={[5, 25, 20]} />
               <Suspense fallback={null}>
-                <Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} />
+                <Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} redeemableSymbol={redeemableSymbol}/>
                 <Environment preset="city" />
               </Suspense>
               <OrbitControls autoRotate autoRotateSpeed={1} />

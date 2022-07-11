@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from "react";
 import {useFrame} from "@react-three/fiber";
-import {Instance} from "@react-three/drei";
+import {Html, Instance} from "@react-three/drei";
 import * as THREE from "three";
 const color = new THREE.Color();
 
-export default function Voucher({random, modalOpen, setModalOpen, ...props }: {random: number, modalOpen: boolean, setModalOpen: any}) {
+export default function Voucher({random, modalOpen, setModalOpen, redeemableSymbol, ...props }: {random: number, modalOpen: boolean, setModalOpen: any, redeemableSymbol: string}) {
   const ref = useRef<any>()
   const [hovered, setHover] = useState(false)
 
@@ -16,7 +16,7 @@ export default function Voucher({random, modalOpen, setModalOpen, ...props }: {r
     const t = state.clock.getElapsedTime() + random * 10000
     ref.current.rotation.set(Math.cos(t / 4) / 2, Math.sin(t / 4) / 2, Math.cos(t / 1.5) / 2)
     ref.current.position.y = Math.sin(t / 1.5) / 2
-    ref.current.scale.x = ref.current.scale.y = ref.current.scale.z = THREE.MathUtils.lerp(ref.current.scale.z, hovered ? 1.4 : 1, 0.1)
+    ref.current.scale.x = ref.current.scale.y = ref.current.scale.z = THREE.MathUtils.lerp(ref.current.scale.z, hovered ? 1 : 0.5, 0.1)
     ref.current.color.lerp(color.set(hovered ? 'red' : 'gold'), hovered ? 1 : 0.1)
   })
 
