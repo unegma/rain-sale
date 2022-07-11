@@ -17,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string})
+export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string})
 {
 
 
@@ -88,6 +88,10 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <Typography className="modalText">
             To see these Vouchers in your Wallet, you may need to add the address ({redeemableTokenAddress}) for {redeemableSymbol}.
+          </Typography><br/>
+
+          <Typography className="modalText">
+            You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">tokens for buying these vouchers here</a>.
           </Typography><br/>
 
           { consoleColor === 'red' && (

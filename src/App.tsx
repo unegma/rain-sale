@@ -521,7 +521,7 @@ function App() {
               redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
               redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
-              saleView={saleView} setSaleAddress={setSaleAddress}
+              saleView={saleView} setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
             />
           }
         />
