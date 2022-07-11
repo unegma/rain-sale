@@ -78,16 +78,14 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
           <br/>
 
-          <Typography className="modalText">Your {redeemableSymbol} will be exchangeable for an item in the {redeemableName} Collection!</Typography><br/>
+          <Typography className="modalText">
+            To see {redeemableSymbol} in your Wallet, you may need to add the address ({redeemableTokenAddress}). These will be exchangeable for a (physical/digital) item in the (imaginary) {redeemableName} Collection!
+          </Typography><br/>
 
           {/*todo pass the address in url when passing*/}
           <Typography className="modalText">
             This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address)</a> for allowing {redeemableSymbol} holders to claim other Tokens; Sale must have closed successfully,
             see <a href={`https://rain-voucher-sale.unegma.work/${saleAddress}/dashboard`} target="_blank">Sale Dashboard</a>.
-          </Typography><br/>
-
-          <Typography className="modalText">
-            To see these Vouchers in your Wallet, you may need to add the address ({redeemableTokenAddress}) for {redeemableSymbol}.
           </Typography><br/>
 
           <Typography className="modalText">
