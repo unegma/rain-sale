@@ -438,6 +438,7 @@ function App() {
 
       setConsoleData(`Complete! You can view the ${redeemableSymbol} in your wallet by adding: ${redeemableTokenAddress}`);
       setConsoleColor(`green`); // todo add to struct
+      getSubgraphSaleData(); // update the amount of vouchers in the UI, todo check this works
       setSaleComplete(true);
       setButtonLock(false);
       setLoading(false);
