@@ -89,7 +89,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           </Typography><br/>
 
           <Typography className="modalText">
-            You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank"> <b>{reserveSymbol}</b> tokens for buying these <b>{redeemableSymbol} Vouchers</b> here</a>.
+            You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank"> <b>{reserveSymbol}</b> tokens for buying these <b>{redeemableSymbol}</b> here</a>.
           </Typography><br/>
 
           { consoleColor === 'red' && (
