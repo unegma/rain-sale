@@ -5,7 +5,7 @@ import {
 import NavBar from "./NavBar";
 import Modal from "./Modal";
 import {Canvas} from "@react-three/fiber";
-import Shoes from "./Shoes";
+import Vouchers from "./Vouchers";
 import {Environment, OrbitControls} from "@react-three/drei";
 
 type saleViewProps = {
@@ -53,7 +53,7 @@ export default function SaleView({
               <ambientLight intensity={0.5} />
               <directionalLight intensity={0.3} position={[5, 25, 20]} />
               <Suspense fallback={null}>
-                <Shoes modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} />
+                <Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} />
                 <Environment preset="city" />
               </Suspense>
               <OrbitControls autoRotate autoRotateSpeed={1} />

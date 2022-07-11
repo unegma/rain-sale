@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const displayedImage = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-voucher.jpg'
+const displayedImage = 'https://assets.unegma.net/unegma.work/rain-voucher-sale.unegma.work/shoe-voucher.jpg'
 
 type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
