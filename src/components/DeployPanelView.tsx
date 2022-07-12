@@ -102,7 +102,7 @@ export default function DeployPanelView({
           A Short Demo for Rain Protocol Sales, to go along with the tutorials at <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
         </Typography>
         <Typography color="black" align="center">
-          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' as fillers for USDC etc can be Deployed and Minted here</a>
+          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (like demo USDC) can be Deployed and Minted here</a>
         </Typography>
 
         <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
