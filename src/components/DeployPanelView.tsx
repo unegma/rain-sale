@@ -6,7 +6,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
 import {Bar} from "react-chartjs-2";
-import React from "react";
+import React, {Suspense} from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +16,10 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import {Canvas} from "@react-three/fiber";
+import Vouchers from "./Vouchers";
+import {Environment, Html, OrbitControls} from "@react-three/drei";
+import RTKN from "./RTKN";
 
 ChartJS.register(
   CategoryScale,
@@ -105,7 +109,21 @@ export default function DeployPanelView({
           <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (like demo USDC) can be Deployed and Minted here</a>
         </Typography>
 
-        <img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />
+        {/*<img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />*/}
+
+
+        <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 0, 20], fov: 20 }} performance={{ min: 0.1 }}>
+          <ambientLight intensity={0.1} />
+          <directionalLight intensity={0.01} position={[5, 25, 20]} />
+          <Suspense fallback={null}>
+            {/*<Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} redeemableSymbol={redeemableSymbol}/>*/}
+            <RTKN rotation={[1,1,1]} redeemableSymbol={redeemableSymbol} />
+            <Environment preset="studio" />
+          </Suspense>
+          <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} enablePan={false} enableRotate={false} />
+          {/*<OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />*/}
+        </Canvas>
+
 
         { adminConfigPage === 0 && (
           <>

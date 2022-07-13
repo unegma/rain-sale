@@ -26,6 +26,21 @@ export const opcodeData = {
     argumentsLength: 0,
   },
 
+  // // Configuration for determining when a sale can end.
+  // canEndStateConfig: (END_TIMESTAMP) => ({ // Math.floor(Date.now() / 1000)
+  //   constants: [END_TIMESTAMP],
+  //   sources: [
+  //     ethers.utils.concat([
+  //       rainSDK.utils.op(rainSDK.Sale.Opcodes.BLOCK_TIMESTAMP),
+  //
+  //       rainSDK.utils.op(rainSDK.Sale.Opcodes.VAL, 0),
+  //       rainSDK.utils.op(rainSDK.Sale.Opcodes.GREATER_THAN),
+  //     ]),
+  //   ],
+  //   stackLength: 3,
+  //   argumentsLength: 0,
+  // }),
+
   // define the parameters for the VM which will be used whenever the price is calculated, for example, when a user wants to buy a number of units
   calculatePriceStateConfig: (STATIC_PRICE, WALLET_CAP) => ({
     constants: [STATIC_PRICE, WALLET_CAP, ethers.constants.MaxUint256], // staticPrice, walletCap, (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)

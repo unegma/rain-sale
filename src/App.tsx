@@ -273,6 +273,7 @@ function App() {
     const saleConfig = {
       canStartStateConfig: opcodeData.canStartStateConfig, // config for the start of the Sale (see opcodes section below)
       canEndStateConfig: opcodeData.canEndStateConfig, // config for the end of the Sale (see opcodes section below)
+      // canEndStateConfig: new rainSDK.SaleDurationInTimestamp( TIMESTAMP_OF_NOW_PLUS_DESIRED_LENGTH), // config for the end of the Sale (see opcodes section below)
       calculatePriceStateConfig: opcodeData.calculatePriceStateConfig(
         ethers.utils.parseUnits(staticReservePriceOfRedeemable, parseInt(reserveDecimals)),
         ethers.utils.parseUnits(redeemableWalletCap, parseInt(redeemableDecimals)),

@@ -60,6 +60,12 @@ body {
   height: 100vh !important;
 }
 
+.the-canvas-deploypanel {
+  width: 100% !important;
+  height: 200px !important;
+}
+
+
 .canvasContainer {
 
 }
