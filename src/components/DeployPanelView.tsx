@@ -125,11 +125,11 @@ export default function DeployPanelView({
         </Canvas>
 
 
-        { adminConfigPage === 0 && (
+        { adminConfigPage === 1 && (
           <>
 
             <Typography variant="h5" component="h3" color="black">
-              (Page 1/3)
+              (Page 2/3)
             </Typography>
 
             <FormControl variant="standard">
@@ -161,16 +161,16 @@ export default function DeployPanelView({
             </FormControl>
 
             <div className="buttons-box">
-              <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
+              <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
               <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
             </div>
           </>
         )}
 
-        { adminConfigPage === 1 && (
+        { adminConfigPage === 0 && (
           <>
             <Typography variant="h5" component="h3" color="black">
-              (Page 2/3)
+              (Page 1/3)
             </Typography>
 
             <FormControl variant="standard">
@@ -202,7 +202,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <div className="buttons-box">
-              <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
+              <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
               <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
             </div>
           </>
