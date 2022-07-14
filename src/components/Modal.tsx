@@ -80,17 +80,17 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
         <br/>
 
         <Typography className="modalText">
-          To see <b>{redeemableSymbol}</b> in your Wallet, you may need to add: (<b>{redeemableTokenAddress}</b>). These will be exchangeable for a (physical/digital) item in the (imaginary) <b>{redeemableName} Collection</b>!
+          To see <b>{redeemableSymbol}</b> in your Wallet, you may need to add its address: <b>{redeemableTokenAddress}</b>.
+        </Typography><br/>
+
+        <Typography className="modalText">
+          Each <b>{redeemableSymbol}</b> is exchangeable for an imaginary physical/digital item in the <b>{redeemableName} Collection</b>! <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">Click to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
         </Typography><br/>
 
         {/*todo pass the address in url when passing*/}
         <Typography className="modalText">
-          This Sale can be used in the <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Rain Escrow Example (link passes Sale address)</a> for allowing <b>{redeemableSymbol}</b> holders to claim other Tokens; <b className='red'>Sale must have closed successfully</b>,
-          see <a href={`https://rain-voucher-sale.unegma.work/${saleAddress}/dashboard`} target="_blank">Sale Dashboard</a>.
-        </Typography><br/>
-
-        <Typography className="modalText">
-          You should be able to get <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank"> <b>{reserveSymbol}</b> tokens for buying these <b>{redeemableSymbol}</b> here</a>.
+          <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens<br/>
+          (<b className='red'>Sale must have closed successfully</b>, <a href={`https://rain-voucher-sale.unegma.work/${saleAddress}/dashboard`} target="_blank">see Sale Dashboard</a>).
         </Typography><br/>
 
         { consoleColor === 'red' && (
@@ -107,7 +107,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
           <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
 
           { !staticReservePriceOfRedeemable.includes('e') && (
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy a Voucher ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
+            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy {redeemableSymbol} ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
           )}
           { staticReservePriceOfRedeemable.includes('e')  && (
             <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>

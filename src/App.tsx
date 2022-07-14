@@ -20,11 +20,11 @@ declare var process : {
     REACT_APP_REDEEMABLE_ERC20_DECIMALS: string
     REACT_APP_REDEEMABLE_WALLET_CAP: string
     REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE: string
-    REACT_APP_SALE_TIMEOUT_IN_BLOCKS: string
     REACT_APP_REDEEMABLE_INITIAL_SUPPLY: string
     REACT_APP_REDEEMABLE_NAME: string
     REACT_APP_REDEEMABLE_SYMBOL: string
     REACT_APP_CHAIN_ID: string
+    REACT_APP_BASE_URL: string
   }
 }
 
@@ -64,7 +64,7 @@ function App() {
   const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
   const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
   const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
-  const [saleTimeoutInBlocks, setSaleTimeoutInBlocks] = useState(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
+  const [saleTimeout, setSaleTimeout] = useState(Date.now());
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
 
@@ -82,7 +82,7 @@ function App() {
     setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
     setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
     setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
-    setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
+    setSaleTimeout(Date.now());
     setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
     setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
   }
@@ -133,8 +133,8 @@ function App() {
   const handleChangeStaticReservePriceOfRedeemable = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStaticReservePriceOfRedeemable(event.target.value);
   };
-  const handleChangeSaleTimeout = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSaleTimeoutInBlocks(event.target.value);
+  const handleChangeSaleTimeout = (value: number) => {
+    setSaleTimeout(value);
   };
   const handleChangeRedeemableName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRedeemableName(event.target.value);
@@ -181,16 +181,12 @@ function App() {
       setRedeemableSymbol(await redeemable.symbol())
       setRedeemableDecimals((await redeemable.decimals()).toString());
 
-      // unnecessary, but here for reference // TODO ADD A SALE TIMEOUT INDICATOR AND A PRICE GETTER
-      // setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
-      // setStaticReservePriceOfRedeemable(saleContract.calculatePrice(process.env.REACT_APP_REDEEMABLE_WALLET_CAP)); // should be desired units
-      // setSaleTimeoutInBlocks(process.env.REACT_APP_SALE_TIMEOUT_IN_BLOCKS);
-
-      const amountOfShoesBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
-      const amountOfShoesDecimals = await redeemable.decimals();
-      const amountOfShoes = parseInt(amountOfShoesBN.toString()) / 10 ** amountOfShoesDecimals;
-      console.log(`Shoes in Sale: ${amountOfShoes}`); // todo check if this changes when they are bought
-      setRedeemableInitialSupply(amountOfShoes.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
+      // todo this might need to be removed becasue getting now from subgraph..
+      const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
+      const amountOfVouchersDecimals = await redeemable.decimals();
+      const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
+      console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
+      setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
 
       // todo this will cause a giant number if signer has more than the walletcap
       const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
@@ -272,15 +268,16 @@ function App() {
 
     const saleConfig = {
       canStartStateConfig: opcodeData.canStartStateConfig, // config for the start of the Sale (see opcodes section below)
-      canEndStateConfig: opcodeData.canEndStateConfig, // config for the end of the Sale (see opcodes section below)
-      // canEndStateConfig: new rainSDK.SaleDurationInTimestamp( TIMESTAMP_OF_NOW_PLUS_DESIRED_LENGTH), // config for the end of the Sale (see opcodes section below)
+      // canEndStateConfig: opcodeData.canEndStateConfig, // config for the end of the Sale (see opcodes section below)
+      canEndStateConfig: new rainSDK.SaleDurationInTimestamp(saleTimeout), // config for the end of the Sale (see opcodes section below)
       calculatePriceStateConfig: opcodeData.calculatePriceStateConfig(
         ethers.utils.parseUnits(staticReservePriceOfRedeemable, parseInt(reserveDecimals)),
         ethers.utils.parseUnits(redeemableWalletCap, parseInt(redeemableDecimals)),
       ), // config for the `calculatePrice` function (see opcodes section below).
       recipient: address, // who will receive the RESERVE token (e.g. USDCC) after the Sale completes
       reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
-      saleTimeout: saleTimeoutInBlocks, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds
+      // saleTimeout: ethers.constants.MaxUint256, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds
+      saleTimeout: 10000, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds. This can be obtained by checking the factory through which the sale was deployed // todo check difference between timeout and MaxTimout and whether the new deployment is 4 months, and how timeout interacts with maxtimout, and how maxtimout can be set (does it need a subgraph call?)
       cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
       // USING THE REDEEMABLE_INITIAL_SUPPLY HERE BECAUSE WE HAVE CONFIGURED 1 REDEEMABLE TO COST 1 RESERVE
       minimumRaise: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), reserveDecimals), // minimum to complete a Raise, setting to "1" here for example purposes
@@ -463,35 +460,6 @@ function App() {
         <div className="deploying"><CircularProgress /></div>
       )}
 
-      {/*if nothing is set, show admin panel*/}
-      {/*{ !saleView && (*/}
-      {/*  <AdminPanelView*/}
-      {/*    adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}*/}
-      {/*    handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}*/}
-      {/*    staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}*/}
-      {/*    handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}*/}
-      {/*    saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}*/}
-      {/*    resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}*/}
-      {/*    handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}*/}
-      {/*    handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}*/}
-      {/*    handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}*/}
-      {/*    deploySale={deploySale}*/}
-      {/*  />*/}
-      {/*)}*/}
-
-      {/*/!* redeemableInitialSupply will be fetched from Sale->Redeemable in the instance that s=address is set *!/*/}
-      {/*{ saleView && showShoes && (*/}
-      {/*  <SaleView*/}
-      {/*    redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}*/}
-      {/*    setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}*/}
-      {/*    redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}*/}
-      {/*    reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}*/}
-      {/*    redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}*/}
-      {/*  />*/}
-      {/*)}*/}
-
-      {/*todo change 'admin panel' to deploypanel*/}
-
       <Routes>
         <Route
           key={'home'}
@@ -502,7 +470,7 @@ function App() {
               handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
               staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}
-              saleTimeoutInBlocks={saleTimeoutInBlocks} handleChangeSaleTimeout={handleChangeSaleTimeout}
+              saleTimeout={saleTimeout} handleChangeSaleTimeout={handleChangeSaleTimeout}
               resetToDefault={resetToDefault} setAdminConfigPage={setAdminConfigPage} redeemableName={redeemableName}
               handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
               handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
@@ -523,6 +491,7 @@ function App() {
               reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
               redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
               saleView={saleView} setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
+              BASE_URL={process.env.REACT_APP_BASE_URL}
             />
           }
         />

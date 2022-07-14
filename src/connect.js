@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID); // Mumbai (Polygon Testnet) Chain ID
+const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
 
 /**
  * Very basic connection to Web3 wallet
@@ -10,7 +11,7 @@ export const connect = async () => {
     const {ethereum} = window;
 
     const provider = new ethers.providers.Web3Provider(ethereum, {
-      name: 'Mumbai',
+      name: CHAIN_NAME,
       chainId: CHAIN_ID // Mumbai testnet chain id,
     });
 

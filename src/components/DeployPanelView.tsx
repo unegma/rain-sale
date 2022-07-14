@@ -5,8 +5,11 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {Bar} from "react-chartjs-2";
-import React, {Suspense} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,9 +20,10 @@ import {
   Legend,
 } from 'chart.js';
 import {Canvas} from "@react-three/fiber";
-import Vouchers from "./Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import RTKN from "./RTKN";
+import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
+const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
 
 ChartJS.register(
   CategoryScale,
@@ -30,11 +34,9 @@ ChartJS.register(
   Legend
 );
 
-const displayedImage = 'https://assets.unegma.net/unegma.work/rain-voucher-sale.unegma.work/shoe-voucher.jpg'
-
 type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
-  handleChangeStaticReservePriceOfRedeemable: any, saleTimeoutInBlocks: any, handleChangeSaleTimeout: any,
+  handleChangeStaticReservePriceOfRedeemable: any, saleTimeout: any, handleChangeSaleTimeout: any,
   resetToDefault: any, setAdminConfigPage: any, redeemableName: any, handleChangeRedeemableName: any,
   redeemableSymbol: any, handleChangeRedeemableSymbol: any, redeemableInitialSupply: any,
   handleChangeRedeemableInitialSupply: any, buttonLock: any, deploySale: any
@@ -43,7 +45,7 @@ type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
 // todo rename from admin panel
 export default function DeployPanelView({
     adminConfigPage, reserveTokenAddress, handleChangeReserveTokenAddress, staticReservePriceOfRedeemable,
-    handleChangeStaticReservePriceOfRedeemable, saleTimeoutInBlocks, handleChangeSaleTimeout, resetToDefault,
+    handleChangeStaticReservePriceOfRedeemable, saleTimeout, handleChangeSaleTimeout, resetToDefault,
     setAdminConfigPage, redeemableName, handleChangeRedeemableName, redeemableSymbol, handleChangeRedeemableSymbol,
     redeemableInitialSupply, handleChangeRedeemableInitialSupply, buttonLock, deploySale
   } : adminPanelProps)
@@ -85,6 +87,19 @@ export default function DeployPanelView({
     ],
   };
 
+  const [theDate, changeTheDate] = useState(saleTimeout); // this will be Date.now()
+
+  const changeTimeout = (newValue: any) => {
+    console.log(`New Value: ${newValue}`);
+    changeTheDate(newValue);
+  };
+
+  const setFinishTimeout = (newValue: any) => {
+    let finishTime = Date.parse(newValue); // be aware, this will use your local time (not UTC): https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
+    finishTime = finishTime/1000;
+    handleChangeSaleTimeout(finishTime);
+  }
+
   return (
     <>
       <NavBar />
@@ -109,16 +124,13 @@ export default function DeployPanelView({
           <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (like demo USDC) can be Deployed and Minted here</a>
         </Typography>
 
-        {/*<img hidden={!(adminConfigPage !== 2)} className="mainImage" src={displayedImage} alt="#" />*/}
-
-
-        <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 0, 20], fov: 20 }} performance={{ min: 0.1 }}>
+        <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 10, 20], fov: 40 }} performance={{ min: 0.1 }}>
           <ambientLight intensity={0.1} />
           <directionalLight intensity={0.01} position={[5, 25, 20]} />
-          <Suspense fallback={null}>
+          <Suspense fallback={<Html className="black">loading..</Html>}>
             {/*<Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} redeemableSymbol={redeemableSymbol}/>*/}
-            <RTKN rotation={[1,1,1]} redeemableSymbol={redeemableSymbol} />
-            <Environment preset="studio" />
+            <RTKN rotation={[-1.5,0,0]} redeemableSymbol={redeemableSymbol} />
+            <Environment preset="lobby" />
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} enablePan={false} enableRotate={false} />
           {/*<OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />*/}
@@ -150,14 +162,17 @@ export default function DeployPanelView({
               />
             </FormControl>
 
-            {/*todo add some validation for max*/}
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Sale Duration (Matic Mumbai: 600 blocks is 60mins)</InputLabel>
-              <Input
-                id="component-helper"
-                value={saleTimeoutInBlocks}
-                onChange={handleChangeSaleTimeout}
-              />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  label="Sale End"
+                  inputFormat="yyyy-MM-dd HH:mm"
+                  value={theDate}
+                  onChange={changeTimeout}
+                  onAccept={setFinishTimeout}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </FormControl>
 
             <div className="buttons-box">
@@ -217,7 +232,7 @@ export default function DeployPanelView({
             </Typography>
 
             <Typography color="red">
-              Please make sure you are connected to Mumbai Matic testnet.
+              Please make sure you are connected to the <b className='red'>{CHAIN_NAME}</b> Network.
             </Typography>
 
             <Typography color="black">
@@ -226,7 +241,11 @@ export default function DeployPanelView({
 
 
             <Typography color="black">
-              Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails. If Tx2 (Start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.
+              Please be aware, this example does not have strict checking, and so you will not recover the cost of network fees (gas) if a deployment fails*.
+            </Typography>
+
+            <Typography color="black">
+              <sub>*If Tx2 (Start Sale) fails, you can call this manually on the contract instead of re-deploying the Sale.</sub>
             </Typography>
 
             <div className="buttons-box">

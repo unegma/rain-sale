@@ -7,26 +7,28 @@ import React, { useRef } from 'react'
 import {Text, useGLTF} from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
-const VOUCHER_URL = 'https://assets.unegma.net/unegma.work/rain-voucher-sale.unegma.work/voucher.gltf';
+const VOUCHER_URL = 'https://assets.unegma.net/unegma.work/rain-voucher-sale.unegma.work/voucher-transformed.glb';
 
 type GLTFResult = GLTF & {
   nodes: {
-    GoldCoin: THREE.Mesh
+    Object_2: THREE.Mesh
+    Object_3: THREE.Mesh
   }
   materials: {
-    lambert1: THREE.MeshStandardMaterial
+    paper_Mat: THREE.MeshStandardMaterial
+    textile_Mat: THREE.MeshStandardMaterial
   }
 }
 
-export default function RTKN({ redeemableSymbol, ...props }: any) {
+export default function Model({ redeemableSymbol, ...props }: any) {
   const group = useRef<THREE.Group>(null)
-  const { nodes, materials } = useGLTF(VOUCHER_URL) as GLTFResult
+  const { nodes, materials } = useGLTF(VOUCHER_URL, 'https://www.gstatic.com/draco/versioned/decoders/1.4.1/') as GLTFResult
   return (
     <group ref={group} {...props} dispose={null}>
       <Text
-        position={[0, 0.2, 0]}
-        rotation={[-1.55,0,-0.7]}
-        fontSize={0.7}
+        position={[0, -1, 0.58]}
+        rotation={[0,0,0]}
+        fontSize={2}
         // lineHeight={0.8}
         // material-toneMapped={false}
         color='#444444'
@@ -34,22 +36,10 @@ export default function RTKN({ redeemableSymbol, ...props }: any) {
         {redeemableSymbol}
       </Text>
 
-      <mesh castShadow receiveShadow geometry={nodes.GoldCoin.geometry}rotation={[Math.PI / 2, 0, 0]} scale={1}>
-        <meshPhysicalMaterial color="gold"/>
-      </mesh>
-
-      <Text
-        position={[0, -0.2, 0]}
-        rotation={[1.55,0,-1.7]}
-        fontSize={0.7}
-        // lineHeight={0.8}
-        // material-toneMapped={false}
-        color='#444444'
-      >
-        {redeemableSymbol}
-      </Text>
+      <mesh castShadow receiveShadow geometry={nodes.Object_2.geometry} material={materials.paper_Mat} />
+      {/*<mesh castShadow receiveShadow geometry={nodes.Object_3.geometry} material={materials.textile_Mat} />*/}
     </group>
-)
+  )
 }
 
 useGLTF.preload(VOUCHER_URL)

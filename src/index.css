@@ -154,3 +154,20 @@ body {
 .red {
   color: red;
 }
+
+
+.deploy-own {
+  display: block;
+  position: absolute;
+
+  background-color: black;
+  font-size: 16px;
+  padding: 10px;
+  bottom: 10px;
+  right: 10px;
+  z-index:999;
+}
+
+.deploy-own a {
+  color: white;
+}
