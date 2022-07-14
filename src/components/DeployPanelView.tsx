@@ -115,7 +115,7 @@ export default function DeployPanelView({
       >
 
         <Typography variant="h4" component="h2" color="black" align="center">
-          Configure Voucher Sale
+          Configure {redeemableSymbol} Sale
         </Typography>
         <Typography color="black" align="center">
           Rain Protocol Sale Demo, tutorials: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
