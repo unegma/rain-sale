@@ -344,7 +344,7 @@ function App() {
       console.log(`Info: End Receipt:`, endStatusReceipt);
       console.log('------------------------------'); // separator
 
-      setConsoleData(`Ended!`);
+      setConsoleData(`Sale Ended Successfully!`);
       setConsoleColor(`green`); // todo add to struct
       setSaleComplete(true);
       setButtonLock(false);
@@ -352,7 +352,7 @@ function App() {
     } catch(err) {
       setLoading(false);
       setButtonLock(false);
-      setConsoleData(`End Failed (Check console for more data).`);
+      setConsoleData(`Ending Sale Failed (Check console for more data).`);
       setConsoleColor(`red`); // todo add to struct
       console.log(`Info: Something went wrong:`, err);
     }
@@ -379,7 +379,7 @@ function App() {
       console.log(`Info: Start Receipt:`, startStatusReceipt);
       console.log('------------------------------'); // separator
 
-      setConsoleData(`Ended!`);
+      setConsoleData(`Sale Started Successfully!`);
       setConsoleColor(`green`); // todo add to struct
       setSaleComplete(true);
       setButtonLock(false);
@@ -387,7 +387,7 @@ function App() {
     } catch(err) {
       setLoading(false);
       setButtonLock(false);
-      setConsoleData(`Start Failed (Check console for more data).`);
+      setConsoleData(`Starting Sale Failed (is it already running?).`);
       setConsoleColor(`red`); // todo add to struct
       console.log(`Info: Something went wrong:`, err);
     }
@@ -507,6 +507,8 @@ function App() {
               endSale={endSale}
               startSale={startSale}
               setSaleAddress={setSaleAddress}
+              consoleData={consoleData}
+              consoleColor={consoleColor}
             />
           }
         />

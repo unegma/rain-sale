@@ -171,3 +171,7 @@ body {
 .deploy-own a {
   color: white;
 }
+
+.console {
+  text-align: center;
+}

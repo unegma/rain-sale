@@ -6,11 +6,12 @@ import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";
 
 type saleSettingsProps = {
-  saleAddress: string, redeemableName: string, redeemableSymbol: string, endSale: any, startSale: any, setSaleAddress: any
+  saleAddress: string, redeemableName: string, redeemableSymbol: string, endSale: any, startSale: any, setSaleAddress: any,
+  consoleColor: string, consoleData: string
 }
 
 export default function SaleDashboardView({
-  saleAddress, redeemableName, redeemableSymbol, endSale, startSale, setSaleAddress,
+  saleAddress, redeemableName, redeemableSymbol, endSale, startSale, setSaleAddress, consoleColor, consoleData
   }: saleSettingsProps)
 {
 
@@ -46,6 +47,16 @@ export default function SaleDashboardView({
         <Typography color="black" align="center">
           <sub>Be aware that, these functions can be called by ANYONE, so the deployer of a Sale, must understand how to configure when these can be called in order for a Sale to work as intended. (link to video about timeout() vs canEndStateConfig()</sub>
         </Typography>
+
+        <div className='console'>
+          { consoleColor === 'red' && (
+            <Typography className="modalTextRed">{consoleData}</Typography>
+          )}
+
+          { consoleColor === 'green' && (
+            <Typography className="modalTextGreen">{consoleData}</Typography>
+          )}
+        </div>
 
         <Button variant='contained' onClick={() => {startSale()}}>Start Sale</Button>
         <Button variant='contained' onClick={() => {endSale()}}>End Sale</Button>
