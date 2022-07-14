@@ -6,11 +6,11 @@ import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";
 
 type saleSettingsProps = {
-  saleAddress: string, reserveName: string, reserveSymbol: string, endSale: any, startSale: any, setSaleAddress: any
+  saleAddress: string, redeemableName: string, redeemableSymbol: string, endSale: any, startSale: any, setSaleAddress: any
 }
 
 export default function SaleDashboardView({
-  saleAddress, reserveName, reserveSymbol, endSale, startSale, setSaleAddress,
+  saleAddress, redeemableName, redeemableSymbol, endSale, startSale, setSaleAddress,
   }: saleSettingsProps)
 {
 
@@ -38,7 +38,7 @@ export default function SaleDashboardView({
           Sale Settings
         </Typography>
         <Typography color="black" align="center">
-          Settings for {reserveName} ({reserveSymbol}) Sale
+          Settings for {redeemableName} Collection ({redeemableSymbol}) Sale
         </Typography>
         <Typography color="black" align="center">
           {saleAddress}

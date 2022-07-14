@@ -502,8 +502,8 @@ function App() {
           element={
             <SaleDashboardView
               saleAddress={saleAddress}
-              reserveName={reserveName}
-              reserveSymbol={reserveSymbol}
+              redeemableName={redeemableName}
+              redeemableSymbol={redeemableSymbol}
               endSale={endSale}
               startSale={startSale}
               setSaleAddress={setSaleAddress}
