@@ -31,7 +31,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
       },
       title: {
         display: true,
-        text: 'Upcoming Transaction Costs (Estimated MATIC)',
+        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs from: 2022-05-30T15:32:44Z)',
       },
     },
   };
@@ -68,8 +68,6 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
       onClose={handleClose}
     >
       <Box component="div" sx={style}>
-        {/*<img className="modalImage" src={displayedImage} alt="#" /><br/>*/}
-        {/*todo create graph of transaction costs*/}
 
         <br/>
 

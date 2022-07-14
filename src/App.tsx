@@ -64,9 +64,12 @@ function App() {
   const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
   const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
   const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
-  const [saleTimeout, setSaleTimeout] = useState(Date.now());
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
+
+  // date stuff
+  let dateToUse = new Date().getTime() + 86400000; // this adds 24 hours, but beware, it doesn't take daylight saving into consideration https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+  const [saleTimeout, setSaleTimeout] = useState(dateToUse);
 
   // a bit isolated because not taken from .env and only used in the Sale (and got from getSaleData())
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
@@ -82,7 +85,7 @@ function App() {
     setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
     setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
     setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
-    setSaleTimeout(Date.now());
+    setSaleTimeout(dateToUse);
     setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
     setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
   }
