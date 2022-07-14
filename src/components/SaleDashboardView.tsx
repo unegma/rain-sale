@@ -48,6 +48,10 @@ export default function SaleDashboardView({
           <sub>Be aware that, these functions can be called by ANYONE, so the deployer of a Sale, must understand how to configure when these can be called in order for a Sale to work as intended. (link to video about timeout() vs canEndStateConfig()</sub>
         </Typography>
 
+        <Typography color="black" align="center">
+          <b>Sale End Countdown: ?:?:?</b>
+        </Typography>
+
         <div className='console'>
           { consoleColor === 'red' && (
             <Typography className="modalTextRed">{consoleData}</Typography>
