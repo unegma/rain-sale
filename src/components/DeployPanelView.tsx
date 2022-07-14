@@ -54,6 +54,20 @@ export default function DeployPanelView({
 
   const options = {
     responsive: true,
+    // scales: {
+    //   yAxes: [{
+    //     scaleLabel: {
+    //       display: true,
+    //       labelString: 'Y text'
+    //     }
+    //   }],
+    //   xAxes: [{
+    //     scaleLabel: {
+    //       display: true,
+    //       labelString: 'X text'
+    //     }
+    //   }],
+    // },
     plugins: {
       legend: {
         display: false,
@@ -61,7 +75,7 @@ export default function DeployPanelView({
       },
       title: {
         display: true,
-        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs from: 2022-05-30T15:32:44Z)',
+        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs at: 2022-05-30T15:32:44Z)',
       }
     },
   };

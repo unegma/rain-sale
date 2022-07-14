@@ -31,7 +31,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
       },
       title: {
         display: true,
-        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs from: 2022-05-30T15:32:44Z)',
+        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs at: 2022-05-30T15:32:44Z)',
       },
     },
   };
