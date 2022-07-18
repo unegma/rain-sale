@@ -151,6 +151,46 @@ export default function DeployPanelView({
           {/*<Html className="canvas-deployment-info">{redeemableName} Collection Sale</Html>*/}
         </Canvas>
 
+        { adminConfigPage === 0 && (
+          <>
+            <Typography variant="h5" component="h3" color="black">
+              (Page 1/3)
+            </Typography>
+
+            <FormControl variant="standard">
+              <InputLabel className="input-box-label" htmlFor="component-helper">Name of your Digital Object Collection</InputLabel>
+              <Input
+                id="component-helper"
+                value={redeemableName}
+                onChange={handleChangeRedeemableName}
+              />
+            </FormControl>
+
+
+            <FormControl variant="standard">
+              <InputLabel className="input-box-label" htmlFor="component-helper">Your Digital Object Symbol</InputLabel>
+              <Input
+                id="component-helper"
+                value={redeemableSymbol}
+                onChange={handleChangeRedeemableSymbol}
+              />
+            </FormControl>
+
+            <FormControl variant="standard">
+              <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Objects for Sale (in this example, limited to 1 per User)</InputLabel>
+              <Input
+                id="component-helper"
+                value={redeemableInitialSupply}
+                onChange={handleChangeRedeemableInitialSupply}
+              />
+            </FormControl>
+
+            <div className="buttons-box">
+              <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
+              <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
+            </div>
+          </>
+        )}
 
         { adminConfigPage === 1 && (
           <>
@@ -192,47 +232,6 @@ export default function DeployPanelView({
 
             <div className="buttons-box">
               <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>
-              <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
-            </div>
-          </>
-        )}
-
-        { adminConfigPage === 0 && (
-          <>
-            <Typography variant="h5" component="h3" color="black">
-              (Page 1/3)
-            </Typography>
-
-            <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Name of your Digital Object Collection</InputLabel>
-              <Input
-                id="component-helper"
-                value={redeemableName}
-                onChange={handleChangeRedeemableName}
-              />
-            </FormControl>
-
-
-            <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Your Digital Object Symbol</InputLabel>
-              <Input
-                id="component-helper"
-                value={redeemableSymbol}
-                onChange={handleChangeRedeemableSymbol}
-              />
-            </FormControl>
-
-            <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Objects for Sale (in this example, limited to 1 per User)</InputLabel>
-              <Input
-                id="component-helper"
-                value={redeemableInitialSupply}
-                onChange={handleChangeRedeemableInitialSupply}
-              />
-            </FormControl>
-
-            <div className="buttons-box">
-              <Button className="fifty-percent-button" variant="outlined" onClick={() => {resetToDefault()}}>Reset</Button>
               <Button className="fifty-percent-button" variant="contained" onClick={() => {setAdminConfigPage(adminConfigPage+1)}}>Next</Button>
             </div>
           </>
