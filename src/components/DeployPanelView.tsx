@@ -116,7 +116,7 @@ export default function DeployPanelView({
 
   return (
     <>
-      <NavBar string={`Configure ${redeemableSymbol} Sale`} stringRight={``} />
+      <NavBar string={`Configure Sale`} stringRight={``} />
 
       <Box
         className="admin-form"
@@ -129,7 +129,7 @@ export default function DeployPanelView({
       >
 
         <Typography variant="h4" component="h2" color="black" align="center">
-          Configure <b>{redeemableSymbol}</b> <br/>Digital Objects Sale
+          Configure your Digital Objects Sale
         </Typography>
         <Typography color="black" align="center">
           An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
@@ -148,6 +148,7 @@ export default function DeployPanelView({
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} enablePan={false} enableRotate={false} />
           {/*<OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />*/}
+          {/*<Html className="canvas-deployment-info">{redeemableName} Collection Sale</Html>*/}
         </Canvas>
 
 
@@ -159,7 +160,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (e.g. USDC) for buying Digital Objects</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (see link above) others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
@@ -168,7 +169,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Tokens) of a Digital Object</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Token set above) of each Digital Object (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
@@ -179,7 +180,7 @@ export default function DeployPanelView({
             <FormControl variant="standard">
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
-                  label="Sale End"
+                  label="Sale End (i.e. when end() can be called on the Sale contract)"
                   inputFormat="yyyy-MM-dd HH:mm"
                   value={theDate}
                   onChange={changeTimeout}
@@ -203,7 +204,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Collection Name (for Digital Objects)</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Name of your Digital Object Collection</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableName}
@@ -213,7 +214,7 @@ export default function DeployPanelView({
 
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Digital Object Symbol</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Your Digital Object Symbol</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableSymbol}
@@ -222,7 +223,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Objects for Sale (1 per User)</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Objects for Sale (in this example, limited to 1 per User)</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableInitialSupply}
@@ -245,16 +246,12 @@ export default function DeployPanelView({
               (Page 3/3)
             </Typography>
 
-            <Typography color="red">
+            <Typography color="black">
               Please make sure you are connected to the <b className='red'>{CHAIN_NAME}</b> Network.
             </Typography>
 
-            <Typography color="black">
-              Please be aware, this example does not (currently) have strict checking for all fields, and you will not recover the cost for network fees (gas) if a deployment fails*.
-            </Typography>
-
-            <Typography color="black">
-              <sub>*If Tx2 (Start Sale) fails, you can start manually from the dashboard instead of re-deploying.</sub>
+            <Typography color="red">
+              Please be aware, you will not recover the cost for network fees (gas) if deployment fails.
             </Typography>
 
             <div className="buttons-box">
