@@ -25,6 +25,8 @@ declare var process : {
     REACT_APP_REDEEMABLE_SYMBOL: string
     REACT_APP_CHAIN_ID: string
     REACT_APP_BASE_URL: string
+    REACT_APP_TIER_GATING_ADDRESS: string
+    REACT_APP_MINIMUM_TIER: string
   }
 }
 
@@ -66,6 +68,8 @@ function App() {
   const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
   const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
   const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
+  const [tierGatingAddress, setTierGatingAddress] = React.useState(process.env.REACT_APP_TIER_GATING_ADDRESS);
+  const [minimumTier, setMinimumTier] = React.useState(process.env.REACT_APP_MINIMUM_TIER);
 
   // date stuff
   let dateToUse = new Date().getTime() + 86400000; // this adds 24 hours, but beware, it doesn't take daylight saving into consideration https://stackoverflow.com/questions/563406/how-to-add-days-to-date
@@ -88,6 +92,8 @@ function App() {
     setSaleTimeout(dateToUse);
     setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
     setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
+    setTierGatingAddress(process.env.REACT_APP_TIER_GATING_ADDRESS);
+    setMinimumTier(process.env.REACT_APP_MINIMUM_TIER);
   }
 
   /** UseEffects **/
@@ -148,6 +154,12 @@ function App() {
   const handleChangeRedeemableInitialSupply = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRedeemableInitialSupply(event.target.value);
   };
+  const handleChangeTierGatingAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTierGatingAddress(event.target.value);
+  };
+  const handleChangeMinimumTier = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMinimumTier(event.target.value);
+  };
 
   /** Functions **/
 
@@ -183,6 +195,8 @@ function App() {
       setRedeemableName(await redeemable.name());
       setRedeemableSymbol(await redeemable.symbol())
       setRedeemableDecimals((await redeemable.decimals()).toString());
+
+      // todo does it need tier gating info too?
 
       // todo this might need to be removed becasue getting now from subgraph..
       const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
@@ -295,8 +309,8 @@ function App() {
         initialSupply: ethers.utils.parseUnits(redeemableInitialSupply, redeemableDecimals), // initial rTKN supply
       },
       // todo why can't I decompile? https://mumbai.polygonscan.com/address/0xC064055DFf6De32f44bB7cCB0ca59Cbd8434B2de#code
-      tier: "0xC064055DFf6De32f44bB7cCB0ca59Cbd8434B2de", // tier contract address (used for gating)
-      minimumTier: 0, // minimum tier a user needs to take part
+      tier: tierGatingAddress, // tier contract address (used for gating)
+      minimumTier: minimumTier, // minimum tier a user needs to take part
       distributionEndForwardingAddress: "0x0000000000000000000000000000000000000000" // the rTKNs that are not sold get forwarded here (0x00.. will burn them)
     }
 
@@ -478,7 +492,8 @@ function App() {
               handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
               handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
               handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}
-              deploySale={deploySale}
+              deploySale={deploySale} minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
+              tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
             />
           }
         />

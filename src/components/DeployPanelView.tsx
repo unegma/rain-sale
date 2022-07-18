@@ -10,6 +10,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {Bar} from "react-chartjs-2";
 import React, {Suspense, useEffect, useState} from "react";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +24,7 @@ import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import RTKN from "./RTKN";
 import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
+import {Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
 
 ChartJS.register(
@@ -39,7 +41,8 @@ type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
   handleChangeStaticReservePriceOfRedeemable: any, saleTimeout: any, handleChangeSaleTimeout: any,
   resetToDefault: any, setAdminConfigPage: any, redeemableName: any, handleChangeRedeemableName: any,
   redeemableSymbol: any, handleChangeRedeemableSymbol: any, redeemableInitialSupply: any,
-  handleChangeRedeemableInitialSupply: any, buttonLock: any, deploySale: any
+  handleChangeRedeemableInitialSupply: any, buttonLock: any, deploySale: any,
+  tierGatingAddress: string, handleChangeTierGatingAddress: any, minimumTier: any, handleChangeMinimumTier: any
 }
 
 // todo rename from admin panel
@@ -47,7 +50,8 @@ export default function DeployPanelView({
     adminConfigPage, reserveTokenAddress, handleChangeReserveTokenAddress, staticReservePriceOfRedeemable,
     handleChangeStaticReservePriceOfRedeemable, saleTimeout, handleChangeSaleTimeout, resetToDefault,
     setAdminConfigPage, redeemableName, handleChangeRedeemableName, redeemableSymbol, handleChangeRedeemableSymbol,
-    redeemableInitialSupply, handleChangeRedeemableInitialSupply, buttonLock, deploySale
+    redeemableInitialSupply, handleChangeRedeemableInitialSupply, buttonLock, deploySale,
+    tierGatingAddress, handleChangeTierGatingAddress, minimumTier, handleChangeMinimumTier
   } : adminPanelProps)
 {
 
@@ -116,7 +120,7 @@ export default function DeployPanelView({
 
   return (
     <>
-      <NavBar string={`Configure Sale`} stringRight={``} />
+      <NavBar string={`Configure Your Sale`} stringRight={``} />
 
       <Box
         className="admin-form"
@@ -135,7 +139,7 @@ export default function DeployPanelView({
           An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
         </Typography>
         <Typography color="black" align="center">
-          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' for buying Digital Objects (which act sort of like USDC) can be Deployed and Minted here</a>
+          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (will act like a Stablecoin for this demo) which users can use to buy your Digital Objects can be Deployed and Minted here</a>
         </Typography>
 
         <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 10, 20], fov: 40 }} performance={{ min: 0.1 }}>
@@ -245,12 +249,38 @@ export default function DeployPanelView({
               (Page 3/3)
             </Typography>
 
-            <Typography color="black">
-              Please make sure you are connected to the <b className='red'>{CHAIN_NAME}</b> Network.
-            </Typography>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Advanced Settings</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <FormControl variant="standard" className="accordion-style">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The Tier Gating address for your Sale</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={tierGatingAddress}
+                    onChange={handleChangeTierGatingAddress}
+                  />
+                </FormControl>
 
-            <Typography color="red">
-              Please be aware, you will not recover the cost for network fees (gas) if deployment fails.
+                <FormControl variant="standard" className="accordion-style">
+                  <InputLabel className="input-box-label" htmlFor="component-helper">Minimum Tier for taking part</InputLabel>
+                  <Input
+                    id="component-helper"
+                    value={minimumTier}
+                    onChange={handleChangeMinimumTier}
+                  />
+                </FormControl>
+              </AccordionDetails>
+            </Accordion>
+
+            <Typography color="black">
+              Please make sure you are connected to the <b className='red'>{CHAIN_NAME}</b> Network.<br/>
+              <span className="red">Please be aware, you will not recover the cost for network fees (gas) if deployment fails.</span>
             </Typography>
 
             <div className="buttons-box">
