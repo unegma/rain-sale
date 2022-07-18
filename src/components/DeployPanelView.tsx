@@ -129,13 +129,13 @@ export default function DeployPanelView({
       >
 
         <Typography variant="h4" component="h2" color="black" align="center">
-          Configure {redeemableSymbol} Sale
+          Configure <b>{redeemableSymbol}</b> <br/>Digital Objects Sale
         </Typography>
         <Typography color="black" align="center">
-          Rain Protocol Sale Demo, tutorials: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
+          An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
         </Typography>
         <Typography color="black" align="center">
-          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (like demo USDC) can be Deployed and Minted here</a>
+          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' for buying Digital Objects (which act sort of like USDC) can be Deployed and Minted here</a>
         </Typography>
 
         <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 10, 20], fov: 40 }} performance={{ min: 0.1 }}>
@@ -159,7 +159,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (e.g. USDC) for buying Vouchers</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (e.g. USDC) for buying Digital Objects</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
@@ -168,7 +168,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Tokens) of a Voucher</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Tokens) of a Digital Object</InputLabel>
               <Input
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
@@ -203,7 +203,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Collection Name</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Collection Name (for Digital Objects)</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableName}
@@ -213,7 +213,7 @@ export default function DeployPanelView({
 
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Voucher Symbol</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Digital Object Symbol</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableSymbol}
@@ -222,7 +222,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">Amount for Sale (1 per User)</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">Amount of Objects for Sale (1 per User)</InputLabel>
               <Input
                 id="component-helper"
                 value={redeemableInitialSupply}
