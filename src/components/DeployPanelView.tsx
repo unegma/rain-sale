@@ -24,7 +24,7 @@ import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import RTKN from "./RTKN";
 import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
-import {Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
 
 ChartJS.register(
@@ -186,6 +186,7 @@ export default function DeployPanelView({
                 id="component-helper"
                 value={redeemableInitialSupply}
                 onChange={handleChangeRedeemableInitialSupply}
+                endAdornment={<InputAdornment position="end">{redeemableSymbol}</InputAdornment>}
               />
             </FormControl>
 
@@ -218,6 +219,7 @@ export default function DeployPanelView({
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
                 onChange={handleChangeStaticReservePriceOfRedeemable}
+                endAdornment={<InputAdornment position="end"><sub>{reserveTokenAddress}</sub></InputAdornment>}
               />
             </FormControl>
 
