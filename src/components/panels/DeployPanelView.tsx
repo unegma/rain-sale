@@ -278,7 +278,7 @@ export default function DeployPanelView({
             </Accordion>
 
             <Typography color="black">
-              Please make sure you are connected to the <b className='red'>{CHAIN_NAME}</b> Network.<br/>
+              Please make sure you are connected to the <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Network.<br/>
               <span className="red">Please be aware, you will not recover the cost for network fees (gas) if deployment fails.</span>
             </Typography>
 

@@ -78,7 +78,14 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
         <br/>
 
         <Typography className="modalText">
-          To see <b>{redeemableSymbol}</b> in your Wallet, you may need to add its address: <b>{redeemableTokenAddress}</b>.
+          To see <b>{redeemableSymbol}</b> in your Wallet, you may need to&nbsp;
+          {/*!! note: this won't work on localhost, needs https !!*/}
+          <a href="#" onClick={(event: any) =>
+          {event.preventDefault(); navigator.clipboard.writeText(redeemableTokenAddress);
+            alert(`${redeemableTokenAddress} copied to clipboard!`)}}
+          >
+            add its address
+          </a>.
         </Typography><br/>
 
         <Typography className="modalText">
