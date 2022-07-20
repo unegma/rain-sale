@@ -258,7 +258,7 @@ export default function DeployPanelView({
               </AccordionSummary>
               <AccordionDetails>
                 <FormControl variant="standard" className="accordion-style">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The Tier Gating address for your Sale</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The <a href="https://rain-tier-gating.unegma.work" target="_blank">Tier Gating</a> address for your Sale</InputLabel>
                   <Input
                     id="component-helper"
                     value={tierGatingAddress}
