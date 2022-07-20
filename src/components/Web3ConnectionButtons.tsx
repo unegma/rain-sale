@@ -177,7 +177,7 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
       </Modal>
 
       {(!active && !error) && (
-        <Button variant="outlined" color="secondary" className="connectButton" onClick={showModal}>
+        <Button variant="outlined" color="secondary" className={`connectButton web3connectButton`} onClick={showModal}>
           Connect
         </Button>
       )}
@@ -187,7 +187,7 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
           <div className="donateButton-container">
             {/*<DonateButton />*/}
           </div>
-          <Button variant="outlined" color="secondary" className="disconnectButton" onClick={() => {handleDisconnect()}}>
+          <Button variant="outlined" color="secondary" className={`disconnectButton web3connectButton`} onClick={() => {handleDisconnect()}}>
             Disconnect
           </Button>
         </>
