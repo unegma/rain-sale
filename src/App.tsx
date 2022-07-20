@@ -8,7 +8,7 @@ import { connect } from "./connect.js"; // a very basic web3 connection implemen
 import { opcodeData } from "./opcodeData.js";
 import {CircularProgress} from "@mui/material";
 import DeployPanelView from "./components/panels/DeployPanelView";
-import SaleView from "./components/SaleView";
+import SaleView from "./components/panels/SaleView";
 import SaleDashboardView from "./components/panels/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";

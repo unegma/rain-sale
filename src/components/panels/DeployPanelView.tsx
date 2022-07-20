@@ -22,7 +22,7 @@ import {
 } from 'chart.js';
 import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
-import RTKN from "../RTKN";
+import RTKN from "../3d/RTKN";
 import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
