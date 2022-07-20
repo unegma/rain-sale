@@ -3,7 +3,7 @@ import {
   useParams
 } from "react-router-dom";
 import NavBar from "./layout/NavBar";
-import Modal from "./layout/Modal";
+import Modal from "./panels/Modal";
 import {Canvas} from "@react-three/fiber";
 import Vouchers from "./Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
