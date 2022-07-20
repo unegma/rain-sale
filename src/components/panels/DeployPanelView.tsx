@@ -135,12 +135,17 @@ export default function DeployPanelView({
         <Typography variant="h4" component="h2" color="black" align="center">
           Configure your Digital Objects Sale
         </Typography>
-        <Typography color="black" align="center">
-          An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
-        </Typography>
-        <Typography color="black" align="center">
-          <a href="#" target="_blank">See Sale Deployment demo video</a>
-        </Typography>
+
+        { adminConfigPage !== 2 && (
+          <>
+            <Typography color="black" align="center">
+              An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
+            </Typography>
+            <Typography color="black" align="center">
+              <a href="#" target="_blank">See Sale Deployment demo video</a>
+            </Typography>
+          </>
+        )}
 
         <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 10, 20], fov: 40 }} performance={{ min: 0.1 }}>
           <ambientLight intensity={0.1} />
