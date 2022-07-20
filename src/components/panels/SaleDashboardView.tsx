@@ -1,6 +1,6 @@
 import React, {Suspense, useEffect} from "react";
 import Typography from "@mui/material/Typography";
-import NavBar from "./NavBar";
+import NavBar from "../layout/NavBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";

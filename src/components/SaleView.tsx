@@ -2,8 +2,8 @@ import React, {Suspense, useEffect} from "react";
 import {
   useParams
 } from "react-router-dom";
-import NavBar from "./NavBar";
-import Modal from "./Modal";
+import NavBar from "./layout/NavBar";
+import Modal from "./layout/Modal";
 import {Canvas} from "@react-three/fiber";
 import Vouchers from "./Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";

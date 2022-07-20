@@ -1,4 +1,4 @@
-import NavBar from "./NavBar";
+import NavBar from "../layout/NavBar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
@@ -22,7 +22,7 @@ import {
 } from 'chart.js';
 import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
-import RTKN from "./RTKN";
+import RTKN from "../RTKN";
 import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
