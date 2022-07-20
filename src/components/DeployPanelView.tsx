@@ -36,7 +36,7 @@ ChartJS.register(
   Legend
 );
 
-type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
+type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string, reserveSymbol: string
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
   handleChangeStaticReservePriceOfRedeemable: any, saleTimeout: any, handleChangeSaleTimeout: any,
   resetToDefault: any, setAdminConfigPage: any, redeemableName: any, handleChangeRedeemableName: any,
@@ -47,7 +47,7 @@ type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string,
 
 // todo rename from admin panel
 export default function DeployPanelView({
-    adminConfigPage, reserveTokenAddress, handleChangeReserveTokenAddress, staticReservePriceOfRedeemable,
+    adminConfigPage, reserveTokenAddress, reserveSymbol, handleChangeReserveTokenAddress, staticReservePriceOfRedeemable,
     handleChangeStaticReservePriceOfRedeemable, saleTimeout, handleChangeSaleTimeout, resetToDefault,
     setAdminConfigPage, redeemableName, handleChangeRedeemableName, redeemableSymbol, handleChangeRedeemableSymbol,
     redeemableInitialSupply, handleChangeRedeemableInitialSupply, buttonLock, deploySale,
@@ -138,9 +138,6 @@ export default function DeployPanelView({
         <Typography color="black" align="center">
           An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
         </Typography>
-        <Typography color="black" align="center">
-          <a href="https://rain-erc20-faucet.unegma.work" target="_blank">'Reserve Tokens' (will act like a Stablecoin for this demo) which users can use to buy your Digital Objects can be Deployed and Minted here</a>
-        </Typography>
 
         <Canvas hidden={!(adminConfigPage !== 2)} className="the-canvas-deploypanel" camera={{ position: [0, 10, 20], fov: 40 }} performance={{ min: 0.1 }}>
           <ambientLight intensity={0.1} />
@@ -205,7 +202,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The 'Reserve' Token (see link above) others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The <a href="https://rain-erc20-faucet.unegma.work" target="_blank">Reserve Token</a> others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
@@ -219,7 +216,7 @@ export default function DeployPanelView({
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
                 onChange={handleChangeStaticReservePriceOfRedeemable}
-                endAdornment={<InputAdornment position="end"><sub>{reserveTokenAddress}</sub></InputAdornment>}
+                endAdornment={<InputAdornment position="end"><sub>{reserveSymbol}</sub></InputAdornment>}
               />
             </FormControl>
 

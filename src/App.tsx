@@ -12,9 +12,11 @@ import SaleView from "./components/SaleView";
 import SaleDashboardView from "./components/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";
+import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
+// todo having issues exporting this from a separate file
 declare var process : {
   env: {
     REACT_APP_RESERVE_TOKEN_ADDRESS: string
@@ -32,10 +34,7 @@ declare var process : {
   }
 }
 
-const SUBGRAPH_ENDPOINT = rainSDK.AddressBook.getSubgraphEndpoint(parseInt(process.env.REACT_APP_CHAIN_ID));
-
 // todo might need to check sale timeout is working (ie that cant buy if passes)
-
 // todo add a graphql call to get amount of shoes remaining in the sale
 
 /**
@@ -81,7 +80,6 @@ function App() {
 
   // a bit isolated because not taken from .env and only used in the Sale (and got from getSaleData())
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
-  const [reserveName, setReserveName] = React.useState("");
   const [reserveSymbol, setReserveSymbol] = React.useState("");
   const [rTKNAvailable, setRTKNAvailable] = React.useState(0);
 
@@ -139,9 +137,13 @@ function App() {
     // todo check this still works with new url parameter
     if (saleAddress && signer) {
       getSaleData(); // get saleContract and then get amount of shoes, and then load shoes
-      getSubgraphSaleData();
+      getSubgraphSaleData(saleAddress, setRTKNAvailable);
     }
   }, [saleAddress, signer, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
+
+  useEffect(() => {
+    getReserveName(reserveTokenAddress, setReserveSymbol);
+  },[reserveTokenAddress]);
 
   /** Handle Form Inputs **/
 
@@ -198,7 +200,6 @@ function App() {
       console.log(reserve);
 
       setReserveTokenAddress(reserve.address);
-      setReserveName(await reserve.name());
       setReserveSymbol(await reserve.symbol());
       setRedeemableTokenAddress(redeemable.address);
       setRedeemableName(await redeemable.name());
@@ -225,63 +226,6 @@ function App() {
       setSaleView(true);
     } catch(err) {
       console.log('Error getting sale data', err);
-    }
-  }
-
-  async function getSubgraphSaleData() {
-    try {
-      let subgraphData = await fetch(SUBGRAPH_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-            query {
-              sales (where: {id: "${saleAddress.toLowerCase()}"}) {
-                id
-                deployer
-                startEvent {
-                    timestamp
-                }
-                endEvent {
-                  timestamp
-                }
-                token {
-                  symbol
-                  name
-                  decimals
-                }
-                reserve {
-                  symbol
-                  name
-                  decimals
-                }
-                minimumRaise
-                unitsAvailable
-                totalRaised
-                percentRaised
-                saleStatus
-              }
-            }
-          `
-        })
-      });
-
-      // the response will then come back as promise, the data of which will need to be accessed as such:
-      subgraphData = await subgraphData.json();
-      console.log(subgraphData);
-
-      // @ts-ignore
-      subgraphData = subgraphData.data.sales[0]; // should only be one here anyway. // todo--question is there potential for 'too quick' to cause it not to exist yet in the subgraph?
-      if (subgraphData === undefined) throw new Error('NO_SUBGRAPH_DATA');
-
-      console.log(`Result: data from subgraph with endpoint ${SUBGRAPH_ENDPOINT}:`);
-      // @ts-ignore
-      setRTKNAvailable(subgraphData.unitsAvailable/10**18); // todo add
-
-    } catch(err) {
-      console.log(err);
     }
   }
 
@@ -492,7 +436,7 @@ function App() {
           path="/"
           element={
             <DeployPanelView
-              adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress}
+              adminConfigPage={adminConfigPage} reserveTokenAddress={reserveTokenAddress} reserveSymbol={reserveSymbol}
               handleChangeReserveTokenAddress={handleChangeReserveTokenAddress}
               staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               handleChangeStaticReservePriceOfRedeemable={handleChangeStaticReservePriceOfRedeemable}
