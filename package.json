@@ -40,7 +40,7 @@
     "build-prod": "react-scripts build --prod",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "aws --profile unegma s3 sync --delete ./build s3://rain-sale.unegma.work/",
+    "deploy": "eval $(grep '^DEPLOYMENT_URI' .env) && eval $(grep '^PROFILE' .env) && aws --profile $PROFILE s3 sync --delete ./build s3://$DEPLOYMENT_URI",
     "BUILD-AND-DEPLOY": "npm run build && npm run deploy",
     "BUILD-AND-DEPLOY-PROD": "npm run build-prod && npm run deploy"
   },
