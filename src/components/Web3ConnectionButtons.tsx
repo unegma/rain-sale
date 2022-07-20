@@ -118,6 +118,8 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
               // bit of a hacky override
               if (name === 'Metamask') {
                 nameLabel = 'Metamask/Browser'
+              } else {
+                nameLabel = name;
               }
 
               return (
