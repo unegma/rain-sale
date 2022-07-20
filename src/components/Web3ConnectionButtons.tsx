@@ -6,7 +6,6 @@ import { useEagerConnect, useInactiveListener } from "../helpers/hooks";
 import getErrorMessage from "../helpers/getErrorMessage";
 import { Spinner } from "./Spinner";
 import { Button, Modal, Box} from "@mui/material";
-import { Theme, createStyles, makeStyles } from '@mui/material/styles';
 // import DonateButton from "./DonateButton";
 import {Typography} from "@mui/material";
 import {HighlightOff as HighlightOffIcon} from "@mui/icons-material";
@@ -40,19 +39,14 @@ const connectorsByName: { [connectorName in ConnectorNames]: any} = {
 }
 
 export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any) {
-  const [modalOpen, setModalOpen] = useState(false);
   const context = useWeb3React<Web3Provider>(); // todo check because this web3provider is from ethers
   const { connector, library, chainId, account, activate, deactivate, active, error } = context;
-
   // handle logic to recognize the connector currently being activated
-  const [activatingConnector, setActivatingConnector] = useState<any>()
+
+  const [activatingConnector, setActivatingConnector] = useState<any>();
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    if (account) {
-      localStorage.setItem('address', account); // todo test this and check if ok to do like this
-      // setAddress(account); // todo check as possibly redundant
-    }
-
     if (activatingConnector && activatingConnector === connector) {
       setActivatingConnector(undefined);
     }
@@ -62,9 +56,6 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
   const triedEager = useEagerConnect();
 
   const handleDisconnect = () => {
-    localStorage.setItem('address', ""); // todo test this and check if ok to do like this
-    // setAddress(""); // todo check as possibly redundant
-
     if (connector === connectorsByName[ConnectorNames.WalletConnect]) {
       console.log('Deactivating WalletConnect session');
       (connector as any).close(); // todo unfinsihed
@@ -122,6 +113,11 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
               const activating = currentConnector === activatingConnector;
               const connected = currentConnector === connector;
               const disabled = !triedEager || !!activatingConnector || connected || !!error;
+
+              // bit of a hacky override
+              if (name === 'Metamask') {
+                name = 'Metamask/Browser'
+              }
 
               return (
                 (!active && !error) && (
