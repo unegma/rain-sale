@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Web3ConnectionButtons from '../components/Web3ConnectionButtons';
 
 export default function NavBar({string, stringRight}: {string?: string, stringRight?: string}) {
   return (
@@ -12,9 +13,8 @@ export default function NavBar({string, stringRight}: {string?: string, stringRi
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {!string ? 'Rain Protocol Sale' : string}
           </Typography>
-          <Typography className="right" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {!stringRight ? '' : stringRight}
-          </Typography>
+
+          <Web3ConnectionButtons className='connect-button' />
         </Toolbar>
       </AppBar>
     </Box>

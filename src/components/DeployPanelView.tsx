@@ -120,7 +120,7 @@ export default function DeployPanelView({
 
   return (
     <>
-      <NavBar string={`Configure Your Sale`} stringRight={``} />
+      <NavBar string={`Configure Your Sale`} />
 
       <Box
         className="admin-form"

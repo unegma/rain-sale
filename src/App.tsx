@@ -10,6 +10,8 @@ import {CircularProgress} from "@mui/material";
 import DeployPanelView from "./components/DeployPanelView";
 import SaleView from "./components/SaleView";
 import SaleDashboardView from "./components/SaleDashboardView";
+import {useWeb3React} from "@web3-react/core";
+import {Web3Provider} from "@ethersproject/providers";
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -43,9 +45,11 @@ function App() {
 
   /** State Config **/
 
+  const context = useWeb3React<Web3Provider>(); // todo check because this web3provider is from ethers
+  const { connector, library, chainId, account, activate, deactivate, active, error }: any = context;
+
   // high level
   const [signer, setSigner] = useState<Signer|undefined>(undefined);
-  const [address, setAddress] = useState("");
   const [saleAddress, setSaleAddress] = React.useState(""); // this is now retrieved from the url
   const [saleComplete, setSaleComplete] = React.useState(false);
   const [consoleData, setConsoleData] = React.useState("");
@@ -119,10 +123,15 @@ function App() {
 
   },[]);
 
-  // basic connection to web3 wallet
+  // // basic connection to web3 wallet
+  // useEffect(() => {
+  //   makeWeb3Connection(); // todo test what happens if not signed in
+  // },[]);
+
   useEffect(() => {
-    makeWeb3Connection(); // todo test what happens if not signed in
-  },[]);
+    setSigner(library?.getSigner());
+    // setAddress(account); // todo check that definitely not needed now
+  }, [library, account]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
   // todo check this section because it is different in all frontends
@@ -163,15 +172,15 @@ function App() {
 
   /** Functions **/
 
-  async function makeWeb3Connection() {
-    try {
-      const {signer, address} = await connect(); // get the signer and account address using a very basic connection implementation
-      setSigner(signer);
-      setAddress(address);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // async function makeWeb3Connection() {
+  //   try {
+  //     const {signer, address} = await connect(); // get the signer and account address using a very basic connection implementation
+  //     setSigner(signer);
+  //     setAddress(address);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   /**
    * Get Sale Data from blockchain instead of .env
@@ -291,7 +300,7 @@ function App() {
         ethers.utils.parseUnits(staticReservePriceOfRedeemable, parseInt(reserveDecimals)),
         ethers.utils.parseUnits(redeemableWalletCap, parseInt(redeemableDecimals)),
       ), // config for the `calculatePrice` function (see opcodes section below).
-      recipient: address, // who will receive the RESERVE token (e.g. USDCC) after the Sale completes
+      recipient: account, // who will receive the RESERVE token (e.g. USDCC) after the Sale completes
       reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
       // saleTimeout: ethers.constants.MaxUint256, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds
       saleTimeout: 10000, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds. This can be obtained by checking the factory through which the sale was deployed // todo check difference between timeout and MaxTimout and whether the new deployment is 4 months, and how timeout interacts with maxtimout, and how maxtimout can be set (does it need a subgraph call?)
@@ -438,7 +447,7 @@ function App() {
       console.log(`Info: Price of tokens in the Sale: ${staticReservePriceOfRedeemable}${await reserveContract.symbol()} (${reserveContract.address})`);
 
       const buyConfig = {
-        feeRecipient: address,
+        feeRecipient: account,
         fee: ethers.utils.parseUnits("0", parseInt(reserveDecimals)), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
         minimumUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)), // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
         desiredUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)),

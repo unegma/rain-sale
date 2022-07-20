@@ -7,15 +7,25 @@ import {Suspense} from 'react';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Web3ReactProvider } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+
+function getLibrary(provider: any): Web3Provider {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 12000;
+  return library;
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Router>
-      <App/>
-    </Router>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Router>
+        <App/>
+      </Router>
+    </Web3ReactProvider>
   </React.StrictMode>
 );
 

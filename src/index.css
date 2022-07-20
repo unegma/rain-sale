@@ -189,3 +189,39 @@ body {
 .accordion-style {
   width: 100%;
 }
+
+
+.red {
+  color: red;
+}
+
+.connect-button {
+}
+
+/* modal for connect */
+
+.closeModalButton {
+  cursor: pointer;
+  position: absolute !important;
+  right: 5px !important;
+  top:5px !important;
+  color: black;
+  cursor: pointer;
+}
+
+.modalTitle {
+  color: black;
+}
+
+.connectButtonContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.connectTypeButton {
+  margin-right: 5px !important;
+}
+
+.minitext {
+  font-size: 10px;
+}
