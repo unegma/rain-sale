@@ -4,12 +4,13 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
 import {Bar} from "react-chartjs-2";
+import Warning from "../various/Warning";
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '35vw',
+  width: '42vw',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -78,23 +79,25 @@ export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonL
         <br/>
 
         <Typography className="modalText">
-          To see <b>{redeemableSymbol}</b> in your Wallet, you may need to&nbsp;
           <a href="#" onClick={(event: any) =>
             {event.preventDefault();alert(`Copy: ${redeemableTokenAddress} to clipboard and import token in to your Wallet.`)}}
           >
-            add the address for <b>{redeemableSymbol}</b>
-          </a>.
+            Add the address for <b>{redeemableSymbol}</b>
+          </a> to see them in your wallet.
         </Typography><br/>
 
+        {/*Each <b>{redeemableSymbol}</b> is exchangeable for an imaginary physical/digital item in the <b>{redeemableName} Collection</b>!*/}
+
         <Typography className="modalText">
-          Each <b>{redeemableSymbol}</b> is exchangeable for an imaginary physical/digital item in the <b>{redeemableName} Collection</b>! <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">Click to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
+          <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">Click here to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
         </Typography><br/>
 
         {/*todo pass the address in url when passing*/}
         <Typography className="modalText">
-          <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens<br/>
-          (<b className='red'>Sale must have closed successfully</b>, <a href={`https://rain-voucher-sale.unegma.work/${saleAddress}/dashboard`} target="_blank">see Sale Dashboard</a>).
+          <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.<br/>
         </Typography><br/>
+
+        <Warning /><br/>
 
         { consoleColor === 'red' && (
           <Typography className="modalTextRed">{consoleData}</Typography>
