@@ -90,7 +90,10 @@ function App() {
 
   useEffect(() => {
     setSigner(library?.getSigner());
-    getPriceForUser(signer,saleAddress,setStaticReservePriceOfRedeemable,redeemableDecimals); // get price when signer is set
+
+    if (saleView) {
+      getPriceForUser(signer, saleAddress, setStaticReservePriceOfRedeemable, redeemableDecimals); // get price when signer is set
+    }
   }, [library, account]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got

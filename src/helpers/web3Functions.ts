@@ -222,6 +222,7 @@ export async function getPriceForUser(
   signer: any, saleAddress: string, setStaticReservePriceOfRedeemable: any, redeemableDecimals: string
 ) {
   try {
+    console.log(`the sale address: ${saleAddress}`)
     const saleContract = new rainSDK.Sale(saleAddress, signer);
     const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(parseInt(DESIRED_UNITS_OF_REDEEMABLE)); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
     let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
