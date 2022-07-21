@@ -101,7 +101,8 @@ function App() {
       // todo is this now redundant?
       getSaleData(
         signer,setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,setRedeemableName,setRedeemableSymbol,
-        setRedeemableDecimals,setRedeemableInitialSupply,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,setStaticReservePriceOfRedeemable
+        setRedeemableDecimals,setRedeemableInitialSupply,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,
+        setStaticReservePriceOfRedeemable, setSaleView
       ); // get saleContract and then get amount, and then load
       getSubgraphSaleData(saleAddress, setRTKNAvailable);
     }
@@ -165,9 +166,9 @@ function App() {
                minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
               tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
               deploySale={() => deploySale(
-                setButtonLock,setLoading,saleAddress,reserveTokenAddress,reserveDecimals,redeemableWalletCap,redeemableDecimals,
-                account,reserveTokenAddress,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,redeemableSymbol,redeemableInitialSupply,
-                saleAddress,reserveTokenAddress
+                setButtonLock,setLoading,saleTimeout,staticReservePriceOfRedeemable,
+                redeemableWalletCap,redeemableDecimals,account,reserveTokenAddress,DESIRED_UNITS_OF_REDEEMABLE,
+                redeemableName,redeemableSymbol,redeemableInitialSupply, tierGatingAddress, minimumTier, reserveDecimals
               )}
             />
           }
@@ -205,10 +206,10 @@ function App() {
               consoleData={consoleData}
               consoleColor={consoleColor}
               endSale={() => endSale(
-                signer,setButtonLock,setLoading,saleAddress,reserveTokenAddress,setConsoleColor,setSaleComplete, account
+                signer,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete, account
               )}
               startSale={() => startSale(
-                signer,setButtonLock,setLoading,saleAddress,reserveTokenAddress,setConsoleColor,setSaleComplete, account
+                signer,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete, account
               )}
             />
           }

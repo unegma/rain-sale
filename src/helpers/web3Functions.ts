@@ -13,7 +13,8 @@ const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the butto
 export async function getSaleData(
   signer: any, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
   setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
-  DESIRED_UNITS_OF_REDEEMABLE: number, redeemableDecimals: string, setStaticReservePriceOfRedeemable: any
+  DESIRED_UNITS_OF_REDEEMABLE: number, redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
+  setSaleView: any
 ) {
   try {
     // if (account === "" || typeof account === 'undefined') {
@@ -63,10 +64,10 @@ export async function getSaleData(
  * Deploy a Sale and Start it (2txs)
  */
 export async function deploySale(
-  setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string, reserveDecimals: string,
+  setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
   redeemableWalletCap: string, redeemableDecimals: string, account: string, reserveTokenAddress: string,
   DESIRED_UNITS_OF_REDEEMABLE: number, redeemableName: string, redeemableSymbol: string, redeemableInitialSupply: string,
-  tierGatingAddress: string, minimumTier: string
+  tierGatingAddress: string, minimumTier: string, reserveDecimals: string
 ) {
   try {
     if (account === "" || typeof account === 'undefined') {
