@@ -10,7 +10,7 @@ import SaleDashboardView from "./components/panels/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";
 import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
-import {deploySale, getSaleData, startSale, endSale, initiateBuy} from './helpers/web3Functions';
+import {deploySale, startSale, endSale, initiateBuy} from './helpers/web3Functions';
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
 
@@ -95,18 +95,13 @@ function App() {
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
   // todo check this section because it is different in all frontends
   useEffect(() => {
-    // todo check this still works with new url parameter
-    if (saleAddress && signer) {
-
-      // todo is this now redundant?
-      getSaleData(
-        signer,setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,setRedeemableName,setRedeemableSymbol,
-        setRedeemableDecimals,setRedeemableInitialSupply,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,
-        setStaticReservePriceOfRedeemable, setSaleView
-      ); // get saleContract and then get amount, and then load
-      getSubgraphSaleData(saleAddress, setRTKNAvailable);
+    if (saleAddress) {
+      getSubgraphSaleData(
+        DESIRED_UNITS_OF_REDEEMABLE,setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
+        setRedeemableName,setRedeemableSymbol, setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
+        setStaticReservePriceOfRedeemable, setSaleView,saleAddress, setRTKNAvailable);
     }
-  }, [saleAddress, signer, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
+  }, [saleAddress, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
 
   useEffect(() => {
     getReserveName(reserveTokenAddress, setReserveSymbol);
@@ -166,8 +161,8 @@ function App() {
                minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
               tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
               deploySale={() => deploySale(
-                signer, setButtonLock,setLoading,saleTimeout,staticReservePriceOfRedeemable,
-                redeemableWalletCap,redeemableDecimals,account,reserveTokenAddress,DESIRED_UNITS_OF_REDEEMABLE,
+                signer, account, DESIRED_UNITS_OF_REDEEMABLE, setButtonLock,setLoading,saleTimeout,
+                staticReservePriceOfRedeemable,redeemableWalletCap,redeemableDecimals,reserveTokenAddress,
                 redeemableName,redeemableSymbol,redeemableInitialSupply, tierGatingAddress, minimumTier, reserveDecimals
               )}
             />
@@ -186,9 +181,9 @@ function App() {
               saleAddress={saleAddress} rTKNAvailable={rTKNAvailable} saleView={saleView}
               setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
               initiateBuy={() => initiateBuy(
-                signer, setButtonLock, setLoading, saleAddress, setConsoleData, setConsoleColor, setSaleComplete,
-                staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,account,reserveDecimals,
-                DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,redeemableSymbol
+                signer, account, DESIRED_UNITS_OF_REDEEMABLE, setButtonLock, setLoading, saleAddress, setConsoleData,
+                setConsoleColor, setSaleComplete,staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,
+                reserveDecimals,redeemableDecimals,redeemableSymbol
               )}
             />
           }
@@ -206,10 +201,10 @@ function App() {
               consoleData={consoleData}
               consoleColor={consoleColor}
               endSale={() => endSale(
-                signer,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete, account
+                signer,account,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete
               )}
               startSale={() => startSale(
-                signer,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete, account
+                signer,account,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete
               )}
             />
           }

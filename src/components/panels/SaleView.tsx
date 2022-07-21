@@ -31,6 +31,7 @@ export default function SaleView({
   }, []);
 
   // todo add a message in case the indexing is slow
+  console.log(`saleView is set to:`, saleView);
 
   return (
     <>

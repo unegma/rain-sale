@@ -11,16 +11,13 @@ const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the butto
  * todo can this use subgraph instead?
  */
 export async function getSaleData(
-  signer: any, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
+  signer: any, DESIRED_UNITS_OF_REDEEMABLE: number, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
   setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
-  DESIRED_UNITS_OF_REDEEMABLE: number, redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
+  redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
   setSaleView: any
 ) {
   try {
-    // if (account === "" || typeof account === 'undefined') {
-    //   alert(WARNING_MESSAGE);
-    //   return;
-    // }
+    // checking account not needed here
 
     // @ts-ignore
     const saleContract = new rainSDK.Sale(saleAddress, signer);
@@ -64,9 +61,9 @@ export async function getSaleData(
  * Deploy a Sale and Start it (2txs)
  */
 export async function deploySale(
-  signer: any, setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
-  redeemableWalletCap: string, redeemableDecimals: string, account: string, reserveTokenAddress: string,
-  DESIRED_UNITS_OF_REDEEMABLE: number, redeemableName: string, redeemableSymbol: string, redeemableInitialSupply: string,
+  signer: any, account: string, DESIRED_UNITS_OF_REDEEMABLE: number, setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
+  redeemableWalletCap: string, redeemableDecimals: string, reserveTokenAddress: string,
+  redeemableName: string, redeemableSymbol: string, redeemableInitialSupply: string,
   tierGatingAddress: string, minimumTier: string, reserveDecimals: string
 ) {
   try {
@@ -138,8 +135,8 @@ export async function deploySale(
  * end Sale
  */
 export async function endSale(
-  signer: any, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
-  setConsoleColor: any, setSaleComplete: any, account: string
+  signer: any, account: string, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
+  setConsoleColor: any, setSaleComplete: any
 ) {
   try {
     if (account === "" || typeof account === 'undefined') {
@@ -180,8 +177,8 @@ export async function endSale(
  * start Sale
  */
 export async function startSale(
-  signer: any, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
-  setConsoleColor: any, setSaleComplete: any, account: string
+  signer: any, account: string, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
+  setConsoleColor: any, setSaleComplete: any
 ) {
   try {
     if (account === "" || typeof account === 'undefined') {
@@ -224,9 +221,9 @@ export async function startSale(
  * THIS MUST NOT BE SHOWN BEFORE getSaleData() HAS FINISHED OR THE DATA WILL BE FROM .ENV
  */
 export async function initiateBuy(
-  signer: any, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
-  setConsoleColor: any, setSaleComplete: any, staticReservePriceOfRedeemable: string, reserveSymbol: string,
-  reserveTokenAddress: string, account: string, reserveDecimals: string, DESIRED_UNITS_OF_REDEEMABLE: number,
+  signer: any, account: string, DESIRED_UNITS_OF_REDEEMABLE: number, setButtonLock: any, setLoading: any,
+  saleAddress: string, setConsoleData: any, setConsoleColor: any, setSaleComplete: any,
+  staticReservePriceOfRedeemable: string, reserveSymbol: string, reserveTokenAddress: string, reserveDecimals: string,
   redeemableDecimals: string, redeemableSymbol: string
 ) {
   try {
@@ -234,6 +231,17 @@ export async function initiateBuy(
       alert(WARNING_MESSAGE);
       return;
     }
+
+
+    // todo might need to use this somewhere
+    // TODO THIS WAS IN THE NON-SUBGRAPH VERSION, CHECK IF ANY ISSUES WITH IT NOT EXISTING NOW
+    // // todo this will cause a giant number if signer has more than the walletcap
+    // const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+    // let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+    // setStaticReservePriceOfRedeemable(readablePrice);
+    // console.log(`Price for you: ${readablePrice}`);
+
+
 
     setButtonLock(true);
     setLoading(true);
@@ -247,12 +255,12 @@ export async function initiateBuy(
     // approval
     console.log(`Info: Connecting to Reserve token for approval of spend of ${staticReservePriceOfRedeemable}${reserveSymbol}:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
 
-    // todo maybe create a toBigNumber() function instead of putting ethers everywhere
     const approveTransaction = await reserveContract.approve(saleContract.address, ethers.utils.parseUnits(staticReservePriceOfRedeemable.toString(), parseInt(reserveDecimals)));
     const approveReceipt = await approveTransaction.wait();
     console.log(`Info: Approve Receipt:`, approveReceipt);
     console.log('------------------------------'); // separator
 
+    // todo might be an issue with this now as coming from .env after replacing with subgraph
     console.log(`Info: Price of tokens in the Sale: ${staticReservePriceOfRedeemable}${await reserveContract.symbol()} (${reserveContract.address})`);
 
     const buyConfig = {

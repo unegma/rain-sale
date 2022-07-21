@@ -27,19 +27,7 @@ export default function Vouchers({amount, modalOpen, setModalOpen, redeemableSym
   return (
     <Instances range={amount} material={materials.paper_Mat} geometry={nodes.Object_2.geometry}>
       {randomData.map((props, i) => (
-        <>
-          <Voucher modalOpen={modalOpen} setModalOpen={setModalOpen} key={i} {...props} redeemableSymbol={redeemableSymbol}/>
-          {/*<Text*/}
-          {/*  position={[0, -1, 0.58]}*/}
-          {/*  rotation={[0,0,0]}*/}
-          {/*  fontSize={2}*/}
-          {/*  // lineHeight={0.8}*/}
-          {/*  // material-toneMapped={false}*/}
-          {/*  color='black'*/}
-          {/*>*/}
-          {/*  {redeemableSymbol}*/}
-          {/*</Text>*/}
-        </>
+        <Voucher modalOpen={modalOpen} setModalOpen={setModalOpen} key={`${i}`} {...props} redeemableSymbol={redeemableSymbol}/>
       ))}
     </Instances>
   )

@@ -70,6 +70,7 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
         <br/>
 
+        {/*todo might be issues with this now, as price is passed from .env (after moving to subgraph call). Might need to re-call in a different function with signer*/}
         { !staticReservePriceOfRedeemable.includes('e') && (
           <Bar options={options} data={data} />
         )}
