@@ -4,58 +4,58 @@ import {ethers} from "ethers";
 
 const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)!";
 
-/**
- * Get Sale Data from blockchain instead of .env
- * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
- * todo might want to abstract this function and the whole Sale into a different component
- * todo can this use subgraph instead?
- */
-export async function getSaleData(
-  signer: any, DESIRED_UNITS_OF_REDEEMABLE: number, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
-  setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
-  redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
-  setSaleView: any
-) {
-  try {
-    // checking account not needed here
-
-    // @ts-ignore
-    const saleContract = new rainSDK.Sale(saleAddress, signer);
-    console.log(saleContract);
-    const redeemable = await saleContract.getRedeemable(signer);
-    console.log(redeemable);
-    const reserve = await saleContract.getReserve(signer);
-    console.log(reserve);
-
-    setReserveTokenAddress(reserve.address);
-    setReserveSymbol(await reserve.symbol());
-    setRedeemableTokenAddress(redeemable.address);
-    setRedeemableName(await redeemable.name());
-    setRedeemableSymbol(await redeemable.symbol())
-    setRedeemableDecimals((await redeemable.decimals()).toString());
-
-    // todo does it need tier gating info too?
-
-    // todo this might need to be removed becasue getting now from subgraph..
-    const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
-    const amountOfVouchersDecimals = await redeemable.decimals();
-    const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
-    console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
-    setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
-
-    // todo this will cause a giant number if signer has more than the walletcap
-    const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-    let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-    setStaticReservePriceOfRedeemable(readablePrice);
-    console.log(`Price for you: ${readablePrice}`);
-
-    // @ts-ignore
-    // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
-    setSaleView(true);
-  } catch(err) {
-    console.log('Error getting sale data', err);
-  }
-}
+// /**
+//  * Get Sale Data from blockchain instead of .env
+//  * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
+//  * todo might want to abstract this function and the whole Sale into a different component
+//  * todo can this use subgraph instead?
+//  */
+// export async function getSaleData(
+//   signer: any, DESIRED_UNITS_OF_REDEEMABLE: number, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
+//   setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
+//   redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
+//   setSaleView: any
+// ) {
+//   try {
+//     // checking account not needed here
+//
+//     // @ts-ignore
+//     const saleContract = new rainSDK.Sale(saleAddress, signer);
+//     console.log(saleContract);
+//     const redeemable = await saleContract.getRedeemable(signer);
+//     console.log(redeemable);
+//     const reserve = await saleContract.getReserve(signer);
+//     console.log(reserve);
+//
+//     setReserveTokenAddress(reserve.address);
+//     setReserveSymbol(await reserve.symbol());
+//     setRedeemableTokenAddress(redeemable.address);
+//     setRedeemableName(await redeemable.name());
+//     setRedeemableSymbol(await redeemable.symbol())
+//     setRedeemableDecimals((await redeemable.decimals()).toString());
+//
+//     // todo does it need tier gating info too?
+//
+//     // todo this might need to be removed becasue getting now from subgraph..
+//     const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
+//     const amountOfVouchersDecimals = await redeemable.decimals();
+//     const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
+//     console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
+//     setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
+//
+//     // todo this will cause a giant number if signer has more than the walletcap
+//     const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+//     let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+//     setStaticReservePriceOfRedeemable(readablePrice);
+//     console.log(`Price for you: ${readablePrice}`);
+//
+//     // @ts-ignore
+//     // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
+//     setSaleView(true);
+//   } catch(err) {
+//     console.log('Error getting sale data', err);
+//   }
+// }
 
 /**
  * Deploy a Sale and Start it (2txs)
