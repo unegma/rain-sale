@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
 import {Bar} from "react-chartjs-2";
-const displayedImage = 'https://assets.unegma.net/unegma.work/rain-voucher-sale.unegma.work/shoes.jpg'
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',

@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {Bar} from "react-chartjs-2";
-import React, {Suspense, useEffect, useState} from "react";
+import React, {Suspense, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Chart as ChartJS,
@@ -23,9 +23,10 @@ import {
 import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import RTKN from "../3d/RTKN";
-import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
+import {DateTimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
-const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
+import Warning from "../various/Warning";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 ChartJS.register(
   CategoryScale,
@@ -54,7 +55,6 @@ export default function DeployPanelView({
     tierGatingAddress, handleChangeTierGatingAddress, minimumTier, handleChangeMinimumTier
   } : adminPanelProps)
 {
-
 
   const options = {
     responsive: true,
@@ -138,12 +138,14 @@ export default function DeployPanelView({
 
         { adminConfigPage !== 2 && (
           <>
-            <Typography color="black" align="center">
-              An example to go along with the Rain Protocol Sale tutorial: <a href="https://docs.rainprotocol.xyz">docs.rainprotocol.xyz</a>
-            </Typography>
-            <Typography color="black" align="center">
-              <a href="#" target="_blank">See Sale Deployment demo video</a>
-            </Typography>
+            <>
+              <Typography color="black" align="center">
+                <a href="#" target="_blank">Rain Protocol Sale Demo Video</a><br/>
+                <a href="https://docs.rainprotocol.xyz">Tutorials at docs.rainprotocol.xyz</a><br/>
+                {/*todo change to rUSD?*/}
+                <a href={`${BASE_URL}/`} target="_blank">Example Sale: </a>
+              </Typography>
+            </>
           </>
         )}
 
@@ -151,13 +153,10 @@ export default function DeployPanelView({
           <ambientLight intensity={0.1} />
           <directionalLight intensity={0.01} position={[5, 25, 20]} />
           <Suspense fallback={<Html className="black">loading..</Html>}>
-            {/*<Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} redeemableSymbol={redeemableSymbol}/>*/}
             <RTKN rotation={[-1.5,0,0]} redeemableSymbol={redeemableSymbol} />
             <Environment preset="lobby" />
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} enablePan={false} enableRotate={false} />
-          {/*<OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />*/}
-          {/*<Html className="canvas-deployment-info">{redeemableName} Collection Sale</Html>*/}
         </Canvas>
 
         { adminConfigPage === 0 && (
@@ -285,10 +284,7 @@ export default function DeployPanelView({
               </AccordionDetails>
             </Accordion>
 
-            <Typography color="black">
-              Please make sure you are connected to the <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Network.<br/>
-              <span className="red">Please be aware, you will not recover the cost for network fees (gas) if deployment fails.</span>
-            </Typography>
+            <Warning />
 
             <div className="buttons-box">
               <Button className="fifty-percent-button" variant="outlined" onClick={() => {setAdminConfigPage(adminConfigPage-1)}}>Previous</Button>

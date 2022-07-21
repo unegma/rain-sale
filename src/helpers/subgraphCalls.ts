@@ -1,24 +1,6 @@
 import * as rainSDK from "rain-sdk";
 
-// todo having issues exporting this from a separate file
-declare var process : {
-  env: {
-    REACT_APP_RESERVE_TOKEN_ADDRESS: string
-    REACT_APP_RESERVE_ERC20_DECIMALS: string
-    REACT_APP_REDEEMABLE_ERC20_DECIMALS: string
-    REACT_APP_REDEEMABLE_WALLET_CAP: string
-    REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE: string
-    REACT_APP_REDEEMABLE_INITIAL_SUPPLY: string
-    REACT_APP_REDEEMABLE_NAME: string
-    REACT_APP_REDEEMABLE_SYMBOL: string
-    REACT_APP_CHAIN_ID: string
-    REACT_APP_BASE_URL: string
-    REACT_APP_TIER_GATING_ADDRESS: string
-    REACT_APP_MINIMUM_TIER: string
-  }
-}
-
-const SUBGRAPH_ENDPOINT = rainSDK.AddressBook.getSubgraphEndpoint(parseInt(process.env.REACT_APP_CHAIN_ID));
+const SUBGRAPH_ENDPOINT = rainSDK.AddressBook.getSubgraphEndpoint(parseInt(process.env.REACT_APP_CHAIN_ID as string));
 
 /**
  * Get the name of the reserve token to be used in the gui

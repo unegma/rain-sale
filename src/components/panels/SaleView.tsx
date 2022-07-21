@@ -8,18 +8,19 @@ import {Canvas} from "@react-three/fiber";
 import Vouchers from "../3d/Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 type saleViewProps = {
   redeemableName: any, redeemableSymbol: any, modalOpen: any, setModalOpen: any, initiateBuy: any, buttonLock: any,
   redeemableTokenAddress: any, staticReservePriceOfRedeemable: any, reserveSymbol: any, consoleData: any,
-  consoleColor: any, redeemableInitialSupply: any, saleAddress: string, rTKNAvailable: number, saleView: any
-  setSaleAddress: any, reserveTokenAddress: string, BASE_URL: string
+  consoleColor: any, saleAddress: string, rTKNAvailable: number, saleView: any
+  setSaleAddress: any, reserveTokenAddress: string
 }
 
 export default function SaleView({
     redeemableName, redeemableSymbol, modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress,
-    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, redeemableInitialSupply, saleAddress, saleView,
-    rTKNAvailable, setSaleAddress, reserveTokenAddress, BASE_URL
+    staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, saleAddress, saleView,
+    rTKNAvailable, setSaleAddress, reserveTokenAddress
   }: saleViewProps )
 {
 
@@ -34,7 +35,7 @@ export default function SaleView({
       { saleView && (
         <>
           <NavBar string={`${redeemableSymbol} Sale (${redeemableName} Collection)`} stringRight={``} />
-          <p className='deploy-own'>Make sure you are connected to the <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Network. <a href={`${BASE_URL}`}>Click Here to Deploy Your Own Sale!</a></p>
+          <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${BASE_URL}`}>Deploy Your Own Sale Here!</a></p>
 
           <div className="canvasContainer">
             <Modal

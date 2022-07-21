@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Route, Routes, useParams
+  Route, Routes
 } from "react-router-dom";
-import {ethers, Signer} from "ethers";
-import * as rainSDK from "rain-sdk";
-import { connect } from "./connect.js"; // a very basic web3 connection implementation
-import { opcodeData } from "./opcodeData.js";
+import {Signer} from "ethers";
 import {CircularProgress} from "@mui/material";
 import DeployPanelView from "./components/panels/DeployPanelView";
 import SaleView from "./components/panels/SaleView";
@@ -13,29 +10,9 @@ import SaleDashboardView from "./components/panels/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";
 import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
+import {deploySale, getSaleData, startSale, endSale, initiateBuy} from './helpers/web3Functions';
 
 const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
-
-// todo having issues exporting this from a separate file
-declare var process : {
-  env: {
-    REACT_APP_RESERVE_TOKEN_ADDRESS: string
-    REACT_APP_RESERVE_ERC20_DECIMALS: string
-    REACT_APP_REDEEMABLE_ERC20_DECIMALS: string
-    REACT_APP_REDEEMABLE_WALLET_CAP: string
-    REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE: string
-    REACT_APP_REDEEMABLE_INITIAL_SUPPLY: string
-    REACT_APP_REDEEMABLE_NAME: string
-    REACT_APP_REDEEMABLE_SYMBOL: string
-    REACT_APP_CHAIN_ID: string
-    REACT_APP_BASE_URL: string
-    REACT_APP_TIER_GATING_ADDRESS: string
-    REACT_APP_MINIMUM_TIER: string
-  }
-}
-
-// todo might need to check sale timeout is working (ie that cant buy if passes)
-// todo add a graphql call to get amount of shoes remaining in the sale
 
 /**
  * App
@@ -60,19 +37,18 @@ function App() {
   const [adminConfigPage, setAdminConfigPage] = useState(0);
   const [saleView, setSaleView] = React.useState(false); // show sale or admin view (if there is a sale address in the url)
   const [modalOpen, setModalOpen] = React.useState(false);
-  // const [showShoes, setShowShoes] = React.useState(false);
 
   // all these from .env will be replaced by calls to blockchain within the getSaleData function when saleView is set to true
-  const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
-  const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
-  const [redeemableDecimals, setRedeemableDecimals] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
-  const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
-  const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
-  const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
-  const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME);
-  const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL);
-  const [tierGatingAddress, setTierGatingAddress] = React.useState(process.env.REACT_APP_TIER_GATING_ADDRESS);
-  const [minimumTier, setMinimumTier] = React.useState(process.env.REACT_APP_MINIMUM_TIER);
+  const [reserveTokenAddress, setReserveTokenAddress] = useState(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS as string);
+  const [reserveDecimals, setReserveDecimals] = useState(process.env.REACT_APP_RESERVE_ERC20_DECIMALS as string);
+  const [redeemableDecimals, setRedeemableDecimals] = useState(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS as string);
+  const [redeemableInitialSupply, setRedeemableInitialSupply] = useState(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY as string);
+  const [redeemableWalletCap, setRedeemableWalletCap] = useState(process.env.REACT_APP_REDEEMABLE_WALLET_CAP as string);
+  const [staticReservePriceOfRedeemable, setStaticReservePriceOfRedeemable] = useState(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE as string); // this will be either a. the price from .env or the price for the user after getSaleData() is called, and if the user has more than the wallet cap, the price will be so big they can't afford it
+  const [redeemableName, setRedeemableName] = React.useState(process.env.REACT_APP_REDEEMABLE_NAME as string);
+  const [redeemableSymbol, setRedeemableSymbol] = React.useState(process.env.REACT_APP_REDEEMABLE_SYMBOL as string);
+  const [tierGatingAddress, setTierGatingAddress] = React.useState(process.env.REACT_APP_TIER_GATING_ADDRESS as string);
+  const [minimumTier, setMinimumTier] = React.useState(process.env.REACT_APP_MINIMUM_TIER as string);
 
   // date stuff
   let dateToUse = new Date().getTime() + 86400000; // this adds 24 hours, but beware, it doesn't take daylight saving into consideration https://stackoverflow.com/questions/563406/how-to-add-days-to-date
@@ -85,17 +61,17 @@ function App() {
 
   // these must be the same as the above in .env
   function resetToDefault() {
-    setReserveTokenAddress(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS);
-    setReserveDecimals(process.env.REACT_APP_RESERVE_ERC20_DECIMALS);
-    setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS);
-    setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY);
-    setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP);
-    setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE);
+    setReserveTokenAddress(process.env.REACT_APP_RESERVE_TOKEN_ADDRESS as string);
+    setReserveDecimals(process.env.REACT_APP_RESERVE_ERC20_DECIMALS as string);
+    setRedeemableDecimals(process.env.REACT_APP_REDEEMABLE_ERC20_DECIMALS as string);
+    setRedeemableInitialSupply(process.env.REACT_APP_REDEEMABLE_INITIAL_SUPPLY as string);
+    setRedeemableWalletCap(process.env.REACT_APP_REDEEMABLE_WALLET_CAP as string);
+    setStaticReservePriceOfRedeemable(process.env.REACT_APP_STATIC_RESERVE_PRICE_OF_REDEEMABLE as string);
     setSaleTimeout(dateToUse);
-    setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME);
-    setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL);
-    setTierGatingAddress(process.env.REACT_APP_TIER_GATING_ADDRESS);
-    setMinimumTier(process.env.REACT_APP_MINIMUM_TIER);
+    setRedeemableName(process.env.REACT_APP_REDEEMABLE_NAME as string);
+    setRedeemableSymbol(process.env.REACT_APP_REDEEMABLE_SYMBOL as string);
+    setTierGatingAddress(process.env.REACT_APP_TIER_GATING_ADDRESS as string);
+    setMinimumTier(process.env.REACT_APP_MINIMUM_TIER as string);
   }
 
   /** UseEffects **/
@@ -106,29 +82,14 @@ function App() {
     // let sParam = queryString.get('s');
     let tParam = queryString.get('t');
 
-    // // todo change this to include saleView in url (so can pass in a sale and autofill the form)
-    // // todo although, it will only be reserve tokens that are passed from the faucet example, so maybe don't need to do the above
-    // if (typeof sParam !== 'undefined' && sParam) {
-    //   console.log(`saleAddress is ${sParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
-    //   setSaleView(true);
-    //   setSaleAddress(sParam);
-    // }
-
     if (typeof tParam !== 'undefined' && tParam) {
       console.log(`tokenAddress is ${tParam}`) // why logged twice: https://stackoverflow.com/questions/60971185/why-does-create-react-app-initialize-twice
       setReserveTokenAddress(tParam); // todo check for xss // this is used for creating links with the Reserve token pre-filled
     }
-
   },[]);
-
-  // // basic connection to web3 wallet
-  // useEffect(() => {
-  //   makeWeb3Connection(); // todo test what happens if not signed in
-  // },[]);
 
   useEffect(() => {
     setSigner(library?.getSigner());
-    // setAddress(account); // todo check that definitely not needed now
   }, [library, account]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
@@ -136,7 +97,12 @@ function App() {
   useEffect(() => {
     // todo check this still works with new url parameter
     if (saleAddress && signer) {
-      getSaleData(); // get saleContract and then get amount of shoes, and then load shoes
+
+      // todo is this now redundant?
+      getSaleData(
+        signer,setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,setRedeemableName,setRedeemableSymbol,
+        setRedeemableDecimals,setRedeemableInitialSupply,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,setStaticReservePriceOfRedeemable
+      ); // get saleContract and then get amount, and then load
       getSubgraphSaleData(saleAddress, setRTKNAvailable);
     }
   }, [saleAddress, signer, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
@@ -172,255 +138,6 @@ function App() {
     setMinimumTier(event.target.value);
   };
 
-  /** Functions **/
-
-  // async function makeWeb3Connection() {
-  //   try {
-  //     const {signer, address} = await connect(); // get the signer and account address using a very basic connection implementation
-  //     setSigner(signer);
-  //     setAddress(address);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
-  /**
-   * Get Sale Data from blockchain instead of .env
-   * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
-   * todo might want to abstract this function and the whole Sale into a different component
-   */
-  async function getSaleData() {
-    try {
-      // @ts-ignore
-      const saleContract = new rainSDK.Sale(saleAddress, signer);
-      console.log(saleContract);
-      const redeemable = await saleContract.getRedeemable(signer);
-      console.log(redeemable);
-      const reserve = await saleContract.getReserve(signer);
-      console.log(reserve);
-
-      setReserveTokenAddress(reserve.address);
-      setReserveSymbol(await reserve.symbol());
-      setRedeemableTokenAddress(redeemable.address);
-      setRedeemableName(await redeemable.name());
-      setRedeemableSymbol(await redeemable.symbol())
-      setRedeemableDecimals((await redeemable.decimals()).toString());
-
-      // todo does it need tier gating info too?
-
-      // todo this might need to be removed becasue getting now from subgraph..
-      const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
-      const amountOfVouchersDecimals = await redeemable.decimals();
-      const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
-      console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
-      setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
-
-      // todo this will cause a giant number if signer has more than the walletcap
-      const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-      let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-      setStaticReservePriceOfRedeemable(readablePrice);
-      console.log(`Price for you: ${readablePrice}`);
-
-      // @ts-ignore
-      // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
-      setSaleView(true);
-    } catch(err) {
-      console.log('Error getting sale data', err);
-    }
-  }
-
-  /**
-   * Deploy a Sale and Start it (2txs)
-   */
-  async function deploySale() {
-    setButtonLock(true);
-    setLoading(true);
-
-    const saleConfig = {
-      canStartStateConfig: opcodeData.canStartStateConfig, // config for the start of the Sale (see opcodes section below)
-      // canEndStateConfig: opcodeData.canEndStateConfig, // config for the end of the Sale (see opcodes section below)
-      canEndStateConfig: new rainSDK.SaleDurationInTimestamp(saleTimeout), // config for the end of the Sale (see opcodes section below)
-      calculatePriceStateConfig: opcodeData.calculatePriceStateConfig(
-        ethers.utils.parseUnits(staticReservePriceOfRedeemable, parseInt(reserveDecimals)),
-        ethers.utils.parseUnits(redeemableWalletCap, parseInt(redeemableDecimals)),
-      ), // config for the `calculatePrice` function (see opcodes section below).
-      recipient: account, // who will receive the RESERVE token (e.g. USDCC) after the Sale completes
-      reserve: reserveTokenAddress, // the reserve token contract address (MUMBAI MATIC in this case)
-      // saleTimeout: ethers.constants.MaxUint256, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds
-      saleTimeout: 10000, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds. This can be obtained by checking the factory through which the sale was deployed // todo check difference between timeout and MaxTimout and whether the new deployment is 4 months, and how timeout interacts with maxtimout, and how maxtimout can be set (does it need a subgraph call?)
-      cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
-      // USING THE REDEEMABLE_INITIAL_SUPPLY HERE BECAUSE WE HAVE CONFIGURED 1 REDEEMABLE TO COST 1 RESERVE
-      minimumRaise: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), reserveDecimals), // minimum to complete a Raise, setting to "1" here for example purposes
-      dustSize: ethers.utils.parseUnits("0", reserveDecimals), // todo check this: for bonding curve price curves (that generate a few left in the contract at the end)
-    };
-    const redeemableConfig = {
-      // todo can erc721 be used instead?
-      erc20Config: { // config for the redeemable token (rTKN) which participants will get in exchange for reserve tokens
-        name: redeemableName, // the name of the rTKN
-        symbol: redeemableSymbol, // the symbol for your rTKN
-        distributor: "0x0000000000000000000000000000000000000000", // distributor address
-        initialSupply: ethers.utils.parseUnits(redeemableInitialSupply, redeemableDecimals), // initial rTKN supply
-      },
-      // todo why can't I decompile? https://mumbai.polygonscan.com/address/0xC064055DFf6De32f44bB7cCB0ca59Cbd8434B2de#code
-      tier: tierGatingAddress, // tier contract address (used for gating)
-      minimumTier: minimumTier, // minimum tier a user needs to take part
-      distributionEndForwardingAddress: "0x0000000000000000000000000000000000000000" // the rTKNs that are not sold get forwarded here (0x00.. will burn them)
-    }
-
-    try {
-      console.log("Info: Creating Sale with the following parameters:", saleConfig, redeemableConfig);
-      // @ts-ignore
-      const saleContract = await rainSDK.Sale.deploy(signer, saleConfig, redeemableConfig);
-      console.log('Result: Sale Contract:', saleContract); // the Sale contract and corresponding address
-      const redeemableContract = await saleContract.getRedeemable();
-      console.log('Result: Redeemable Contract:', redeemableContract); // the Sale contract and corresponding address
-      console.log('------------------------------'); // separator
-
-      // ### Interact with the newly deployed ecosystem
-
-      console.log('Info: Starting The Sale.');
-      const startStatusTransaction = await saleContract.start();
-      const startStatusReceipt = await startStatusTransaction.wait();
-      console.log('Info: Sale Started Receipt:', startStatusReceipt);
-      console.log('------------------------------'); // separator
-
-      console.log(`Redirecting to Sale: ${saleContract.address}`);
-      window.location.replace(`${window.location.origin}/${saleContract.address}`);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-      setButtonLock(false);
-      alert('Failed Deployment, please start again or manually activate start() if the Sale deployed.'); // todo add link to settings panel here
-    }
-  }
-
-  /**
-   * end Sale
-   */
-  async function endSale() {
-    setButtonLock(true);
-    setLoading(true);
-
-    try {
-      console.log(`Sale Address: ${saleAddress}`);
-      // @ts-ignore
-      const saleContract = new rainSDK.Sale(saleAddress, signer);
-
-      // approval
-      console.log(`Info: Ending Sale with Address: ${saleAddress}`);
-
-      const endSaleTransaction = await saleContract.end();
-      const endStatusReceipt = await endSaleTransaction.wait();
-      console.log(`Info: End Receipt:`, endStatusReceipt);
-      console.log('------------------------------'); // separator
-
-      setConsoleData(`Sale Ended Successfully!`);
-      setConsoleColor(`green`); // todo add to struct
-      setSaleComplete(true);
-      setButtonLock(false);
-      setLoading(false);
-    } catch(err) {
-      setLoading(false);
-      setButtonLock(false);
-      setConsoleData(`Ending Sale Failed (Check console for more data).`);
-      setConsoleColor(`red`); // todo add to struct
-      console.log(`Info: Something went wrong:`, err);
-    }
-  }
-
-
-  /**
-   * start Sale
-   */
-  async function startSale() {
-    setButtonLock(true);
-    setLoading(true);
-
-    try {
-      console.log(`Sale Address: ${saleAddress}`);
-      // @ts-ignore
-      const saleContract = new rainSDK.Sale(saleAddress, signer);
-
-      // approval
-      console.log(`Info: Starting Sale with Address: ${saleAddress}`);
-
-      const startSaleTransaction = await saleContract.start();
-      const startStatusReceipt = await startSaleTransaction.wait();
-      console.log(`Info: Start Receipt:`, startStatusReceipt);
-      console.log('------------------------------'); // separator
-
-      setConsoleData(`Sale Started Successfully!`);
-      setConsoleColor(`green`); // todo add to struct
-      setSaleComplete(true);
-      setButtonLock(false);
-      setLoading(false);
-    } catch(err) {
-      setLoading(false);
-      setButtonLock(false);
-      setConsoleData(`Starting Sale Failed (is it already running?).`);
-      setConsoleColor(`red`); // todo add to struct
-      console.log(`Info: Something went wrong:`, err);
-    }
-  }
-
-
-  /**
-   * Called within the modal for making a buy
-   * THIS MUST NOT BE SHOWN BEFORE getSaleData() HAS FINISHED OR THE DATA WILL BE FROM .ENV
-   */
-  async function initiateBuy() {
-    setButtonLock(true);
-    setLoading(true);
-
-    try {
-      // @ts-ignore
-      const reserveContract = new rainSDK.EmissionsERC20(reserveTokenAddress, signer);
-      // const reserveContract = new rainSDK.ERC20(reserveTokenAddress, signer);
-      // @ts-ignore
-      const saleContract = new rainSDK.Sale(saleAddress, signer);
-
-      // approval
-      console.log(`Info: Connecting to Reserve token for approval of spend of ${staticReservePriceOfRedeemable}${reserveSymbol}:`, reserveTokenAddress); // this will have been gotten dynamically in getSaleData()
-
-      // todo maybe create a toBigNumber() function instead of putting ethers everywhere
-      const approveTransaction = await reserveContract.approve(saleContract.address, ethers.utils.parseUnits(staticReservePriceOfRedeemable.toString(), parseInt(reserveDecimals)));
-      const approveReceipt = await approveTransaction.wait();
-      console.log(`Info: Approve Receipt:`, approveReceipt);
-      console.log('------------------------------'); // separator
-
-      console.log(`Info: Price of tokens in the Sale: ${staticReservePriceOfRedeemable}${await reserveContract.symbol()} (${reserveContract.address})`);
-
-      const buyConfig = {
-        feeRecipient: account,
-        fee: ethers.utils.parseUnits("0", parseInt(reserveDecimals)), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
-        minimumUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)), // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
-        desiredUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)),
-        maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
-      }
-
-      console.log(`Info: Buying ${DESIRED_UNITS_OF_REDEEMABLE}${redeemableSymbol} from Sale with parameters:`, buyConfig);
-      const buyStatusTransaction = await saleContract.buy(buyConfig);
-      const buyStatusReceipt = await buyStatusTransaction.wait();
-      console.log(`Info: Buy Receipt:`, buyStatusReceipt);
-      console.log('------------------------------'); // separator
-
-      setConsoleData(`Complete!`);
-      setConsoleColor(`green`); // todo add to struct
-      // getSubgraphSaleData(); // no point in doin this because it takes the subgraph a while to index the data
-      setSaleComplete(true);
-      setButtonLock(false);
-      setLoading(false);
-    } catch(err) {
-      setLoading(false);
-      setButtonLock(false);
-      setConsoleData(`Buy Failed (Check console for more data).`);
-      setConsoleColor(`red`); // todo add to struct
-      console.log(`Info: Something went wrong:`, err);
-    }
-  }
-
-  /** Various **/
-
   /** View **/
 
   return (
@@ -445,8 +162,13 @@ function App() {
               handleChangeRedeemableName={handleChangeRedeemableName} redeemableSymbol={redeemableSymbol}
               handleChangeRedeemableSymbol={handleChangeRedeemableSymbol} redeemableInitialSupply={redeemableInitialSupply}
               handleChangeRedeemableInitialSupply={handleChangeRedeemableInitialSupply} buttonLock={buttonLock}
-              deploySale={deploySale} minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
+               minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
               tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
+              deploySale={() => deploySale(
+                setButtonLock,setLoading,saleAddress,reserveTokenAddress,reserveDecimals,redeemableWalletCap,redeemableDecimals,
+                account,reserveTokenAddress,DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,redeemableSymbol,redeemableInitialSupply,
+                saleAddress,reserveTokenAddress
+              )}
             />
           }
         />
@@ -457,12 +179,16 @@ function App() {
           element={
             <SaleView
               redeemableName={redeemableName} redeemableSymbol={redeemableSymbol} modalOpen={modalOpen}
-              setModalOpen={setModalOpen} initiateBuy={initiateBuy} buttonLock={buttonLock}
+              setModalOpen={setModalOpen} buttonLock={buttonLock}
               redeemableTokenAddress={redeemableTokenAddress} staticReservePriceOfRedeemable={staticReservePriceOfRedeemable}
               reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
-              redeemableInitialSupply={redeemableInitialSupply} saleAddress={saleAddress} rTKNAvailable={rTKNAvailable}
-              saleView={saleView} setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
-              BASE_URL={process.env.REACT_APP_BASE_URL}
+              saleAddress={saleAddress} rTKNAvailable={rTKNAvailable} saleView={saleView}
+              setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
+              initiateBuy={() => initiateBuy(
+                signer, setButtonLock, setLoading, saleAddress, setConsoleData, setConsoleColor, setSaleComplete,
+                staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,account,reserveDecimals,
+                DESIRED_UNITS_OF_REDEEMABLE,redeemableDecimals,redeemableSymbol
+              )}
             />
           }
         />
@@ -475,11 +201,15 @@ function App() {
               saleAddress={saleAddress}
               redeemableName={redeemableName}
               redeemableSymbol={redeemableSymbol}
-              endSale={endSale}
-              startSale={startSale}
               setSaleAddress={setSaleAddress}
               consoleData={consoleData}
               consoleColor={consoleColor}
+              endSale={() => endSale(
+                signer,setButtonLock,setLoading,saleAddress,reserveTokenAddress,setConsoleColor,setSaleComplete, account
+              )}
+              startSale={() => startSale(
+                signer,setButtonLock,setLoading,saleAddress,reserveTokenAddress,setConsoleColor,setSaleComplete, account
+              )}
             />
           }
         />

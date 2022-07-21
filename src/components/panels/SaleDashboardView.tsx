@@ -1,4 +1,4 @@
-import React, {Suspense, useEffect} from "react";
+import React, {useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import NavBar from "../layout/NavBar";
 import Box from "@mui/material/Box";
