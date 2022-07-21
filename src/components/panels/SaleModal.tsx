@@ -6,6 +6,9 @@ import { Modal as ModalMaterial } from '@mui/material';
 import {Bar} from "react-chartjs-2";
 import Warning from "../various/Warning";
 import Console from "../various/Console";
+const ESCROW_BASE_URL = process.env.REACT_APP_ESCROW_BASE_URL;
+const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -90,12 +93,12 @@ export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonL
         {/*Each <b>{redeemableSymbol}</b> is exchangeable for an imaginary physical/digital item in the <b>{redeemableName} Collection</b>!*/}
 
         <Typography className="modalText">
-          <a href={`https://rain-erc20-faucet.unegma.work/${reserveTokenAddress}`} target="_blank">Click here to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
+          <a href={`${FAUCET_BASE_URL}/${reserveTokenAddress}`} target="_blank">Click here to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
         </Typography><br/>
 
         {/*todo pass the address in url when passing*/}
         <Typography className="modalText">
-          <a href={`https://rain-escrow-example.unegma.work?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.<br/>
+          <a href={`${ESCROW_BASE_URL}?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.<br/>
         </Typography><br/>
 
         <Warning /><br/>

@@ -5,7 +5,7 @@ import Shoe from "./Shoe";
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader';
 
 const DECODER_PATH="https://www.gstatic.com/draco/versioned/decoders/1.4.1/";
-const shoeURL = 'https://assets.unegma.net/unegma.work/rain-shoe-sale.unegma.work/shoe-compressed.gltf';
+const shoeURL = `${process.env.REACT_APP_CDN_BASE_URL}/shoe-compressed.gltf`;
 const randomVector = (r: any) => [r / 2 - Math.random() * r, r / 2 - Math.random() * r, r / 2 - Math.random() * r];
 const randomEuler = () => [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI];
 const randomData = Array.from({ length: 1000 }, (r = 10) => ({ random: Math.random(), position: randomVector(r), rotation: randomEuler() }))

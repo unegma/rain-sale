@@ -27,6 +27,8 @@ import {DateTimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 import Warning from "../various/Warning";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
+const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
 
 ChartJS.register(
   CategoryScale,
@@ -207,7 +209,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The <a href="https://rain-erc20-faucet.unegma.work" target="_blank">Reserve Token</a> others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The <a href={`${FAUCET_BASE_URL}`} target="_blank">Reserve Token</a> others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
@@ -263,7 +265,7 @@ export default function DeployPanelView({
               </AccordionSummary>
               <AccordionDetails>
                 <FormControl variant="standard" className="accordion-style">
-                  <InputLabel className="input-box-label" htmlFor="component-helper">The <a href="https://rain-tier-gating.unegma.work" target="_blank">Tier Gating</a> address for your Sale</InputLabel>
+                  <InputLabel className="input-box-label" htmlFor="component-helper">The <a href={`${TIER_GATING_BASE_URL}`} target="_blank">Tier Gating</a> address for your Sale</InputLabel>
                   <Input
                     id="component-helper"
                     value={tierGatingAddress}
