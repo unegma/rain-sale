@@ -4,6 +4,7 @@ import NavBar from "../layout/NavBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";
+import Console from "../various/Console";
 
 type saleSettingsProps = {
   saleAddress: string, redeemableName: string, redeemableSymbol: string, endSale: any, startSale: any, setSaleAddress: any,
@@ -52,15 +53,7 @@ export default function SaleDashboardView({
           <b>Sale End Countdown: ?:?:?</b>
         </Typography>
 
-        <div className='console'>
-          { consoleColor === 'red' && (
-            <Typography className="modalTextRed">{consoleData}</Typography>
-          )}
-
-          { consoleColor === 'green' && (
-            <Typography className="modalTextGreen">{consoleData}</Typography>
-          )}
-        </div>
+        <Console consoleData={consoleData} consoleColor={consoleColor} />
 
         <Button variant='contained' onClick={() => {startSale()}}>Start Sale</Button>
         <Button variant='contained' onClick={() => {endSale()}}>End Sale</Button>

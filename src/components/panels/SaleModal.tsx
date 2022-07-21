@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
 import {Bar} from "react-chartjs-2";
 import Warning from "../various/Warning";
+import Console from "../various/Console";
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -98,14 +99,7 @@ export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonL
         </Typography><br/>
 
         <Warning /><br/>
-
-        { consoleColor === 'red' && (
-          <Typography className="modalTextRed">{consoleData}</Typography>
-        )}
-
-        { consoleColor === 'green' && (
-          <Typography className="modalTextGreen">{consoleData}</Typography>
-        )}
+        <Console consoleData={consoleData} consoleColor={consoleColor} />
 
         <br/>
 
