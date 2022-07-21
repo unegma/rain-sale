@@ -166,7 +166,7 @@ function App() {
                minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
               tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
               deploySale={() => deploySale(
-                setButtonLock,setLoading,saleTimeout,staticReservePriceOfRedeemable,
+                signer, setButtonLock,setLoading,saleTimeout,staticReservePriceOfRedeemable,
                 redeemableWalletCap,redeemableDecimals,account,reserveTokenAddress,DESIRED_UNITS_OF_REDEEMABLE,
                 redeemableName,redeemableSymbol,redeemableInitialSupply, tierGatingAddress, minimumTier, reserveDecimals
               )}

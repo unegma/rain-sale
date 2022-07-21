@@ -64,7 +64,7 @@ export async function getSaleData(
  * Deploy a Sale and Start it (2txs)
  */
 export async function deploySale(
-  setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
+  signer: any, setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
   redeemableWalletCap: string, redeemableDecimals: string, account: string, reserveTokenAddress: string,
   DESIRED_UNITS_OF_REDEEMABLE: number, redeemableName: string, redeemableSymbol: string, redeemableInitialSupply: string,
   tierGatingAddress: string, minimumTier: string, reserveDecimals: string

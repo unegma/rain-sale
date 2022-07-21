@@ -174,7 +174,6 @@ export default function DeployPanelView({
               />
             </FormControl>
 
-
             <FormControl variant="standard">
               <InputLabel className="input-box-label" htmlFor="component-helper">Your Digital Object Symbol</InputLabel>
               <Input
