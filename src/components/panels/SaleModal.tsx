@@ -16,7 +16,7 @@ const style = {
   p: 4,
 };
 
-export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress}:
+export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress}:
   {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string})
 {
 
@@ -79,12 +79,10 @@ export default function Modal({modalOpen, setModalOpen, initiateBuy, buttonLock,
 
         <Typography className="modalText">
           To see <b>{redeemableSymbol}</b> in your Wallet, you may need to&nbsp;
-          {/*!! note: this won't work on localhost, needs https !!*/}
           <a href="#" onClick={(event: any) =>
-          {event.preventDefault(); navigator.clipboard.writeText(redeemableTokenAddress);
-            alert(`${redeemableTokenAddress} copied to clipboard!`)}}
+            {event.preventDefault();alert(`Copy: ${redeemableTokenAddress} to clipboard and import token in to your Wallet.`)}}
           >
-            add its address
+            add the address for <b>{redeemableSymbol}</b>
           </a>.
         </Typography><br/>
 

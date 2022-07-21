@@ -3,7 +3,7 @@ import {
   useParams
 } from "react-router-dom";
 import NavBar from "../layout/NavBar";
-import Modal from "./Modal";
+import SaleModal from "./SaleModal";
 import {Canvas} from "@react-three/fiber";
 import Vouchers from "../3d/Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
@@ -41,7 +41,7 @@ export default function SaleView({
           <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${BASE_URL}`}>Deploy Your Own Sale Here!</a></p>
 
           <div className="canvasContainer">
-            <Modal
+            <SaleModal
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
               initiateBuy={initiateBuy}
