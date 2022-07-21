@@ -1,7 +1,7 @@
 import * as rainSDK from "rain-sdk";
 import {opcodeData} from "../opcodeData";
 import {ethers} from "ethers";
-
+const DESIRED_UNITS_OF_REDEEMABLE = process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string;
 const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)!";
 
 // /**
@@ -215,6 +215,22 @@ export async function startSale(
   }
 }
 
+/**
+ * Get price for user to display on the buy button and also when buying
+ */
+export async function getPriceForUser(
+  signer: any, saleAddress: string, setStaticReservePriceOfRedeemable: any, redeemableDecimals: string
+) {
+  try {
+    const saleContract = new rainSDK.Sale(saleAddress, signer);
+    const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(parseInt(DESIRED_UNITS_OF_REDEEMABLE)); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+    let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+    setStaticReservePriceOfRedeemable(readablePrice);
+    console.log(`Price for you: ${readablePrice}`);
+  } catch(err) {
+    console.log(`Info: Something went wrong:`, err);
+  }
+}
 
 /**
  * Called within the modal for making a buy
@@ -231,17 +247,6 @@ export async function initiateBuy(
       alert(WARNING_MESSAGE);
       return;
     }
-
-
-    // todo might need to use this somewhere
-    // TODO THIS WAS IN THE NON-SUBGRAPH VERSION, CHECK IF ANY ISSUES WITH IT NOT EXISTING NOW
-    // // todo this will cause a giant number if signer has more than the walletcap
-    // const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-    // let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-    // setStaticReservePriceOfRedeemable(readablePrice);
-    // console.log(`Price for you: ${readablePrice}`);
-
-
 
     setButtonLock(true);
     setLoading(true);

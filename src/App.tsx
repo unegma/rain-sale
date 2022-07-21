@@ -10,9 +10,9 @@ import SaleDashboardView from "./components/panels/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";
 import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
-import {deploySale, startSale, endSale, initiateBuy} from './helpers/web3Functions';
+import {deploySale, startSale, endSale, initiateBuy, getPriceForUser} from './helpers/web3Functions';
 
-const DESIRED_UNITS_OF_REDEEMABLE = 1; // this could be entered dynamically by user, but we are limiting to 1
+const DESIRED_UNITS_OF_REDEEMABLE = parseInt(process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string); // this could be entered dynamically by user, but we are limiting to 1
 
 /**
  * App
@@ -90,6 +90,7 @@ function App() {
 
   useEffect(() => {
     setSigner(library?.getSigner());
+    getPriceForUser(signer,saleAddress,setStaticReservePriceOfRedeemable,redeemableDecimals); // get price when signer is set
   }, [library, account]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
