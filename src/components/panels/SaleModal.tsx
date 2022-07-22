@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Modal as ModalMaterial } from '@mui/material';
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import {Bar} from "react-chartjs-2";
 import Warning from "../various/Warning";
 import Console from "../various/Console";
 import {TransactionsChartBuy} from "../various/TransactionsChartBuy";

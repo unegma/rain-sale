@@ -8,18 +8,8 @@ import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import {Bar} from "react-chartjs-2";
 import React, {Suspense, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import {Canvas} from "@react-three/fiber";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import RTKN from "../3d/RTKN";
@@ -30,15 +20,6 @@ import {TransactionsChartDeploy} from "../various/TransactionsChartDeploy";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string, reserveSymbol: string
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
