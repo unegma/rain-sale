@@ -1,0 +1,191 @@
+/*todo move to styled components*/
+
+/******* Main *******/
+
+html, body {
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.rootContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+}
+
+body {
+  color: white;
+  user-select: none;
+}
+
+.right {
+  text-align: right;
+}
+
+.black {
+  color: black;
+}
+
+.red {
+  color: red;
+}
+
+.the-canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+/******* 3D *******/
+
+
+/******* Layout *******/
+
+.navBar {
+  z-index: 2;
+  color: black;
+}
+
+.connectButtonContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.connectTypeButton {
+  margin-right: 5px !important;
+}
+
+.minitext {
+  font-size: 10px;
+}
+
+.web3connectButton {
+  background-color: green !important;
+  color: white !important;
+  border: none !important;
+
+  &:hover {
+    opacity: 0.8 !important;
+  }
+}
+
+.deploying {
+  position: fixed;
+  width:100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
+}
+
+.deploy-own {
+  display: block;
+  position: absolute;
+
+  background-color: black;
+  font-size: 16px;
+  padding: 10px;
+  bottom: 10px;
+  right: 10px;
+  z-index:999;
+
+  a {
+    color: white;
+  }
+}
+
+/******* Panels *******/
+
+.the-canvas-deploypanel {
+  width: 100% !important;
+  height: 200px !important;
+}
+
+.closeModalButton {
+  cursor: pointer;
+  position: absolute !important;
+  right: 5px !important;
+  top:5px !important;
+  color: black;
+}
+
+.modalTitle {
+  color: black;
+}
+
+.modalImage {
+  width: 100%;
+  height: auto;
+}
+
+.modalText {
+  color: black;
+  user-select: text;
+}
+
+.modalTextRed {
+  color: red;
+  user-select: text;
+}
+
+.modalTextGreen {
+  color: green;
+  user-select: text;
+}
+
+/******* Various *******/
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 40vw;
+}
+
+.buttons-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.fifty-percent-button {
+  flex: 1;
+}
+
+.input-box-label {
+  font-weight: bold !important;
+  color: black !important;
+}
+
+.accordion-style {
+  width: 100%;
+}

@@ -38,7 +38,7 @@ export default function SaleView({
       { saleView && (
         <>
           <NavBar string={`${redeemableSymbol} Sale (${redeemableName} Collection)`} stringRight={``} />
-          <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${BASE_URL}`}>Deploy Your Own Sale Here!</a></p>
+          <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${window.location}`}>Deploy Your Own Sale Here!</a></p>
 
           <div className="canvasContainer">
             <SaleModal

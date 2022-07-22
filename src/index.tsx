@@ -4,7 +4,7 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 import {Suspense} from 'react';
-import './index.css';
+import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';

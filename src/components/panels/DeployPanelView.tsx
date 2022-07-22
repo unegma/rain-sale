@@ -77,7 +77,7 @@ export default function DeployPanelView({
               <Typography color="black" align="center">
                 <a href="#" target="_blank">Rain Protocol Sale Demo Video</a><br/>
                 <a href="https://docs.rainprotocol.xyz">Tutorials at docs.rainprotocol.xyz</a><br/>
-                <a href={`${BASE_URL}/0xF4C1C2AA064d09964A08a7c36199d3f2979FE6fa`} target="_blank">Example Sale: Shoes Collection (shoeVoucher)</a>
+                <a href={`${window.location}0xF4C1C2AA064d09964A08a7c36199d3f2979FE6fa`} target="_blank">Example Sale: Shoes Collection (shoeVoucher)</a>
               </Typography>
             </>
           </>
