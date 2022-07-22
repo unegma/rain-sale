@@ -4,64 +4,11 @@ import {ethers} from "ethers";
 const DESIRED_UNITS_OF_REDEEMABLE = process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string;
 const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)!";
 
-// /**
-//  * Get Sale Data from blockchain instead of .env
-//  * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
-//  * todo might want to abstract this function and the whole Sale into a different component
-//  * todo can this use subgraph instead?
-//  */
-// export async function getSaleData(
-//   signer: any, DESIRED_UNITS_OF_REDEEMABLE: number, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
-//   setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
-//   redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
-//   setSaleView: any
-// ) {
-//   try {
-//     // checking account not needed here
-//
-//     // @ts-ignore
-//     const saleContract = new rainSDK.Sale(saleAddress, signer);
-//     console.log(saleContract);
-//     const redeemable = await saleContract.getRedeemable(signer);
-//     console.log(redeemable);
-//     const reserve = await saleContract.getReserve(signer);
-//     console.log(reserve);
-//
-//     setReserveTokenAddress(reserve.address);
-//     setReserveSymbol(await reserve.symbol());
-//     setRedeemableTokenAddress(redeemable.address);
-//     setRedeemableName(await redeemable.name());
-//     setRedeemableSymbol(await redeemable.symbol())
-//     setRedeemableDecimals((await redeemable.decimals()).toString());
-//
-//     // todo does it need tier gating info too?
-//
-//     // todo this might need to be removed becasue getting now from subgraph..
-//     const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
-//     const amountOfVouchersDecimals = await redeemable.decimals();
-//     const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
-//     console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
-//     setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
-//
-//     // todo this will cause a giant number if signer has more than the walletcap
-//     const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-//     let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-//     setStaticReservePriceOfRedeemable(readablePrice);
-//     console.log(`Price for you: ${readablePrice}`);
-//
-//     // @ts-ignore
-//     // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
-//     setSaleView(true);
-//   } catch(err) {
-//     console.log('Error getting sale data', err);
-//   }
-// }
-
 /**
  * Deploy a Sale and Start it (2txs)
  */
 export async function deploySale(
-  signer: any, account: string, DESIRED_UNITS_OF_REDEEMABLE: number, setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
+  signer: any, account: string, setButtonLock: any, setLoading: any, saleTimeout: any, staticReservePriceOfRedeemable: string,
   redeemableWalletCap: string, redeemableDecimals: string, reserveTokenAddress: string,
   redeemableName: string, redeemableSymbol: string, redeemableInitialSupply: string,
   tierGatingAddress: string, minimumTier: string, reserveDecimals: string
@@ -88,7 +35,7 @@ export async function deploySale(
       saleTimeout: 10000, // this is not the duration of the Sale, but a setting for enabling the 'killswitch' to be triggered (i.e. call timeout() thus returning funds to participants). This is a security measure to stop bad actors creating Sales which can trap user funds. This can be obtained by checking the factory through which the sale was deployed // todo check difference between timeout and MaxTimout and whether the new deployment is 4 months, and how timeout interacts with maxtimout, and how maxtimout can be set (does it need a subgraph call?)
       cooldownDuration: 100, // this will be 100 blocks (10 mins on MUMBAI) // this will stay as blocks in upcoming releases
       // USING THE REDEEMABLE_INITIAL_SUPPLY HERE BECAUSE WE HAVE CONFIGURED 1 REDEEMABLE TO COST 1 RESERVE
-      minimumRaise: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), reserveDecimals), // minimum to complete a Raise, setting to "1" here for example purposes
+      minimumRaise: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE, reserveDecimals), // minimum to complete a Raise, setting to "1" here for example purposes
       dustSize: ethers.utils.parseUnits("0", reserveDecimals), // todo check this: for bonding curve price curves (that generate a few left in the contract at the end)
     };
     const redeemableConfig = {
@@ -224,7 +171,7 @@ export async function getPriceForUser(
   try {
     console.log(`the sale address: ${saleAddress}`);
     const saleContract = new rainSDK.Sale(saleAddress, signer);
-    console.log(`the saleContract: ${saleContract}`);
+    console.log(`the saleContract:`, saleContract);
     const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(parseInt(DESIRED_UNITS_OF_REDEEMABLE)); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
     console.log(`the priceOfRedeemableInUnitsOfReserve: ${priceOfRedeemableInUnitsOfReserve}`);
     let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
@@ -241,7 +188,7 @@ export async function getPriceForUser(
  * THIS MUST NOT BE SHOWN BEFORE getSaleData() HAS FINISHED OR THE DATA WILL BE FROM .ENV
  */
 export async function initiateBuy(
-  signer: any, account: string, DESIRED_UNITS_OF_REDEEMABLE: number, setButtonLock: any, setLoading: any,
+  signer: any, account: string, setButtonLock: any, setLoading: any,
   saleAddress: string, setConsoleData: any, setConsoleColor: any, setSaleComplete: any,
   staticReservePriceOfRedeemable: string, reserveSymbol: string, reserveTokenAddress: string, reserveDecimals: string,
   redeemableDecimals: string, redeemableSymbol: string
@@ -275,8 +222,8 @@ export async function initiateBuy(
     const buyConfig = {
       feeRecipient: account,
       fee: ethers.utils.parseUnits("0", parseInt(reserveDecimals)), // TODO DOES DECIMALS NEED CONVERTING TO INT? // fee to be taken by the frontend
-      minimumUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)), // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
-      desiredUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE.toString(), parseInt(redeemableDecimals)),
+      minimumUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE, parseInt(redeemableDecimals)), // this will cause the sale to fail if there are (DESIRED_UNITS - remainingUnits) left in the sale
+      desiredUnits: ethers.utils.parseUnits(DESIRED_UNITS_OF_REDEEMABLE, parseInt(redeemableDecimals)),
       maximumPrice: ethers.constants.MaxUint256, // this is for preventing slippage (for static price curves, this isn't really needed and can be set to the same as staticPrice) // todo is this better as STATIC_RESERVE_PRICE_OF_REDEEMABLE?
     }
 
@@ -300,3 +247,56 @@ export async function initiateBuy(
     console.log(`Info: Something went wrong:`, err);
   }
 }
+
+// /**
+//  * Get Sale Data from blockchain instead of .env
+//  * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD
+//  * todo might want to abstract this function and the whole Sale into a different component
+//  * todo can this use subgraph instead?
+//  */
+// export async function getSaleData(
+//   signer: any, DESIRED_UNITS_OF_REDEEMABLE: number, setReserveTokenAddress: any, setReserveSymbol: any, setRedeemableTokenAddress: any,
+//   setRedeemableName: any, setRedeemableSymbol: any, setRedeemableDecimals: any, setRedeemableInitialSupply: any,
+//   redeemableDecimals: string, setStaticReservePriceOfRedeemable: any,
+//   setSaleView: any
+// ) {
+//   try {
+//     // checking account not needed here
+//
+//     // @ts-ignore
+//     const saleContract = new rainSDK.Sale(saleAddress, signer);
+//     console.log(saleContract);
+//     const redeemable = await saleContract.getRedeemable(signer);
+//     console.log(redeemable);
+//     const reserve = await saleContract.getReserve(signer);
+//     console.log(reserve);
+//
+//     setReserveTokenAddress(reserve.address);
+//     setReserveSymbol(await reserve.symbol());
+//     setRedeemableTokenAddress(redeemable.address);
+//     setRedeemableName(await redeemable.name());
+//     setRedeemableSymbol(await redeemable.symbol())
+//     setRedeemableDecimals((await redeemable.decimals()).toString());
+//
+//     // todo does it need tier gating info too?
+//
+//     // todo this might need to be removed becasue getting now from subgraph..
+//     const amountOfVouchersBN = await redeemable.totalSupply(); // todo change to get remaining amount from subgraph
+//     const amountOfVouchersDecimals = await redeemable.decimals();
+//     const amountOfVouchers = parseInt(amountOfVouchersBN.toString()) / 10 ** amountOfVouchersDecimals;
+//     console.log(`Vouchers in Sale: ${amountOfVouchers}`); // todo check if this changes when they are bought
+//     setRedeemableInitialSupply(amountOfVouchers.toString()); // TODO THIS SHOULD BE REMAINING SHOES NOT TOTAL SUPPLY
+//
+//     // todo this will cause a giant number if signer has more than the walletcap
+//     const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
+//     let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
+//     setStaticReservePriceOfRedeemable(readablePrice);
+//     console.log(`Price for you: ${readablePrice}`);
+//
+//     // @ts-ignore
+//     // setShowShoes(true); // todo removed this, but test how it works with it (could use it for showing the sale view, but no shoes, or could just hide the whole sale view)_
+//     setSaleView(true);
+//   } catch(err) {
+//     console.log('Error getting sale data', err);
+//   }
+// }

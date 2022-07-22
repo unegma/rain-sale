@@ -12,8 +12,6 @@ import {Web3Provider} from "@ethersproject/providers";
 import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
 import {deploySale, startSale, endSale, initiateBuy, getPriceForUser} from './helpers/web3Functions';
 
-const DESIRED_UNITS_OF_REDEEMABLE = parseInt(process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string); // this could be entered dynamically by user, but we are limiting to 1
-
 /**
  * App
  */
@@ -101,7 +99,7 @@ function App() {
   useEffect(() => {
     if (saleAddress) {
       getSubgraphSaleData(
-        DESIRED_UNITS_OF_REDEEMABLE,setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
+        setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
         setRedeemableName,setRedeemableSymbol, setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
         setStaticReservePriceOfRedeemable, setSaleView,saleAddress, setRTKNAvailable);
     }
@@ -165,7 +163,7 @@ function App() {
                minimumTier={minimumTier} handleChangeMinimumTier={handleChangeMinimumTier}
               tierGatingAddress={tierGatingAddress} handleChangeTierGatingAddress={handleChangeTierGatingAddress}
               deploySale={() => deploySale(
-                signer, account, DESIRED_UNITS_OF_REDEEMABLE, setButtonLock,setLoading,saleTimeout,
+                signer, account, setButtonLock,setLoading,saleTimeout,
                 staticReservePriceOfRedeemable,redeemableWalletCap,redeemableDecimals,reserveTokenAddress,
                 redeemableName,redeemableSymbol,redeemableInitialSupply, tierGatingAddress, minimumTier, reserveDecimals
               )}
@@ -185,7 +183,7 @@ function App() {
               saleAddress={saleAddress} rTKNAvailable={rTKNAvailable} saleView={saleView}
               setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
               initiateBuy={() => initiateBuy(
-                signer, account, DESIRED_UNITS_OF_REDEEMABLE, setButtonLock, setLoading, saleAddress, setConsoleData,
+                signer, account, setButtonLock, setLoading, saleAddress, setConsoleData,
                 setConsoleColor, setSaleComplete,staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,
                 reserveDecimals,redeemableDecimals,redeemableSymbol
               )}

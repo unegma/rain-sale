@@ -51,7 +51,7 @@ export async function getReserveName(reserveTokenAddress: string, setReserveSymb
  * getSubgraphSaleData
  */
 export async function getSubgraphSaleData(
-  DESIRED_UNITS_OF_REDEEMABLE: number,setReserveTokenAddress: any,setReserveSymbol: any,setRedeemableTokenAddress: any,
+  setReserveTokenAddress: any,setReserveSymbol: any,setRedeemableTokenAddress: any,
   setRedeemableName: any,setRedeemableSymbol: any, setRedeemableDecimals: any,setRedeemableInitialSupply: any,redeemableDecimals: string,
   setStaticReservePriceOfRedeemable: any, setSaleView: any,saleAddress: string, setRTKNAvailable: any
 ) {
@@ -120,14 +120,6 @@ export async function getSubgraphSaleData(
     setRedeemableDecimals((subgraphData.token.decimals).toString());
     // @ts-ignore
     setRTKNAvailable(subgraphData.unitsAvailable/10**18); // todo add
-
-
-    // TODO THIS WAS IN THE NON-SUBGRAPH VERSION, CHECK IF ANY ISSUES WITH IT NOT EXISTING NOW
-    // // todo this will cause a giant number if signer has more than the walletcap
-    // const priceOfRedeemableInUnitsOfReserve = await saleContract.calculatePrice(DESIRED_UNITS_OF_REDEEMABLE); // THIS WILL CALCULATE THE PRICE FOR **YOU** AND WILL TAKE INTO CONSIDERATION THE WALLETCAP, if the user's wallet cap is passed, the price will be so high that the user can't buy the token (you will see a really long number as the price)
-    // let readablePrice = (parseInt(priceOfRedeemableInUnitsOfReserve.toString())/(10**parseInt(redeemableDecimals))).toString();
-    // setStaticReservePriceOfRedeemable(readablePrice);
-    // console.log(`Price for you: ${readablePrice}`);
 
     setSaleView(true);
   } catch(err) {
