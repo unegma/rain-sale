@@ -23,7 +23,7 @@ export default function Vouchers({amount, modalOpen, setModalOpen, redeemableSym
       loader.setDRACOLoader(dracoLoader);
     }
   });
-  console.log(nodes, materials)
+  // console.log(nodes, materials)
   return (
     <Instances range={amount} material={materials.paper_Mat} geometry={nodes.Object_2.geometry}>
       {randomData.map((props, i) => (
