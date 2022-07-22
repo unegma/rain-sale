@@ -31,9 +31,6 @@ export default function SaleView({
     setSaleAddress(id);
   }, []);
 
-  // todo add a message in case the indexing is slow
-  console.log(`saleView is set to:`, saleView);
-
   return (
     <>
       { saleView && (

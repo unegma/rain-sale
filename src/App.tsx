@@ -88,10 +88,6 @@ function App() {
 
   useEffect(() => {
     setSigner(library?.getSigner());
-
-    if (saleView) {
-      getPriceForUser(signer, saleAddress, setStaticReservePriceOfRedeemable, redeemableDecimals); // get price when signer is set
-    }
   }, [library, account]);
 
   // this relies on useEffect above to get saleAddress from url // todo may be able to merge this one with the above one, as long as shoes are hidden until saleContract is got
@@ -100,11 +96,20 @@ function App() {
     if (saleAddress) {
       getSubgraphSaleData(
         setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
-        setRedeemableName,setRedeemableSymbol, setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
-        setStaticReservePriceOfRedeemable, setSaleView,saleAddress, setRTKNAvailable);
+        setRedeemableName,setRedeemableSymbol,setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
+        setStaticReservePriceOfRedeemable,setSaleView,saleAddress,setRTKNAvailable
+      );
+      // NEED TO UPDATE PRICE FOR USER HERE
     }
   }, [saleAddress, saleComplete]); // only get sale data when signer and saleAddress have been loaded // monitor saleComplete so that the amount displayed on the button is updated when the sale is finished
 
+  useEffect(() => {
+    if (signer && saleView) {
+      getPriceForUser(signer, saleAddress, setStaticReservePriceOfRedeemable, redeemableDecimals); // get price when signer is set
+    }
+  }, [signer, library, account, saleAddress, saleView, saleComplete]); // re-fetch when sale is complete (so changes to prevent user buying more) // todo some of these may not now be needed
+
+  // used by frontend input
   useEffect(() => {
     getReserveName(reserveTokenAddress, setReserveSymbol);
   },[reserveTokenAddress]);

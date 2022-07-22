@@ -121,7 +121,7 @@ export async function getSubgraphSaleData(
     // @ts-ignore
     setRTKNAvailable(subgraphData.unitsAvailable/10**18); // todo add
 
-    setSaleView(true);
+    setSaleView(true); // todo might want to move this somewhere else so loads the frontend quicker
   } catch(err) {
     console.log(err);
   }
