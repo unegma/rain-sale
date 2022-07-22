@@ -123,6 +123,20 @@ body {
     color: white;
   }
 }
+.github {
+  display: block;
+  position: absolute;
+
+  font-size: 16px;
+  padding: 10px;
+  bottom: 10px;
+  left: 10px;
+  z-index:999;
+
+  a {
+    color: black;
+  }
+}
 
 /******* Panels *******/
 

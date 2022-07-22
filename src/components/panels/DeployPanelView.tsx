@@ -22,6 +22,7 @@ const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
 const RESERVE_TOKEN_ADDRESS = process.env.REACT_APP_RESERVE_TOKEN_ADDRESS;
 const SALE_EXAMPLE = process.env.REACT_APP_SALE_EXAMPLE;
+const GITHUB_LINK = process.env.REACT_APP_GITHUB_URL;
 
 type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string, reserveSymbol: string
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
@@ -58,6 +59,7 @@ export default function DeployPanelView({
   return (
     <>
       <NavBar string={`Configure Your Sale`} />
+      <p className='github'><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
 
       <Box
         className="admin-form"
