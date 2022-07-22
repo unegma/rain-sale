@@ -26,6 +26,7 @@ import RTKN from "../3d/RTKN";
 import {DateTimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 import Warning from "../various/Warning";
+import {TransactionsChartDeploy} from "../various/TransactionsChartDeploy";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
@@ -57,55 +58,6 @@ export default function DeployPanelView({
     tierGatingAddress, handleChangeTierGatingAddress, minimumTier, handleChangeMinimumTier
   } : adminPanelProps)
 {
-
-  const options = {
-    responsive: true,
-    // scales: {
-    //   yAxes: [{
-    //     scaleLabel: {
-    //       display: true,
-    //       labelString: 'Y text'
-    //     }
-    //   }],
-    //   xAxes: [{
-    //     scaleLabel: {
-    //       display: true,
-    //       labelString: 'X text'
-    //     }
-    //   }],
-    // },
-    plugins: {
-      legend: {
-        display: false,
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Upcoming Transaction Cost Ratios (Estimated MATIC Ratios based on costs at: 2022-05-30T15:32:44Z)',
-      }
-    },
-  };
-
-  const data = {
-    labels: ['Tx1: Deploy Sale', 'Tx2: Start Sale'],
-    datasets: [
-      {
-        label: '',
-        data: [1],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-      },
-      {
-        label: '',
-        data: [0.040, 0.00125], // todo base it on dynamic matic costs
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: '',
-        data: [1],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-      }
-    ],
-  };
 
   const [theDate, changeTheDate] = useState(saleTimeout); // this will be Date.now()
 
@@ -249,7 +201,7 @@ export default function DeployPanelView({
 
         { adminConfigPage === 2 && (
           <>
-            <Bar options={options} data={data} />;
+            <TransactionsChartDeploy />
 
             <Typography variant="h5" component="h3" color="black">
               (Page 3/3)
