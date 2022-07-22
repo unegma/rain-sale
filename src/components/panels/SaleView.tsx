@@ -72,7 +72,7 @@ export default function SaleView({
       )}
       {!saleView && (
         <>
-          <Typography className="black">Something Seems Wrong..<br/>Sale might still be indexing..<br/>Please try again in a few minutes.</Typography>
+          <Typography className="black">Loading..<br/>If this message persists,<br/>Sale may need to finish indexing<br/>(try again in a few moments)</Typography>
         </>
       )}
     </>
