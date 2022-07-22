@@ -245,6 +245,21 @@ export async function initiateBuy(
   }
 }
 
+/**
+ * Reserve Token Balance for User
+ */
+export async function getReserveBalance(signer: any, reserveTokenAddress: string, setReserveTokenBalance: any) {
+  try {
+    console.log(`Provider`, signer.provider)
+    console.log(`Reserve token address`, reserveTokenAddress)
+    const balance = await signer.provider.getBalance(reserveTokenAddress);
+    console.log(`User Balance`, balance.toString())
+    setReserveTokenBalance(balance.toString()); // todo does it need /10**18?
+  } catch(err) {
+    console.log(`Info: Something went wrong:`, err);
+  }
+}
+
 // /**
 //  * Get Sale Data from blockchain instead of .env
 //  * THIS WILL ALL BE AS IF THERE IS NO .ENV ON SALE LOAD

@@ -10,7 +10,7 @@ import SaleDashboardView from "./components/panels/SaleDashboardView";
 import {useWeb3React} from "@web3-react/core";
 import {Web3Provider} from "@ethersproject/providers";
 import {getReserveName, getSubgraphSaleData} from './helpers/subgraphCalls';
-import {deploySale, startSale, endSale, initiateBuy, getPriceForUser} from './helpers/web3Functions';
+import {deploySale, startSale, endSale, initiateBuy, getPriceForUser, getReserveBalance} from './helpers/web3Functions';
 
 /**
  * App
@@ -53,6 +53,7 @@ function App() {
   const [saleTimeout, setSaleTimeout] = useState(dateToUse);
 
   // a bit isolated because not taken from .env and only used in the Sale (and got from getSaleData())
+  const [reserveTokenBalance, setReserveTokenBalance] = React.useState("");
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
   const [reserveSymbol, setReserveSymbol] = React.useState("");
   const [rTKNAvailable, setRTKNAvailable] = React.useState(0);
@@ -105,6 +106,7 @@ function App() {
 
   useEffect(() => {
     if (signer && saleView) {
+      // todo find a different way to disable button if exceeds balance
       getPriceForUser(signer, saleAddress, setStaticReservePriceOfRedeemable, redeemableDecimals); // get price when signer is set
     }
   }, [signer, library, account, saleAddress, saleView, saleComplete]); // re-fetch when sale is complete (so changes to prevent user buying more) // todo some of these may not now be needed
@@ -113,6 +115,13 @@ function App() {
   useEffect(() => {
     getReserveName(reserveTokenAddress, setReserveSymbol);
   },[reserveTokenAddress]);
+
+  // user balance of reserveToken
+  useEffect(() => {
+    if (signer && saleView) {
+      getReserveBalance(signer,reserveTokenAddress,setReserveTokenBalance);
+    }
+  }, [signer, account, reserveTokenAddress])
 
   /** Handle Form Inputs **/
 
@@ -129,10 +138,16 @@ function App() {
     setRedeemableName(event.target.value);
   };
   const handleChangeRedeemableSymbol = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRedeemableSymbol(event.target.value);
+    let newRedeemableSymbol = event.target.value;
+    if (newRedeemableSymbol.length > 11) { alert("Symbol must be 11 characters or less."); return;}
+    setRedeemableSymbol(newRedeemableSymbol);
   };
   const handleChangeRedeemableInitialSupply = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRedeemableInitialSupply(event.target.value);
+    let newInitialSupply = event.target.value;
+    if (parseInt(newInitialSupply) > 100) { alert("Can't have more than 100 in this example."); return;}
+    if (parseInt(newInitialSupply) <= 0) { alert("Must be > 0."); return;}
+    // if (newInitialSupply == "") { alert("Must be > 0."); return;}
+    setRedeemableInitialSupply(newInitialSupply);
   };
   const handleChangeTierGatingAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTierGatingAddress(event.target.value);
@@ -187,6 +202,7 @@ function App() {
               reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
               saleAddress={saleAddress} rTKNAvailable={rTKNAvailable} saleView={saleView}
               setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
+              reserveTokenBalance={reserveTokenBalance}
               initiateBuy={() => initiateBuy(
                 signer, account, setButtonLock, setLoading, saleAddress, setConsoleData,
                 setConsoleColor, setSaleComplete,staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,

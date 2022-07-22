@@ -15,13 +15,13 @@ type saleViewProps = {
   redeemableName: any, redeemableSymbol: any, modalOpen: any, setModalOpen: any, initiateBuy: any, buttonLock: any,
   redeemableTokenAddress: any, staticReservePriceOfRedeemable: any, reserveSymbol: any, consoleData: any,
   consoleColor: any, saleAddress: string, rTKNAvailable: number, saleView: any
-  setSaleAddress: any, reserveTokenAddress: string
+  setSaleAddress: any, reserveTokenAddress: string, reserveTokenBalance: string
 }
 
 export default function SaleView({
     redeemableName, redeemableSymbol, modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress,
     staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, saleAddress, saleView,
-    rTKNAvailable, setSaleAddress, reserveTokenAddress
+    rTKNAvailable, setSaleAddress, reserveTokenAddress, reserveTokenBalance
   }: saleViewProps )
 {
 
@@ -53,6 +53,7 @@ export default function SaleView({
               saleAddress={saleAddress}
               redeemableName={redeemableName}
               reserveTokenAddress={reserveTokenAddress}
+              reserveTokenBalance={reserveTokenBalance}
             />
 
             <Canvas className="the-canvas" camera={{ position: [0, 0, 20], fov: 50 }} performance={{ min: 0.1 }}>

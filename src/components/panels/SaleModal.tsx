@@ -22,8 +22,8 @@ const style = {
   p: 4,
 };
 
-export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string})
+export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress, reserveTokenBalance}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string, reserveTokenBalance: string})
 {
 
   function handleClose() {
@@ -58,6 +58,7 @@ export default function SaleModal({modalOpen, setModalOpen, initiateBuy, buttonL
 
         <Typography className="modalText">
           <a href={`${FAUCET_BASE_URL}/${reserveTokenAddress}`} target="_blank">Click here to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.
+          {/*Your Balance: {reserveTokenBalance}{reserveSymbol}; <a href={`${FAUCET_BASE_URL}/${reserveTokenAddress}`} target="_blank">Click to claim <b>{reserveSymbol}</b></a> for buying <b>{redeemableSymbol}</b>.*/}
         </Typography><br/>
 
         {/*todo pass the address in url when passing*/}
