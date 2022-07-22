@@ -21,6 +21,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
 const RESERVE_TOKEN_ADDRESS = process.env.REACT_APP_RESERVE_TOKEN_ADDRESS;
+const SALE_EXAMPLE = process.env.REACT_APP_SALE_EXAMPLE;
 
 type adminPanelProps = { adminConfigPage: number, reserveTokenAddress: string, reserveSymbol: string
   handleChangeReserveTokenAddress: any, staticReservePriceOfRedeemable: any,
@@ -78,7 +79,7 @@ export default function DeployPanelView({
               <Typography color="black" align="center">
                 <a href="#" target="_blank">Rain Protocol Sale Demo Video</a><br/>
                 <a href="https://docs.rainprotocol.xyz">Tutorials at docs.rainprotocol.xyz</a><br/>
-                <a href={`${window.location.origin}/${RESERVE_TOKEN_ADDRESS}`} target="_blank">Example Sale: Shoes Collection (shoeVoucher)</a>
+                <a href={`${window.location.origin}/${SALE_EXAMPLE}`} target="_blank">Example Sale: Shoes Collection (shoeVoucher)</a>
               </Typography>
             </>
           </>

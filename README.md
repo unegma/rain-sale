@@ -2,6 +2,8 @@
 
 This small project was designed to show Rain Protocol Sale functionality using the SDK.
 
+// todo link to react version
+
 Coin from here: https://www.renderhub.com/lonelyhermitharrison/simple-gold-coin
 Envelope here: https://sketchfab.com/3d-models/paper-gift-envelope-with-bow-mockup-739b9f743e284aeb84735f3eeff7123f
 

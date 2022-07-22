@@ -255,6 +255,7 @@ export async function getReserveBalance(signer: any, reserveTokenAddress: string
     const balance = await signer.provider.getBalance(reserveTokenAddress);
     console.log(`User Balance`, balance.toString())
     setReserveTokenBalance(balance.toString()); // todo does it need /10**18?
+    // todo fix this
   } catch(err) {
     console.log(`Info: Something went wrong:`, err);
   }
