@@ -7,6 +7,7 @@ import SaleModal from "./SaleModal";
 import {Canvas} from "@react-three/fiber";
 import Vouchers from "../3d/Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
+import {Typography} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -67,6 +68,11 @@ export default function SaleView({
               <OrbitControls autoRotate autoRotateSpeed={1} enableRotate={true} enablePan={false} enableZoom={false} />
             </Canvas>
           </div>
+        </>
+      )}
+      {!saleView && (
+        <>
+          <Typography className="black">Something Seems Wrong..<br/>Sale might still be indexing..<br/>Please try again in a few minutes.</Typography>
         </>
       )}
     </>
