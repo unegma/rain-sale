@@ -139,13 +139,14 @@ function App() {
   };
   const handleChangeRedeemableSymbol = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newRedeemableSymbol = event.target.value;
+    if (newRedeemableSymbol.length <= 0) { alert("Must be > 0."); return;}
     if (newRedeemableSymbol.length > 11) { alert("Symbol must be 11 characters or less."); return;}
     setRedeemableSymbol(newRedeemableSymbol);
   };
   const handleChangeRedeemableInitialSupply = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newInitialSupply = event.target.value;
-    if (parseInt(newInitialSupply) > 100) { alert("Can't have more than 100 in this example."); return;}
     if (parseInt(newInitialSupply) <= 0) { alert("Must be > 0."); return;}
+    if (parseInt(newInitialSupply) > 100) { alert("Can't have more than 100 in this example."); return;}
     // if (newInitialSupply == "") { alert("Must be > 0."); return;}
     setRedeemableInitialSupply(newInitialSupply);
   };
