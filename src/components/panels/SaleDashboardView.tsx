@@ -40,10 +40,10 @@ export default function SaleDashboardView({
           Sale Settings
         </Typography>
         <Typography color="black" align="center">
-          Settings for {redeemableName} Collection ({redeemableSymbol}) Sale
+          Settings for <b>{redeemableName}</b> Collection (<b>{redeemableSymbol}</b>) Sale
         </Typography>
         <Typography color="black" align="center">
-          {saleAddress}
+          <b>{saleAddress}</b>
         </Typography>
         <Typography color="black" align="center">
           <sub>Be aware that, these functions can be called by ANYONE, so the deployer of a Sale, must understand how to configure when these can be called in order for a Sale to work as intended. (link to video about timeout() vs canEndStateConfig()</sub>
