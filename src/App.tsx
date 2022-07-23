@@ -119,7 +119,7 @@ function App() {
   // user balance of reserveToken
   useEffect(() => {
     if (signer && saleView) {
-      getReserveBalance(signer,reserveTokenAddress,setReserveTokenBalance);
+      getReserveBalance(signer,account,reserveTokenAddress,setReserveTokenBalance);
     }
   }, [signer, account, reserveTokenAddress])
 

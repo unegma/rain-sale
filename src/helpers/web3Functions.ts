@@ -248,14 +248,17 @@ export async function initiateBuy(
 /**
  * Reserve Token Balance for User
  */
-export async function getReserveBalance(signer: any, reserveTokenAddress: string, setReserveTokenBalance: any) {
+export async function getReserveBalance(signer: any, account: string, reserveTokenAddress: string, setReserveTokenBalance: any) {
   try {
-    console.log(`Provider`, signer.provider)
     console.log(`Reserve token address`, reserveTokenAddress)
-    const balance = await signer.provider.getBalance(reserveTokenAddress);
-    console.log(`User Balance`, balance.toString())
-    setReserveTokenBalance(balance.toString()); // todo does it need /10**18?
-    // todo fix this
+    const token = new rainSDK.EmissionsERC20(reserveTokenAddress, signer);
+
+    let balance = await token.balanceOf(account);
+    let humanReadableBalance = `${parseInt(balance.toString())/10**18}`;
+
+    console.log(`User Balance`, humanReadableBalance)
+    setReserveTokenBalance(humanReadableBalance); // todo does it need /10**18?
+
   } catch(err) {
     console.log(`Info: Something went wrong:`, err);
   }

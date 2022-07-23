@@ -72,7 +72,7 @@ export default function SaleView({
       )}
       {!saleView && (
         <>
-          <Typography className="black">Loading..<br/>If this message persists,<br/>Sale may need to finish indexing<br/>(try again in a few moments)</Typography>
+          <Typography className="black">Loading..<br/>If this message persists,<br/>Sale may need to finish indexing,<br/>or the address doesn't exist.<br/>Try again in a few moments).</Typography>
         </>
       )}
     </>

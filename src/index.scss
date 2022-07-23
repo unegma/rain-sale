@@ -58,6 +58,11 @@ body {
   height: 100vh !important;
 }
 
+.yourBalance {
+  color: green;
+  font-weight: bold;
+}
+
 /******* 3D *******/
 
 
@@ -129,8 +134,8 @@ body {
 
   font-size: 16px;
   padding: 10px;
-  bottom: 10px;
-  left: 10px;
+  bottom: 5px;
+  left: 5px;
   z-index:999;
 
   a {
