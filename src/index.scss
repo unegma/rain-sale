@@ -187,7 +187,11 @@ body {
 .admin-form {
   display: flex;
   flex-direction: column;
-  max-width: 40vw;
+
+  /*ipad mini*/
+  @media screen and (min-width: 768px) {
+    max-width: 40vw;
+  }
 }
 
 .buttons-box {
