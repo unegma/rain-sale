@@ -26,6 +26,12 @@ code {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+
+  margin-top: 5vh;
+  /*ipad mini*/
+  @media screen and (min-width: 768px) {
+    margin-top: 0px;
+  }
 }
 
 .rootContainer {
@@ -71,6 +77,10 @@ body {
 .navBar {
   z-index: 2;
   color: black;
+
+  header {
+    background-color: white;
+  }
 }
 
 .connectButtonContainer {
@@ -128,8 +138,9 @@ body {
     color: white;
   }
 }
+
 .github {
-  display: block;
+  display: none; // hide on mobile
   position: absolute;
 
   font-size: 16px;
@@ -141,8 +152,11 @@ body {
   a {
     color: black;
   }
-}
 
+  @media screen and (min-width: 768px) {
+    display: block
+  }
+}
 /******* Panels *******/
 
 .the-canvas-deploypanel {
