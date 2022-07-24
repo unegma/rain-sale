@@ -187,6 +187,7 @@ body {
 .admin-form {
   display: flex;
   flex-direction: column;
+  max-width: 90vw;
 
   /*ipad mini*/
   @media screen and (min-width: 768px) {
