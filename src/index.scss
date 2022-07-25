@@ -27,11 +27,11 @@ code {
   justify-content: center;
   font-size: calc(10px + 2vmin);
 
-  //margin-top: 5vh;
-  ///*ipad mini*/
-  //@media screen and (min-width: 768px) {
-  //  margin-top: 0px;
-  //}
+  margin-top: 5vh;
+  /*ipad mini*/
+  @media screen and (min-width: 768px) {
+    margin-top: 0px;
+  }
 }
 
 .rootContainer {
@@ -145,7 +145,6 @@ body {
 }
 
 .github {
-  //display: none; // hide on mobile
   position: absolute;
 
   font-size: 16px;
@@ -160,6 +159,13 @@ body {
 
   @media screen and (min-width: 768px) {
     display: block
+  }
+
+  &--firstview {
+    display: none;
+    @media screen and (min-width: 768px) {
+      display: block;
+    }
   }
 
   &--secondview {

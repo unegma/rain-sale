@@ -17,7 +17,6 @@ import {DateTimePicker} from "@mui/x-date-pickers";
 import {Accordion, AccordionDetails, AccordionSummary, InputAdornment} from "@mui/material";
 import Warning from "../various/Warning";
 import {TransactionsChartDeploy} from "../various/TransactionsChartDeploy";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 const TIER_GATING_BASE_URL = process.env.REACT_APP_TIER_GATING_BASE_URL;
 const RESERVE_TOKEN_ADDRESS = process.env.REACT_APP_RESERVE_TOKEN_ADDRESS;
@@ -59,7 +58,7 @@ export default function DeployPanelView({
   return (
     <>
       <NavBar string={`Configure Your Sale`} />
-      <p className='github'><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
+      <p className={'github github--firstview'}><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
 
       <Box
         className="admin-form"
