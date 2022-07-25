@@ -5,15 +5,17 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";
 import Console from "../various/Console";
+import {formatDateTime} from '../../helpers/various';
 const ESCROW_BASE_URL = process.env.REACT_APP_ESCROW_BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 type saleSettingsProps = {
   saleAddress: string, redeemableName: string, redeemableSymbol: string, endSale: any, startSale: any, setSaleAddress: any,
-  consoleColor: string, consoleData: string, saleStatus: number
+  consoleColor: string, consoleData: string, saleStatus: number, endTimeStamp: number
 }
 
 export default function SaleDashboardView({
-  saleAddress, redeemableName, redeemableSymbol, endSale, startSale, setSaleAddress, consoleColor, consoleData, saleStatus
+  saleAddress, redeemableName, redeemableSymbol, endSale, startSale, setSaleAddress, consoleColor, consoleData, saleStatus, endTimeStamp
   }: saleSettingsProps)
 {
 
@@ -22,6 +24,11 @@ export default function SaleDashboardView({
   useEffect(() => {
     setSaleAddress(id);
   }, []);
+
+  console.log(`Formatting timestamp: ${endTimeStamp}`)
+  let formattedTime = formatDateTime(endTimeStamp/1000);
+  let now = Date.now(); // in a single page app, can this be manipulated by the user? don't use this as a security, the blockchain functions do that, this just hides buttons if needed
+  let endIsInThePast = now >= endTimeStamp;
 
   return (
     <>
@@ -42,14 +49,8 @@ export default function SaleDashboardView({
         </Typography>
         <Typography color="black" align="center">
           Dashboard for <b>{redeemableName}</b> Collection (<b>{redeemableSymbol}</b>) Sale:<br/>
-          <b>{saleAddress}</b>
+          <a href={`${BASE_URL}/${saleAddress}`} target="_blank"><b>{saleAddress}</b></a>
         </Typography>
-
-        { saleStatus === 1 && (
-          <Typography color="black" align="center">
-            <sub>Be aware that, these functions can be called by ANYONE, so the deployer of a Sale, must understand how to configure when these can be called in order for a Sale to work as intended.</sub>
-          </Typography>
-        )}
 
         {/* todo (link to video about timeout() vs canEndStateConfig()*/}
 
@@ -61,7 +62,7 @@ export default function SaleDashboardView({
             <>
               {/*todo can we have it saying Sale Over! or something, if the sale has passed end time?*/}
               {/*todo what happens if type whilst building? does it break the build?*/}
-              <span className={`green`}>{redeemableSymbol} Sale Active! (To create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a>, Sale must end successfully).</span>
+              <span className={`green`}>{redeemableSymbol} Sale Active! (To create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a>, Sale must complete successfully).</span>
             </>
           )}
           { saleStatus === 2 && (
@@ -72,14 +73,17 @@ export default function SaleDashboardView({
           )}
         </Typography>
 
-        {/*<Typography color="black" align="center">*/}
-        {/*  <b>Sale End Countdown: ?:?:?</b>*/}
-        {/*</Typography>*/}
+        <Typography color="black" align="center">
+          <b>Sale Can End After: {formattedTime}</b>
+        </Typography>
 
         <Console consoleData={consoleData} consoleColor={consoleColor} />
 
-        { saleStatus === 1 && (
+        { (saleStatus === 1 && endIsInThePast === true) && (
           <>
+            <Typography color="black" align="center">
+              <sub>Be aware that, these functions can be called by <b className='red'>ANYONE</b>, so the deployer of a Sale, must understand how to configure when these can be called in order for a Sale to work as intended.</sub>
+            </Typography>
             <Button variant='contained' onClick={() => {startSale()}}>Start Sale</Button>
             <Button variant='contained' onClick={() => {endSale()}}>End Sale</Button>
             {/*<Button variant='contained'>Timeout Sale</Button>*/}
