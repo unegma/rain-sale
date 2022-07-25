@@ -179,6 +179,7 @@ body {
 .the-modal {
   width: 100vw;
   .MuiBox-root {
+    width: 80vw;
     @media screen and (min-width: 768px) {
       width: 38vw;
     }
