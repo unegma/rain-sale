@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import NavBar from "../layout/NavBar";
 import Box from "@mui/material/Box";
@@ -19,16 +19,25 @@ export default function SaleDashboardView({
   }: saleSettingsProps)
 {
 
+  let [formattedTime, setFormattedTime] = useState("");
+  let [endIsInThePast, setEndIsInThePast] = useState(false);
   let {id}: any = useParams();
   // set token address by url instead of t= (check line 80 onwards works in app.tsx for getting the tokenData)
   useEffect(() => {
     setSaleAddress(id);
   }, []);
 
-  console.log(`Formatting timestamp: ${endTimeStamp}`)
-  let formattedTime = formatDateTime(endTimeStamp/1000);
-  let now = Date.now(); // in a single page app, can this be manipulated by the user? don't use this as a security, the blockchain functions do that, this just hides buttons if needed
-  let endIsInThePast = now >= endTimeStamp;
+  useEffect(() => {
+    if (endTimeStamp !== 0) {
+      console.log(`Formatting timestamp: ${endTimeStamp}`)
+      let _formattedTime = formatDateTime(endTimeStamp) as string;
+      console.log(_formattedTime);
+      let now = Date.now(); // in a single page app, can this be manipulated by the user? don't use this as a security, the blockchain functions do that, this just hides buttons if needed
+      let _endIsInThePast = now >= endTimeStamp;
+      setEndIsInThePast(_endIsInThePast);
+      setFormattedTime(_formattedTime);
+    }
+  }, [endTimeStamp]);
 
   return (
     <>
