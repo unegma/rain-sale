@@ -64,7 +64,7 @@ export default function SaleDashboardView({
             <span className={`green`}><a href={`${ESCROW_BASE_URL}?s=${saleAddress}`} target="_blank">Sale Ended Successfully: Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.</span>
           )}
           { saleStatus === 3 && (
-            <span className={``}>Sale Failed! (You cannot create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a> for a failed Sale).</span>
+            <span className={`red`}>Sale Failed! (You cannot create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a> for a failed Sale).</span>
           )}
         </Typography>
 
