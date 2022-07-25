@@ -239,6 +239,7 @@ export async function initiateBuy(
   } catch(err) {
     setLoading(false);
     setButtonLock(false);
+    alert(`Buy Failed, Sale may have finished (Check Dashboard), or you may not have enough Reserve Token (Claim some from a Faucet).`)
     setConsoleData(`Buy Failed (Check console for more data).`);
     setConsoleColor(`red`); // todo add to struct
     console.log(`Info: Something went wrong:`, err);
