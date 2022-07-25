@@ -58,7 +58,11 @@ export default function SaleDashboardView({
             <span className={``}>{redeemableSymbol} Sale pending!</span>
           )}
           { saleStatus === 1 && (
-            <span className={`green`}>{redeemableSymbol} Sale Active! (To create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a>, Sale must end successfully).</span>
+            <>
+              {/*todo can we have it saying Sale Over! or something, if the sale has passed end time?*/}
+              {/*todo what happens if type whilst building? does it break the build?*/}
+              <span className={`green`}>{redeemableSymbol} Sale Active! (To create an <a href={`${ESCROW_BASE_URL}`} target="_blank">Escrow</a>, Sale must end successfully).</span>
+            </>
           )}
           { saleStatus === 2 && (
             <span className={`green`}><a href={`${ESCROW_BASE_URL}?s=${saleAddress}`} target="_blank">Sale Ended Successfully: Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.</span>
