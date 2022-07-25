@@ -7,7 +7,7 @@ import Web3ConnectionButtons from './Web3ConnectionButtons';
 
 export default function NavBar({string, stringRight}: {string?: string, stringRight?: string}) {
   return (
-    <Box component="div" sx={{ flexGrow: 1 }} className="navBar" >
+    <Box component="div" className="navBar" >
       <AppBar position="fixed" color="transparent">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

@@ -27,19 +27,20 @@ code {
   justify-content: center;
   font-size: calc(10px + 2vmin);
 
-  margin-top: 5vh;
-  /*ipad mini*/
-  @media screen and (min-width: 768px) {
-    margin-top: 0px;
-  }
+  //margin-top: 5vh;
+  ///*ipad mini*/
+  //@media screen and (min-width: 768px) {
+  //  margin-top: 0px;
+  //}
 }
 
 .rootContainer {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items:center;
+  justify-content: center;
 }
 
 body {
@@ -80,6 +81,10 @@ body {
 
   header {
     background-color: white;
+
+    @media screen and (min-width: 768px) {
+      background-color: transparent; // safeguard
+    }
   }
 }
 
@@ -140,12 +145,12 @@ body {
 }
 
 .github {
-  display: none; // hide on mobile
+  //display: none; // hide on mobile
   position: absolute;
 
   font-size: 16px;
   padding: 10px;
-  bottom: 5px;
+  bottom: 0px;
   left: 5px;
   z-index:999;
 
@@ -155,6 +160,13 @@ body {
 
   @media screen and (min-width: 768px) {
     display: block
+  }
+
+  &--secondview {
+    bottom: 60px !important;
+    @media screen and (min-width: 768px) {
+      bottom: 0px !important;
+    }
   }
 }
 

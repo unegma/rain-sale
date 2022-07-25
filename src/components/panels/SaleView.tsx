@@ -9,7 +9,6 @@ import Vouchers from "../3d/Vouchers";
 import {Environment, Html, OrbitControls} from "@react-three/drei";
 import {Typography} from "@mui/material";
 const CHAIN_NAME = process.env.REACT_APP_CHAIN_NAME; // Mumbai (Polygon Testnet) Chain ID
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 const GITHUB_LINK = process.env.REACT_APP_GITHUB_URL;
 
 type saleViewProps = {
@@ -38,7 +37,7 @@ export default function SaleView({
         <>
           <NavBar string={`${redeemableSymbol} Sale (${redeemableName} Collection)`} stringRight={``} />
           <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${window.location.origin}`}>Deploy Your Own Sale Here!</a></p>
-          <p className='github'><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
+          <p className={`github github--secondview`}><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
 
           <div className="canvasContainer">
             <SaleModal
