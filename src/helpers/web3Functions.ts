@@ -80,48 +80,6 @@ export async function deploySale(
 }
 
 /**
- * end Sale
- */
-export async function endSale(
-  signer: any, account: string, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
-  setConsoleColor: any, setSaleComplete: any
-) {
-  try {
-    if (account === "" || typeof account === 'undefined') {
-      alert(WARNING_MESSAGE);
-      return;
-    }
-
-    setButtonLock(true);
-    setLoading(true);
-
-    console.log(`Sale Address: ${saleAddress}`);
-    // @ts-ignore
-    const saleContract = new rainSDK.Sale(saleAddress, signer);
-
-    // approval
-    console.log(`Info: Ending Sale with Address: ${saleAddress}`);
-
-    const endSaleTransaction = await saleContract.end();
-    const endStatusReceipt = await endSaleTransaction.wait();
-    console.log(`Info: End Receipt:`, endStatusReceipt);
-    console.log('------------------------------'); // separator
-
-    setConsoleData(`Sale Ended Successfully!`);
-    setConsoleColor(`green`); // todo add to struct
-    setSaleComplete(true);
-    setButtonLock(false);
-    setLoading(false);
-  } catch(err) {
-    setLoading(false);
-    setButtonLock(false);
-    setConsoleData(`Ending Sale Failed (Check console for more data).`);
-    setConsoleColor(`red`); // todo add to struct
-    console.log(`Info: Something went wrong:`, err);
-  }
-}
-
-/**
  * start Sale
  */
 export async function startSale(
@@ -158,6 +116,48 @@ export async function startSale(
     setLoading(false);
     setButtonLock(false);
     setConsoleData(`Starting Sale Failed (can be started again manually at https://${BASE_URL}/${saleAddress}/dashboard).`);
+    setConsoleColor(`red`); // todo add to struct
+    console.log(`Info: Something went wrong:`, err);
+  }
+}
+
+/**
+ * end Sale
+ */
+export async function endSale(
+  signer: any, account: string, setButtonLock: any, setLoading: any, saleAddress: string, setConsoleData: any,
+  setConsoleColor: any, setSaleComplete: any
+) {
+  try {
+    if (account === "" || typeof account === 'undefined') {
+      alert(WARNING_MESSAGE);
+      return;
+    }
+
+    setButtonLock(true);
+    setLoading(true);
+
+    console.log(`Sale Address: ${saleAddress}`);
+    // @ts-ignore
+    const saleContract = new rainSDK.Sale(saleAddress, signer);
+
+    // approval
+    console.log(`Info: Ending Sale with Address: ${saleAddress}`);
+
+    const endSaleTransaction = await saleContract.end();
+    const endStatusReceipt = await endSaleTransaction.wait();
+    console.log(`Info: End Receipt:`, endStatusReceipt);
+    console.log('------------------------------'); // separator
+
+    setConsoleData(`Sale Ended Successfully!`);
+    setConsoleColor(`green`); // todo add to struct
+    setSaleComplete(true);
+    setButtonLock(false);
+    setLoading(false);
+  } catch(err) {
+    setLoading(false);
+    setButtonLock(false);
+    setConsoleData(`Ending Sale Failed (Check console for more data).`);
     setConsoleColor(`red`); // todo add to struct
     console.log(`Info: Something went wrong:`, err);
   }
