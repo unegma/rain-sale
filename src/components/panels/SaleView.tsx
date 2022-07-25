@@ -15,13 +15,13 @@ type saleViewProps = {
   redeemableName: any, redeemableSymbol: any, modalOpen: any, setModalOpen: any, initiateBuy: any, buttonLock: any,
   redeemableTokenAddress: any, staticReservePriceOfRedeemable: any, reserveSymbol: any, consoleData: any,
   consoleColor: any, saleAddress: string, rTKNAvailable: number, saleView: any
-  setSaleAddress: any, reserveTokenAddress: string, reserveTokenBalance: string
+  setSaleAddress: any, reserveTokenAddress: string, reserveTokenBalance: string, saleStatus: number
 }
 
 export default function SaleView({
     redeemableName, redeemableSymbol, modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress,
     staticReservePriceOfRedeemable, reserveSymbol, consoleData, consoleColor, saleAddress, saleView,
-    rTKNAvailable, setSaleAddress, reserveTokenAddress, reserveTokenBalance
+    rTKNAvailable, setSaleAddress, reserveTokenAddress, reserveTokenBalance, saleStatus
   }: saleViewProps )
 {
 
@@ -38,6 +38,17 @@ export default function SaleView({
           <NavBar string={`${redeemableSymbol} Sale (${redeemableName} Collection)`} stringRight={``} />
           <p className='deploy-own'>Must be connected to <a href={`https://chainlist.org/?search=mumbai&testnets=true`} target="_blank"><b className='modalTextRed'>{CHAIN_NAME}</b></a> Testnet. <a href={`${window.location.origin}`}>Deploy Your Own Sale Here!</a></p>
           <p className={`github github--secondview`}><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
+
+          {/*todo check these are correct status codes*/}
+          { saleStatus === 1 && (
+            <p className={`saleStatusInfo saleStatusInfo--active`}>{redeemableSymbol} Sale!</p>
+          )}
+          { saleStatus === 2 && (
+            <p className={`saleStatusInfo saleStatusInfo--ended`}>Sale Ended!</p>
+          )}
+          { saleStatus === 3 && (
+            <p className={`saleStatusInfo saleStatusInfo--ended`}>Sale Ended!</p>
+          )}
 
           <div className="canvasContainer">
             <SaleModal

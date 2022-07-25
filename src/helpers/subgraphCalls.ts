@@ -53,7 +53,7 @@ export async function getReserveName(reserveTokenAddress: string, setReserveSymb
 export async function getSubgraphSaleData(
   setReserveTokenAddress: any,setReserveSymbol: any,setRedeemableTokenAddress: any,
   setRedeemableName: any,setRedeemableSymbol: any, setRedeemableDecimals: any,setRedeemableInitialSupply: any,redeemableDecimals: string,
-  setStaticReservePriceOfRedeemable: any, setSaleView: any,saleAddress: string, setRTKNAvailable: any
+  setStaticReservePriceOfRedeemable: any, setSaleView: any,saleAddress: string, setRTKNAvailable: any, setSaleStatus: any
 ) {
   try {
     let subgraphData = await fetch(SUBGRAPH_ENDPOINT, {
@@ -120,7 +120,8 @@ export async function getSubgraphSaleData(
     setRedeemableDecimals((subgraphData.token.decimals).toString());
     // @ts-ignore
     setRTKNAvailable(subgraphData.unitsAvailable/10**18); // todo add
-
+    // @ts-ignore
+    setSaleStatus(subgraphData.saleStatus);
     setSaleView(true); // todo might want to move this somewhere else so loads the frontend quicker
   } catch(err) {
     console.log(err);

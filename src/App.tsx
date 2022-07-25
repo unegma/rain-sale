@@ -57,6 +57,7 @@ function App() {
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
   const [reserveSymbol, setReserveSymbol] = React.useState("");
   const [rTKNAvailable, setRTKNAvailable] = React.useState(0);
+  const [saleStatus, setSaleStatus] = React.useState(0);
 
   // these must be the same as the above in .env
   function resetToDefault() {
@@ -98,7 +99,7 @@ function App() {
       getSubgraphSaleData(
         setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
         setRedeemableName,setRedeemableSymbol,setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
-        setStaticReservePriceOfRedeemable,setSaleView,saleAddress,setRTKNAvailable
+        setStaticReservePriceOfRedeemable,setSaleView,saleAddress,setRTKNAvailable, setSaleStatus
       );
       // NEED TO UPDATE PRICE FOR USER HERE
     }
@@ -203,7 +204,7 @@ function App() {
               reserveSymbol={reserveSymbol} consoleData={consoleData} consoleColor={consoleColor}
               saleAddress={saleAddress} rTKNAvailable={rTKNAvailable} saleView={saleView}
               setSaleAddress={setSaleAddress} reserveTokenAddress={reserveTokenAddress}
-              reserveTokenBalance={reserveTokenBalance}
+              reserveTokenBalance={reserveTokenBalance} saleStatus={saleStatus}
               initiateBuy={() => initiateBuy(
                 signer, account, setButtonLock, setLoading, saleAddress, setConsoleData,
                 setConsoleColor, setSaleComplete,staticReservePriceOfRedeemable,reserveSymbol,reserveTokenAddress,

@@ -235,6 +235,20 @@ body {
   user-select: text;
 }
 
+.saleStatusInfo {
+  position: absolute;
+  font-size: 200px;
+  top: 60px;
+  right:0;
+
+  &--active {
+    color: green;
+  }
+  &--ended {
+    color: red;
+  }
+}
+
 /******* Various *******/
 
 .admin-form {
