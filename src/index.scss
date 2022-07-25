@@ -60,6 +60,12 @@ body {
   color: red;
 }
 
+.bullet:before {
+  content:"• ";
+  color: black;
+  text-decoration: none !important;
+}
+
 .the-canvas {
   width: 100vw !important;
   height: 100vh !important;
