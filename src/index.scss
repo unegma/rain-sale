@@ -237,11 +237,16 @@ body {
 }
 
 .saleStatusInfo {
-  position: absolute;
-  font-size: 160px;
-  top: 60px;
-  right:0;
   font-family: 'Bungee Outline', cursive;
+  position: absolute;
+  font-size: 60px;
+  top: 30vh;
+  right:0;
+
+  @media screen and (min-width: 768px) {
+    font-size: 160px;
+    top: 60px;
+  }
 
   &--active {
     color: green;
