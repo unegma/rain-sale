@@ -21,8 +21,8 @@ const style = {
 };
 
 export default function SaleModal(
-  {modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress, reserveTokenBalance}:
-  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string, reserveTokenBalance: string}
+  {modalOpen, setModalOpen, initiateBuy, buttonLock, redeemableTokenAddress, staticReservePriceOfRedeemable, reserveSymbol, redeemableSymbol, redeemableName, consoleData, consoleColor, saleAddress, reserveTokenAddress, reserveTokenBalance, saleStatus}:
+  {modalOpen: boolean, setModalOpen: any, initiateBuy: any, buttonLock: boolean, redeemableTokenAddress: string, staticReservePriceOfRedeemable: any, reserveSymbol: string, redeemableSymbol: string, redeemableName: string, consoleData: string, consoleColor: string, saleAddress: string, reserveTokenAddress: string, reserveTokenBalance: string, saleStatus: number}
 ) {
 
   function handleClose() {
@@ -69,13 +69,16 @@ export default function SaleModal(
         <div className="buttons-box">
           <Button disabled={buttonLock} className="fifty-percent-button" variant="outlined" onClick={() => {setModalOpen(false)}}>Close</Button>
 
-          { !staticReservePriceOfRedeemable.includes('e') && (
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy {redeemableSymbol} ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
+          { saleStatus == 1 && (
+            <>
+              { !staticReservePriceOfRedeemable.includes('e') && (
+                <Button disabled={buttonLock} className="fifty-percent-button" variant="contained" onClick={initiateBuy}>Buy {redeemableSymbol} ({staticReservePriceOfRedeemable}{reserveSymbol})</Button>
+              )}
+              { staticReservePriceOfRedeemable.includes('e')  && (
+                <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>
+              )}
+            </>
           )}
-          { staticReservePriceOfRedeemable.includes('e')  && (
-            <Button disabled={buttonLock} className="fifty-percent-button" variant="contained">Buy Limit Reached</Button>
-          )}
-
         </div>
 
       </Box>

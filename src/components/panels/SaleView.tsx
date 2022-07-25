@@ -64,6 +64,7 @@ export default function SaleView({
               consoleColor={consoleColor}
               saleAddress={saleAddress}
               redeemableName={redeemableName}
+              saleStatus={saleStatus}
               reserveTokenAddress={reserveTokenAddress}
               reserveTokenBalance={reserveTokenBalance}
             />
