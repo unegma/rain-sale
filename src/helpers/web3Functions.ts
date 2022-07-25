@@ -3,6 +3,7 @@ import {opcodeData} from "../opcodeData";
 import {ethers} from "ethers";
 const DESIRED_UNITS_OF_REDEEMABLE = process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string;
 const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)!";
+const BASE_URL = process.env.REACT_APP_BASE_URL as string;
 
 /**
  * Deploy a Sale and Start it (2txs)
@@ -156,7 +157,7 @@ export async function startSale(
   } catch(err) {
     setLoading(false);
     setButtonLock(false);
-    setConsoleData(`Starting Sale Failed (is it already running?).`);
+    setConsoleData(`Starting Sale Failed (can be started again manually at https://${BASE_URL}/${saleAddress}/dashboard).`);
     setConsoleColor(`red`); // todo add to struct
     console.log(`Info: Something went wrong:`, err);
   }
