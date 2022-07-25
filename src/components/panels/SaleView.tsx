@@ -40,6 +40,7 @@ export default function SaleView({
           <p className={`github github--secondview`}><a href={`${GITHUB_LINK}`} target="_blank">(Github Link)</a></p>
 
           {/*todo check these are correct status codes*/}
+          {/*todo can we have it saying Sale Over or something, if the sale has passed the end time duration? also, can users still buy at this point?*/}
           { saleStatus === 1 && (
             <p className={`saleStatusInfo saleStatusInfo--active`}>{redeemableSymbol} Sale!</p>
           )}
