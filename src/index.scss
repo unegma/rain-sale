@@ -1,6 +1,7 @@
 /*todo move to styled components*/
 
 /******* Main *******/
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Outline&family=Codystar:wght@300&display=swap');
 
 html, body {
 }
@@ -237,9 +238,10 @@ body {
 
 .saleStatusInfo {
   position: absolute;
-  font-size: 200px;
+  font-size: 160px;
   top: 60px;
   right:0;
+  font-family: 'Bungee Outline', cursive;
 
   &--active {
     color: green;
