@@ -171,10 +171,20 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
             { !active &&
             <div className="youtube-link-container">
               <br/>
-              <a target="_blank" href="https://www.youtube.com/watch?v=6h_liI6atEk">Learn how to set up a MetaMask wallet.</a>
+              <a target="_blank" href="https://www.youtube.com/watch?v=6h_liI6atEk">How to set up a MetaMask wallet.</a><br/><br/>
+              <a target="_blank" href="https://www.youtube.com/watch?v=I4C5RkiNAYQ">How to connect to Mumbai Testnet.</a>
             </div>
             }
           </div>
+
+          <Button
+            variant="contained"
+            color="primary"
+            className="modalCloseButton"
+            onClick={() => { hideModal()}}
+          >
+            Close
+          </Button>
 
         </Box>
       </Modal>
