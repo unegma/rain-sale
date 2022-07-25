@@ -7,7 +7,6 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Warning from "../various/Warning";
 import Console from "../various/Console";
 import {TransactionsChartBuy} from "../various/TransactionsChartBuy";
-const ESCROW_BASE_URL = process.env.REACT_APP_ESCROW_BASE_URL;
 const FAUCET_BASE_URL = process.env.REACT_APP_FAUCET_BASE_URL;
 
 const style = {
@@ -60,11 +59,6 @@ export default function SaleModal(
         <Typography className="modalText">
           {/*<a href={`${FAUCET_BASE_URL}/${reserveTokenAddress}`} target="_blank">Click here to get <b>{reserveSymbol}</b> tokens</a> for buying <b>{redeemableSymbol}</b>.*/}
           <span className='yourBalance'>Your Balance: {reserveTokenBalance}{reserveSymbol}</span>; <a href={`${FAUCET_BASE_URL}/${reserveTokenAddress}`} target="_blank">Click to claim <b>{reserveSymbol}</b></a> for buying <b>{redeemableSymbol}</b>.
-        </Typography><br/>
-
-        {/*todo pass the address in url when passing*/}
-        <Typography className="modalText">
-          <a href={`${ESCROW_BASE_URL}?s=${saleAddress}`} target="_blank">Click to Deploy an Escrow</a> to allow <b>{redeemableSymbol}</b> buyers to claim new Tokens.<br/>
         </Typography><br/>
 
         <Warning /><br/>

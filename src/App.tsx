@@ -225,6 +225,7 @@ function App() {
               setSaleAddress={setSaleAddress}
               consoleData={consoleData}
               consoleColor={consoleColor}
+              saleStatus={saleStatus}
               endSale={() => endSale(
                 signer,account,setButtonLock,setLoading,saleAddress,setConsoleData,setConsoleColor,setSaleComplete
               )}
