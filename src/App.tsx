@@ -121,7 +121,7 @@ function App() {
     if (signer && saleView) {
       getReserveBalance(signer,account,reserveTokenAddress,setReserveTokenBalance);
     }
-  }, [signer, account, reserveTokenAddress])
+  }, [signer, account, reserveTokenAddress, saleComplete])
 
   /** Handle Form Inputs **/
 
