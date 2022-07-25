@@ -53,7 +53,7 @@ function App() {
   const [saleTimeout, setSaleTimeout] = useState(dateToUse);
 
   // a bit isolated because not taken from .env and only used in the Sale (and got from getSaleData())
-  const [reserveTokenBalance, setReserveTokenBalance] = React.useState("");
+  const [reserveTokenBalance, setReserveTokenBalance] = React.useState("?");
   const [redeemableTokenAddress, setRedeemableTokenAddress] = React.useState("");
   const [reserveSymbol, setReserveSymbol] = React.useState("");
   const [rTKNAvailable, setRTKNAvailable] = React.useState(0);
