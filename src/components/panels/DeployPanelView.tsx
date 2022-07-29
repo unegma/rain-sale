@@ -168,6 +168,8 @@ export default function DeployPanelView({
                 <DateTimePicker
                   label="Sale End (i.e. when end() can be called on the Sale contract)"
                   inputFormat="yyyy-MM-dd HH:mm"
+                  ampm={false}
+                  disablePast={true}
                   value={theDate}
                   onChange={changeTimeout}
                   onAccept={setFinishTimeout}
