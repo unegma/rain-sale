@@ -97,7 +97,8 @@ function App() {
   // todo check this section because it is different in all frontends
   useEffect(() => {
     if (saleAddress) {
-      getSubgraphSaleData(
+      console.log('Getting escrow data:');
+      getSubgraphEscrowData(
         setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
         setRedeemableName,setRedeemableSymbol,setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
         setStaticReservePriceOfRedeemable,setSaleView,saleAddress,setRTKNAvailable, setSaleStatus, setEndTimeStamp
