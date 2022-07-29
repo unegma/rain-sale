@@ -49,6 +49,11 @@ export default function DeployPanelView({
     changeTheDate(newValue);
   };
 
+  /**
+   * TODO THERE IS CURRENTLY A BUG WHEREBY IF A USER CHANGES THE TEXT (INSTEAD OF SELECTING ON THE GUI), THE DATE AND TIME WON'T BE WHAT IS SET
+   * TODO THIS DATE ALSO NEEDS CONVERING TO UTC BECAUSE IT SEEMS TO BE APPLYING THE TIMEZONE OF THE USER SELECTING THE TIME (SO IF I DEPLOY FOR 3PM IN THE UK DURING BST, IT WILL SET IT FOR 2PM IN THE SMART CONTRACT)
+   * @param newValue
+   */
   const setFinishTimeout = (newValue: any) => {
     let finishTime = Date.parse(newValue); // be aware, this will use your local time (not UTC): https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
     finishTime = finishTime/1000;
