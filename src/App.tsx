@@ -98,7 +98,7 @@ function App() {
   useEffect(() => {
     if (saleAddress) {
       console.log('Getting escrow data:');
-      getSubgraphEscrowData(
+      getSubgraphSaleData(
         setReserveTokenAddress,setReserveSymbol,setRedeemableTokenAddress,
         setRedeemableName,setRedeemableSymbol,setRedeemableDecimals,setRedeemableInitialSupply,redeemableDecimals,
         setStaticReservePriceOfRedeemable,setSaleView,saleAddress,setRTKNAvailable, setSaleStatus, setEndTimeStamp
