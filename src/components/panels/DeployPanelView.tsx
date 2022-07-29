@@ -159,7 +159,7 @@ export default function DeployPanelView({
             </FormControl>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in Reserve Token set above) of each Digital Object (i.e. {redeemableSymbol})</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The Price (in {reserveSymbol}) of each Digital Object (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={staticReservePriceOfRedeemable}
