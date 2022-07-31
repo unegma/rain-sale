@@ -6,6 +6,11 @@ See [Create React App](https://github.com/facebook/create-react-app) Docs (or pa
 
 [Frontend Example Link](https://rain-sale.unegma.work)
 
+[Stripped back example with no frontend](https://github.com/unegma/rainprotocol__sdk-tutorial-sale)
+
+Rain Protocol Docs Link: [docs](https://docs.rainprotocol.xyz)
+
+
 ## References
 
 Coin from here: https://www.renderhub.com/lonelyhermitharrison/simple-gold-coin
