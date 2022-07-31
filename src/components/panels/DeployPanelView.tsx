@@ -150,7 +150,7 @@ export default function DeployPanelView({
             </Typography>
 
             <FormControl variant="standard">
-              <InputLabel className="input-box-label" htmlFor="component-helper">The <a href={`${FAUCET_BASE_URL}`} target="_blank">Reserve Token</a> others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
+              <InputLabel className="input-box-label" htmlFor="component-helper">The <a href={`${FAUCET_BASE_URL}`} target="_blank">Reserve Token ({reserveSymbol})</a> others will use to buy your Digital Objects (i.e. {redeemableSymbol})</InputLabel>
               <Input
                 id="component-helper"
                 value={reserveTokenAddress}
