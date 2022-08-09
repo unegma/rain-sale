@@ -83,7 +83,7 @@ export default function DeployPanelView({
           <>
             <>
               <Typography color="black" align="center">
-                <a className="bullet" href="#" target="_blank">Rain Protocol Sale Demo Video</a><br/>
+                <a className="bullet" href="https://youtu.be/4aIbUDuW9CM" target="_blank">Rain Protocol Examples Intro Video</a><br/>
                 <a className="bullet" href="https://docs.rainprotocol.xyz">Docs at: docs.rainprotocol.xyz</a><br/>
                 <a className="bullet" href={`${window.location.origin}/${SALE_EXAMPLE}`} target="_blank">Example Sale: Shoes Collection (shoeVoucher)</a>
               </Typography>
