@@ -2,7 +2,7 @@ import * as rainSDK from "rain-sdk";
 import {opcodeData} from "../opcodeData";
 import {ethers} from "ethers";
 const DESIRED_UNITS_OF_REDEEMABLE = process.env.REACT_APP_DESIRED_UNITS_OF_REDEEMABLE as string;
-const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)! You also need to be connected to Polygon Mumbai Testnet (how to: https://www.youtube.com/watch?v=I4C5RkiNAYQ)!";
+const WARNING_MESSAGE="Are you connected with your Web3 Wallet? (Click the button at the top right)! You also need to be connected to Polygon Mumbai Testnet (how to: https://www.youtube.com/watch?v=I4C5RkiNAYQ)! You will also need testnet Matic tokens (https://faucet.polygon.technology/)";
 const BASE_URL = process.env.REACT_APP_BASE_URL as string;
 
 /**
