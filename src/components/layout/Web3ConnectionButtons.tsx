@@ -190,7 +190,7 @@ export default function Web3ConnectionButtons({setAddress, setSettingsOpen}: any
       </Modal>
 
       {(!active && !error) && (
-        <Button variant="outlined" color="secondary" className={`connectButton web3connectButton`} onClick={showModal}>
+        <Button variant="outlined" color="error" className={`connectButton web3connectButton`} onClick={showModal}>
           Connect
         </Button>
       )}
