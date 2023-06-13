@@ -77,7 +77,7 @@ export default function SaleView({
               <directionalLight intensity={0.3} position={[5, 25, 20]} />
               <Suspense fallback={<Html className="black">loading..</Html>}>
                 <Vouchers modalOpen={modalOpen} setModalOpen={setModalOpen} amount={rTKNAvailable} redeemableSymbol={redeemableSymbol}/>
-                <Environment preset="city" />
+                <Environment files="https://assets.unegma.net/shared/threejs-environments/city.hdr" />
               </Suspense>
               <OrbitControls autoRotate autoRotateSpeed={1} enableRotate={true} enablePan={false} enableZoom={false} />
             </Canvas>

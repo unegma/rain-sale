@@ -96,7 +96,7 @@ export default function DeployPanelView({
           <directionalLight intensity={0.01} position={[5, 25, 20]} />
           <Suspense fallback={<Html className="black">loading..</Html>}>
             <RTKN rotation={[-1.5,0,0]} redeemableSymbol={redeemableSymbol} />
-            <Environment preset="lobby" />
+            <Environment files="https://assets.unegma.net/shared/threejs-environments/apartment.hdr" />
           </Suspense>
           <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={false} enablePan={false} enableRotate={false} />
         </Canvas>
